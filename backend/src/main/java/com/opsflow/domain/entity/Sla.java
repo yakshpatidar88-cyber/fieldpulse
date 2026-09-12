@@ -2,7 +2,6 @@ package com.opsflow.domain.entity;
 
 import com.opsflow.domain.enums.SlaRiskLevel;
 import jakarta.persistence.*;
-import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -11,11 +10,6 @@ import java.time.Instant;
 
 @Entity
 @Table(name = "slas")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class Sla {
 
     @Id
@@ -38,7 +32,6 @@ public class Sla {
     @Column(name = "resolved_at")
     private Instant resolvedAt;
 
-    @Builder.Default
     @Enumerated(EnumType.STRING)
     @Column(name = "risk_level", nullable = false, length = 20)
     private SlaRiskLevel riskLevel = SlaRiskLevel.HEALTHY;
@@ -53,6 +46,38 @@ public class Sla {
     @UpdateTimestamp
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
+
+    public Sla() {}
+
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public Job getJob() { return job; }
+    public void setJob(Job job) { this.job = job; }
+
+    public Instant getResponseDeadline() { return responseDeadline; }
+    public void setResponseDeadline(Instant responseDeadline) { this.responseDeadline = responseDeadline; }
+
+    public Instant getResolutionDeadline() { return resolutionDeadline; }
+    public void setResolutionDeadline(Instant resolutionDeadline) { this.resolutionDeadline = resolutionDeadline; }
+
+    public Instant getRespondedAt() { return respondedAt; }
+    public void setRespondedAt(Instant respondedAt) { this.respondedAt = respondedAt; }
+
+    public Instant getResolvedAt() { return resolvedAt; }
+    public void setResolvedAt(Instant resolvedAt) { this.resolvedAt = resolvedAt; }
+
+    public SlaRiskLevel getRiskLevel() { return riskLevel; }
+    public void setRiskLevel(SlaRiskLevel riskLevel) { this.riskLevel = riskLevel; }
+
+    public String getBreachReason() { return breachReason; }
+    public void setBreachReason(String breachReason) { this.breachReason = breachReason; }
+
+    public Instant getCreatedAt() { return createdAt; }
+    public void setCreatedAt(Instant createdAt) { this.createdAt = createdAt; }
+
+    public Instant getUpdatedAt() { return updatedAt; }
+    public void setUpdatedAt(Instant updatedAt) { this.updatedAt = updatedAt; }
 
     public void recalculateRisk(Instant now, double warningThresholdPercent) {
         if (resolvedAt != null) {

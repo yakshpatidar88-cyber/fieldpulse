@@ -2,18 +2,12 @@ package com.opsflow.domain.entity;
 
 import com.opsflow.domain.enums.AuditAction;
 import jakarta.persistence.*;
-import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Instant;
 
 @Entity
 @Table(name = "audit_events")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class AuditEvent {
 
     @Id
@@ -46,4 +40,33 @@ public class AuditEvent {
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
+
+    public AuditEvent() {}
+
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public String getEntityName() { return entityName; }
+    public void setEntityName(String entityName) { this.entityName = entityName; }
+
+    public Long getEntityId() { return entityId; }
+    public void setEntityId(Long entityId) { this.entityId = entityId; }
+
+    public AuditAction getAction() { return action; }
+    public void setAction(AuditAction action) { this.action = action; }
+
+    public User getPerformedBy() { return performedBy; }
+    public void setPerformedBy(User performedBy) { this.performedBy = performedBy; }
+
+    public String getPreviousState() { return previousState; }
+    public void setPreviousState(String previousState) { this.previousState = previousState; }
+
+    public String getNewState() { return newState; }
+    public void setNewState(String newState) { this.newState = newState; }
+
+    public String getMetadata() { return metadata; }
+    public void setMetadata(String metadata) { this.metadata = metadata; }
+
+    public Instant getCreatedAt() { return createdAt; }
+    public void setCreatedAt(Instant createdAt) { this.createdAt = createdAt; }
 }

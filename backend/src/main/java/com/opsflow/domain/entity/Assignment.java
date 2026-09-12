@@ -2,7 +2,6 @@ package com.opsflow.domain.entity;
 
 import com.opsflow.domain.enums.AssignmentStatus;
 import jakarta.persistence.*;
-import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
@@ -10,11 +9,6 @@ import java.time.Instant;
 
 @Entity
 @Table(name = "assignments")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class Assignment {
 
     @Id
@@ -39,7 +33,6 @@ public class Assignment {
     @Column(name = "score_explanation", columnDefinition = "TEXT")
     private String scoreExplanation;
 
-    @Builder.Default
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)
     private AssignmentStatus status = AssignmentStatus.OFFERED;
@@ -53,4 +46,36 @@ public class Assignment {
 
     @Column(name = "rejection_reason", columnDefinition = "TEXT")
     private String rejectionReason;
+
+    public Assignment() {}
+
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public Job getJob() { return job; }
+    public void setJob(Job job) { this.job = job; }
+
+    public Technician getTechnician() { return technician; }
+    public void setTechnician(Technician technician) { this.technician = technician; }
+
+    public User getAssignedBy() { return assignedBy; }
+    public void setAssignedBy(User assignedBy) { this.assignedBy = assignedBy; }
+
+    public BigDecimal getDispatchScore() { return dispatchScore; }
+    public void setDispatchScore(BigDecimal dispatchScore) { this.dispatchScore = dispatchScore; }
+
+    public String getScoreExplanation() { return scoreExplanation; }
+    public void setScoreExplanation(String scoreExplanation) { this.scoreExplanation = scoreExplanation; }
+
+    public AssignmentStatus getStatus() { return status; }
+    public void setStatus(AssignmentStatus status) { this.status = status; }
+
+    public Instant getOfferedAt() { return offeredAt; }
+    public void setOfferedAt(Instant offeredAt) { this.offeredAt = offeredAt; }
+
+    public Instant getRespondedAt() { return respondedAt; }
+    public void setRespondedAt(Instant respondedAt) { this.respondedAt = respondedAt; }
+
+    public String getRejectionReason() { return rejectionReason; }
+    public void setRejectionReason(String rejectionReason) { this.rejectionReason = rejectionReason; }
 }

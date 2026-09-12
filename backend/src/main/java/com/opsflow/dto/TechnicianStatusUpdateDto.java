@@ -2,15 +2,8 @@ package com.opsflow.dto;
 
 import com.opsflow.domain.enums.TechnicianStatus;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
-
 import java.math.BigDecimal;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class TechnicianStatusUpdateDto {
 
     @NotNull(message = "Technician status is required")
@@ -18,4 +11,15 @@ public class TechnicianStatusUpdateDto {
 
     private BigDecimal currentLatitude;
     private BigDecimal currentLongitude;
+
+    public TechnicianStatusUpdateDto() {}
+
+    public TechnicianStatus getStatus() { return status; }
+    public void setStatus(TechnicianStatus status) { this.status = status; }
+
+    public BigDecimal getCurrentLatitude() { return currentLatitude; }
+    public void setCurrentLatitude(BigDecimal currentLatitude) { this.currentLatitude = currentLatitude; }
+
+    public BigDecimal getCurrentLongitude() { return currentLongitude; }
+    public void setCurrentLongitude(BigDecimal currentLongitude) { this.currentLongitude = currentLongitude; }
 }

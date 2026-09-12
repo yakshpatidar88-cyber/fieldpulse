@@ -4,15 +4,9 @@ import com.opsflow.domain.enums.JobPriority;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
 
 import java.math.BigDecimal;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class CreateServiceRequestDto {
 
     @NotBlank(message = "Customer name is required")
@@ -37,6 +31,31 @@ public class CreateServiceRequestDto {
     @NotBlank(message = "Description of service required")
     private String description;
 
-    @Builder.Default
     private JobPriority priority = JobPriority.MEDIUM;
+
+    public CreateServiceRequestDto() {}
+
+    public String getCustomerName() { return customerName; }
+    public void setCustomerName(String customerName) { this.customerName = customerName; }
+
+    public String getCustomerEmail() { return customerEmail; }
+    public void setCustomerEmail(String customerEmail) { this.customerEmail = customerEmail; }
+
+    public String getCustomerPhone() { return customerPhone; }
+    public void setCustomerPhone(String customerPhone) { this.customerPhone = customerPhone; }
+
+    public String getAddress() { return address; }
+    public void setAddress(String address) { this.address = address; }
+
+    public BigDecimal getLatitude() { return latitude; }
+    public void setLatitude(BigDecimal latitude) { this.latitude = latitude; }
+
+    public BigDecimal getLongitude() { return longitude; }
+    public void setLongitude(BigDecimal longitude) { this.longitude = longitude; }
+
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
+
+    public JobPriority getPriority() { return priority; }
+    public void setPriority(JobPriority priority) { this.priority = priority; }
 }
