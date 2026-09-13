@@ -1,18 +1,25 @@
 package com.opsflow.service.impl;
 
 import com.opsflow.domain.entity.*;
+import com.opsflow.domain.enums.AuditAction;
 import com.opsflow.domain.enums.JobPriority;
 import com.opsflow.domain.enums.JobStatus;
 import com.opsflow.domain.enums.SlaRiskLevel;
 import com.opsflow.dto.*;
+import com.opsflow.dto.triage.JobStatusTransitionDto;
+import com.opsflow.exception.BusinessValidationException;
 import com.opsflow.exception.ResourceNotFoundException;
+import com.opsflow.exception.StateTransitionException;
 import com.opsflow.repository.JobRepository;
+import com.opsflow.service.AuditService;
 import com.opsflow.service.JobService;
+import com.opsflow.service.SlaService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -20,9 +27,15 @@ import java.util.stream.Collectors;
 public class JobServiceImpl implements JobService {
 
     private final JobRepository jobRepository;
+    private final SlaService slaService;
+    private final AuditService auditService;
 
-    public JobServiceImpl(JobRepository jobRepository) {
+    public JobServiceImpl(JobRepository jobRepository,
+                          SlaService slaService,
+                          AuditService auditService) {
         this.jobRepository = jobRepository;
+        this.slaService = slaService;
+        this.auditService = auditService;
     }
 
     @Override
@@ -63,6 +76,75 @@ public class JobServiceImpl implements JobService {
                 .stream()
                 .map(this::mapToSummaryDto)
                 .toList();
+    }
+
+    @Override
+    @Transactional
+    public JobDto transitionJobStatus(Long jobId, JobStatusTransitionDto transitionDto, User caller) {
+        Job job = jobRepository.findById(jobId)
+                .orElseThrow(() -> new ResourceNotFoundException("Job", "id", jobId));
+
+        JobStatus currentStatus = job.getStatus();
+        JobStatus targetStatus = transitionDto.getStatus();
+
+        if (!currentStatus.canTransitionTo(targetStatus)) {
+            throw new StateTransitionException("Job #" + job.getJobNumber(), currentStatus.name(), targetStatus.name());
+        }
+
+        Instant now = Instant.now();
+        AuditAction auditAction = determineAuditAction(targetStatus);
+
+        // State-specific business rules
+        if (targetStatus == JobStatus.COMPLETED) {
+            if (transitionDto.getNotes() == null || transitionDto.getNotes().isBlank()) {
+                throw new BusinessValidationException("Completion notes are mandatory to complete a field job.");
+            }
+            job.setCompletedAt(now);
+            job.setCompletionNotes(transitionDto.getNotes());
+            if (job.getSla() != null) {
+                slaService.recordResolution(job.getSla(), now);
+            }
+        } else if (targetStatus == JobStatus.IN_PROGRESS) {
+            if (job.getActualStartTime() == null) {
+                job.setActualStartTime(now);
+            }
+        } else if (targetStatus == JobStatus.ACCEPTED) {
+            if (job.getSla() != null && job.getSla().getRespondedAt() == null) {
+                slaService.recordResponse(job.getSla(), now);
+            }
+        } else if (targetStatus == JobStatus.CANCELLED) {
+            if (transitionDto.getNotes() != null) {
+                job.setCompletionNotes("CANCELLED: " + transitionDto.getNotes());
+            }
+        }
+
+        job.setStatus(targetStatus);
+        Job saved = jobRepository.save(job);
+
+        // Record Audit Event
+        auditService.logEvent(
+                "Job",
+                saved.getId(),
+                auditAction,
+                caller,
+                currentStatus.name(),
+                targetStatus.name(),
+                Map.of("notes", transitionDto.getNotes() != null ? transitionDto.getNotes() : "", "timestamp", now.toString())
+        );
+
+        return mapToDto(saved);
+    }
+
+    private AuditAction determineAuditAction(JobStatus targetStatus) {
+        return switch (targetStatus) {
+            case TRIAGED -> AuditAction.JOB_TRIAGED;
+            case ASSIGNED -> AuditAction.JOB_ASSIGNED;
+            case ACCEPTED -> AuditAction.TECHNICIAN_ACCEPTED;
+            case IN_PROGRESS -> AuditAction.JOB_STARTED;
+            case COMPLETED -> AuditAction.JOB_COMPLETED;
+            case CANCELLED -> AuditAction.JOB_CANCELLED;
+            default -> AuditAction.JOB_CREATED;
+        };
     }
 
     private JobSummaryDto mapToSummaryDto(Job job) {
