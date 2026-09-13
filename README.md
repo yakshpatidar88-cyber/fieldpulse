@@ -112,7 +112,7 @@ opsflow/
 | **Day 1** | **Product & Repository Foundation, Monorepo Scaffolding & Architecture** | ✅ **Done** |
 | **Day 2** | **Domain Modeling, PostgreSQL Schema, Flyway Migrations & Demo Seeding** | ✅ **Done** |
 | **Day 3** | **Spring Boot Layered Foundation, Exception Handling & OpenAPI/Swagger** | ✅ **Done** |
-| **Day 4** | Spring Security 6, JWT Authentication & Role-Based Access Control (RBAC) | ⏳ Planned |
+| **Day 4** | **Spring Security 6, JWT Authentication & Role-Based Access Control (RBAC)** | ✅ **Done** |
 | **Day 5** | Core Service Request Workflow, SLA Calculation & Audit Trail Engine | ⏳ Planned |
 | **Day 6** | Multi-Factor Dispatch Engine & Candidate Scoring Algorithm | ⏳ Planned |
 | **Day 7** | Transactional Inventory Reservation & Stock Guarding Rules | ⏳ Planned |
