@@ -12,6 +12,7 @@ import com.opsflow.repository.TechnicianRepository;
 import com.opsflow.service.AuditService;
 import com.opsflow.service.DispatchScoringEngine;
 import com.opsflow.service.DispatchService;
+import com.opsflow.service.InventoryService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,18 +28,21 @@ public class DispatchServiceImpl implements DispatchService {
     private final AssignmentRepository assignmentRepository;
     private final DispatchScoringEngine scoringEngine;
     private final AuditService auditService;
+    private final InventoryService inventoryService;
 
     public DispatchServiceImpl(
             JobRepository jobRepository,
             TechnicianRepository technicianRepository,
             AssignmentRepository assignmentRepository,
             DispatchScoringEngine scoringEngine,
-            AuditService auditService) {
+            AuditService auditService,
+            InventoryService inventoryService) {
         this.jobRepository = jobRepository;
         this.technicianRepository = technicianRepository;
         this.assignmentRepository = assignmentRepository;
         this.scoringEngine = scoringEngine;
         this.auditService = auditService;
+        this.inventoryService = inventoryService;
     }
 
     @Override
@@ -128,6 +132,9 @@ public class DispatchServiceImpl implements DispatchService {
         AuditAction auditAction = (currentStatus == JobStatus.ASSIGNED)
                 ? AuditAction.JOB_REASSIGNED
                 : AuditAction.JOB_ASSIGNED;
+
+        // Transactional inventory reservation: lock & reserve parts
+        inventoryService.reservePartsForJob(job.getId(), caller);
 
         // Create Assignment record
         Assignment assignment = new Assignment();

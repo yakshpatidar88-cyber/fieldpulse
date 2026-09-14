@@ -44,6 +44,9 @@ class DispatchServiceTest {
     @Mock
     private AuditService auditService;
 
+    @Mock
+    private InventoryService inventoryService;
+
     private DispatchService dispatchService;
 
     @BeforeEach
@@ -53,7 +56,8 @@ class DispatchServiceTest {
                 technicianRepository,
                 assignmentRepository,
                 scoringEngine,
-                auditService
+                auditService,
+                inventoryService
         );
     }
 

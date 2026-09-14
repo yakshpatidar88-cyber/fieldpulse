@@ -5,6 +5,7 @@ import com.opsflow.domain.enums.AuditAction;
 import com.opsflow.domain.enums.JobPriority;
 import com.opsflow.domain.enums.JobStatus;
 import com.opsflow.domain.enums.SlaRiskLevel;
+import com.opsflow.domain.enums.TechnicianStatus;
 import com.opsflow.dto.*;
 import com.opsflow.dto.triage.JobStatusTransitionDto;
 import com.opsflow.exception.BusinessValidationException;
@@ -12,6 +13,7 @@ import com.opsflow.exception.ResourceNotFoundException;
 import com.opsflow.exception.StateTransitionException;
 import com.opsflow.repository.JobRepository;
 import com.opsflow.service.AuditService;
+import com.opsflow.service.InventoryService;
 import com.opsflow.service.JobService;
 import com.opsflow.service.SlaService;
 import org.springframework.stereotype.Service;
@@ -29,13 +31,16 @@ public class JobServiceImpl implements JobService {
     private final JobRepository jobRepository;
     private final SlaService slaService;
     private final AuditService auditService;
+    private final InventoryService inventoryService;
 
     public JobServiceImpl(JobRepository jobRepository,
                           SlaService slaService,
-                          AuditService auditService) {
+                          AuditService auditService,
+                          InventoryService inventoryService) {
         this.jobRepository = jobRepository;
         this.slaService = slaService;
         this.auditService = auditService;
+        this.inventoryService = inventoryService;
     }
 
     @Override
@@ -104,6 +109,17 @@ public class JobServiceImpl implements JobService {
             if (job.getSla() != null) {
                 slaService.recordResolution(job.getSla(), now);
             }
+            // Permanently consume reserved inventory parts
+            inventoryService.consumePartsForJob(job.getId(), caller);
+
+            // Free technician workload
+            if (job.getAssignedTechnician() != null) {
+                Technician tech = job.getAssignedTechnician();
+                tech.setActiveJobsCount(Math.max(0, tech.getActiveJobsCount() - 1));
+                if (tech.getStatus() == TechnicianStatus.ON_JOB) {
+                    tech.setStatus(TechnicianStatus.AVAILABLE);
+                }
+            }
         } else if (targetStatus == JobStatus.IN_PROGRESS) {
             if (job.getActualStartTime() == null) {
                 job.setActualStartTime(now);
@@ -115,6 +131,17 @@ public class JobServiceImpl implements JobService {
         } else if (targetStatus == JobStatus.CANCELLED) {
             if (transitionDto.getNotes() != null) {
                 job.setCompletionNotes("CANCELLED: " + transitionDto.getNotes());
+            }
+            // Release any reserved inventory parts back to available stock
+            inventoryService.releasePartsForJob(job.getId(), caller);
+
+            // Free technician workload
+            if (job.getAssignedTechnician() != null) {
+                Technician tech = job.getAssignedTechnician();
+                tech.setActiveJobsCount(Math.max(0, tech.getActiveJobsCount() - 1));
+                if (tech.getStatus() == TechnicianStatus.ON_JOB) {
+                    tech.setStatus(TechnicianStatus.AVAILABLE);
+                }
             }
         }
 

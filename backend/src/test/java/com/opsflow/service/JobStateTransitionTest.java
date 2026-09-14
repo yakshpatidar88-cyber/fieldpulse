@@ -38,11 +38,14 @@ class JobStateTransitionTest {
     @Mock
     private AuditService auditService;
 
+    @Mock
+    private InventoryService inventoryService;
+
     private JobService jobService;
 
     @BeforeEach
     void setUp() {
-        jobService = new JobServiceImpl(jobRepository, slaService, auditService);
+        jobService = new JobServiceImpl(jobRepository, slaService, auditService, inventoryService);
     }
 
     @Test
