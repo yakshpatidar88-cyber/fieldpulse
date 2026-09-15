@@ -116,7 +116,7 @@ opsflow/
 | **Day 5** | **Core Service Request Workflow, SLA Calculation & Audit Trail Engine** | ✅ **Done** |
 | **Day 6** | **Multi-Factor Dispatch Engine & Candidate Scoring Algorithm** | ✅ **Done** |
 | **Day 7** | **Transactional Inventory Reservation & Stock Guarding Rules** | ✅ **Done** |
-| **Day 8** | Background SLA Escalation Engine, Polling Scheduler & Notifications | ⏳ Planned |
+| **Day 8** | **Background SLA Escalation Engine, Polling Scheduler & Notifications** | ✅ **Done** |
 | **Day 9** | React 18 + TypeScript + Tailwind Frontend Foundation & Auth Routing | ⏳ Planned |
 | **Day 10** | Operations Dispatch Board, Leaflet Maps & Candidate Recommendation Cards | ⏳ Planned |
 | **Day 11** | Real-Time WebSocket/STOMP Updates & Operations KPI Dashboard | ⏳ Planned |
