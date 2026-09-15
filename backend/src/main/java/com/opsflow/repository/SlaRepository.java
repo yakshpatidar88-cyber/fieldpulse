@@ -21,4 +21,7 @@ public interface SlaRepository extends JpaRepository<Sla, Long> {
 
     @Query("SELECT s FROM Sla s WHERE s.resolvedAt IS NULL AND s.riskLevel = 'HEALTHY' AND s.resolutionDeadline <= :warningThreshold")
     List<Sla> findApproachingSlas(@Param("warningThreshold") Instant warningThreshold);
+
+    @Query("SELECT s FROM Sla s JOIN FETCH s.job j WHERE s.resolvedAt IS NULL AND j.status NOT IN (com.opsflow.domain.enums.JobStatus.COMPLETED, com.opsflow.domain.enums.JobStatus.CANCELLED)")
+    List<Sla> findActiveUnresolvedSlas();
 }
