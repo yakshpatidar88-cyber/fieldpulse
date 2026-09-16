@@ -61,3 +61,20 @@ export interface JobStatusTransitionRequest {
   status: JobStatus;
   notes?: string;
 }
+
+export interface JobSummary {
+  id: number;
+  jobNumber: string;
+  priority: JobPriority;
+  status: JobStatus;
+  address: string;
+  latitude: number;
+  longitude: number;
+  estimatedDurationMinutes: number;
+  assignedTechnicianName?: string;
+  assignedTechnicianId?: number;
+  slaRiskLevel?: 'HEALTHY' | 'WARNING' | 'BREACHED';
+  resolutionDeadline?: string;
+  createdAt: string;
+}
+

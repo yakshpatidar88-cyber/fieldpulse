@@ -18,6 +18,18 @@ export interface Technician {
   skills: Skill[];
 }
 
+export interface TechnicianSummary {
+  id: number;
+  fullName: string;
+  employeeCode: string;
+  status: TechnicianStatus;
+  activeJobsCount: number;
+  maxConcurrentJobs: number;
+  rating: number;
+  currentLatitude: number;
+  currentLongitude: number;
+}
+
 export interface ScoreBreakdown {
   skillScore: number;
   distanceScore: number;
