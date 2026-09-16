@@ -5,8 +5,8 @@ import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { AppLayout } from './components/layout/AppLayout';
 import { LoginPage } from './pages/LoginPage';
 import { DashboardPage } from './pages/DashboardPage';
+import { DispatchConsolePage } from './pages/DispatchConsolePage';
 import {
-  DispatchConsolePage,
   JobsPage,
   InventoryPage,
   SlaPage,

@@ -1,39 +1,7 @@
 import React from 'react';
 import { Card } from '../components/ui/Card';
 import { Badge } from '../components/ui/Badge';
-import { Send, Briefcase, Boxes, ShieldAlert } from 'lucide-react';
-
-export const DispatchConsolePage: React.FC = () => {
-  return (
-    <div className="space-y-6 max-w-7xl mx-auto">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold text-white tracking-tight flex items-center gap-2">
-            <Send className="w-6 h-6 text-teal-400" />
-            Dispatch Recommendation Engine
-          </h2>
-          <p className="text-sm text-slate-400 mt-1">
-            Automated multi-criteria candidate scoring: distance (Haversine), skill match, workload balancing, and SLA priority weight.
-          </p>
-        </div>
-        <Badge variant="info">Day 10 Feature Ready</Badge>
-      </div>
-
-      <Card
-        title="Interactive Dispatch Console"
-        subtitle="Frontend UI hooked to GET /api/v1/dispatch/recommendations/{serviceRequestId}"
-      >
-        <div className="border border-dashed border-slate-800 rounded-xl p-12 text-center text-slate-500">
-          <Send className="w-12 h-12 mx-auto mb-4 text-teal-500/40" />
-          <p className="text-base font-medium text-slate-300">Ready for Day 10 Dispatch UI Integration</p>
-          <p className="text-xs text-slate-500 mt-1">
-            Will render Leaflet map route markers, scored candidate ranking cards, and 1-click job assignment.
-          </p>
-        </div>
-      </Card>
-    </div>
-  );
-};
+import { Briefcase, Boxes, ShieldAlert } from 'lucide-react';
 
 export const JobsPage: React.FC = () => {
   return (
