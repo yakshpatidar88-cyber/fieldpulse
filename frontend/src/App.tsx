@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+import { WebSocketProvider } from './context/WebSocketContext';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { AppLayout } from './components/layout/AppLayout';
 import { LoginPage } from './pages/LoginPage';
@@ -16,9 +17,10 @@ export default function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <Routes>
-          {/* Public Auth Route */}
-          <Route path="/login" element={<LoginPage />} />
+        <WebSocketProvider>
+          <Routes>
+            {/* Public Auth Route */}
+            <Route path="/login" element={<LoginPage />} />
 
           {/* Protected Application Shell */}
           <Route
@@ -54,7 +56,8 @@ export default function App() {
           {/* Fallback */}
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
-      </AuthProvider>
-    </BrowserRouter>
+      </WebSocketProvider>
+    </AuthProvider>
+  </BrowserRouter>
   );
 }
