@@ -18,9 +18,17 @@ public class NotificationServiceImpl implements NotificationService {
 
     private final ConcurrentLinkedDeque<NotificationDto> notifications = new ConcurrentLinkedDeque<>();
     private final int maxBufferSize;
+    private final org.springframework.messaging.simp.SimpMessagingTemplate messagingTemplate;
 
-    public NotificationServiceImpl(@Value("${opsflow.notifications.max-buffer-size:500}") int maxBufferSize) {
+    public NotificationServiceImpl(
+            @Value("${opsflow.notifications.max-buffer-size:500}") int maxBufferSize,
+            org.springframework.messaging.simp.SimpMessagingTemplate messagingTemplate) {
         this.maxBufferSize = maxBufferSize;
+        this.messagingTemplate = messagingTemplate;
+    }
+
+    public NotificationServiceImpl(int maxBufferSize) {
+        this(maxBufferSize, null);
     }
 
     @Override
@@ -34,6 +42,15 @@ public class NotificationServiceImpl implements NotificationService {
         // Evict oldest if exceeding max size
         while (notifications.size() > maxBufferSize) {
             notifications.pollLast();
+        }
+
+        // Push real-time alert over WebSocket STOMP topic
+        if (messagingTemplate != null) {
+            try {
+                messagingTemplate.convertAndSend("/topic/alerts", alert);
+            } catch (Exception e) {
+                log.warn("Failed to dispatch WebSocket alert to /topic/alerts: {}", e.getMessage());
+            }
         }
 
         log.info("OPERATIONAL ALERT [{}]: Job #{} - {} | {}",

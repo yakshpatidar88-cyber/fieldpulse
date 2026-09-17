@@ -47,7 +47,8 @@ public class SecurityConfig {
                                 "/docs/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",
-                                "/v3/api-docs/**"
+                                "/v3/api-docs/**",
+                                "/ws/**"
                         ).permitAll()
                         .requestMatchers(HttpMethod.POST, "/requests").permitAll() // Allow customers to submit requests
                         .anyRequest().authenticated()
