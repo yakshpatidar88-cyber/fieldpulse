@@ -120,7 +120,7 @@ opsflow/
 | **Day 9** | **React 18 + TypeScript + Tailwind Frontend Foundation & Auth Routing** | ✅ **Done** |
 | **Day 10** | **Operations Dispatch Board, Leaflet Maps & Candidate Recommendation Cards** | ✅ **Done** |
 | **Day 11** | **Real-Time WebSocket/STOMP Updates & Operations KPI Dashboard** | ✅ **Done** |
-| **Day 12** | Testcontainers Integration Tests, React Testing Library & Dockerization | ⏳ Planned |
+| **Day 12** | **Testcontainers Integration Tests, React Testing Library & Dockerization** | ✅ **Done** |
 | **Day 13** | Cloud Deployment (Render/Railway + Vercel) & Production Polish | ⏳ Planned |
 | **Day 14** | Documentation Finalization, Demo Video/GIF & Resume Interview Readiness | ⏳ Planned |
 
