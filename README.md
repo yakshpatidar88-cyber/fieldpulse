@@ -121,7 +121,7 @@ opsflow/
 | **Day 10** | **Operations Dispatch Board, Leaflet Maps & Candidate Recommendation Cards** | ✅ **Done** |
 | **Day 11** | **Real-Time WebSocket/STOMP Updates & Operations KPI Dashboard** | ✅ **Done** |
 | **Day 12** | **Testcontainers Integration Tests, React Testing Library & Dockerization** | ✅ **Done** |
-| **Day 13** | Cloud Deployment (Render/Railway + Vercel) & Production Polish | ⏳ Planned |
+| **Day 13** | **Cloud Deployment (Render/Railway + Vercel) & Production Polish** | ✅ **Done** |
 | **Day 14** | Documentation Finalization, Demo Video/GIF & Resume Interview Readiness | ⏳ Planned |
 
 ---
@@ -140,15 +140,17 @@ docker compose up -d
 This spins up:
 - **PostgreSQL 16** on `localhost:5432` (`opsflow` / `opsflow_dev_password`)
 - **Redis 7** on `localhost:6379`
+- **OpsFlow Backend** on `localhost:8080`
+- **OpsFlow Frontend** on `localhost:3000`
 
-### 2. Run Backend
+### 2. Run Backend Locally
 ```bash
 cd backend
 ./mvnw spring-boot:run
 # Swagger UI available at: http://localhost:8080/api/v1/docs/swagger-ui.html
 ```
 
-### 3. Run Frontend
+### 3. Run Frontend Locally
 ```bash
 cd frontend
 npm install
@@ -158,7 +160,24 @@ npm run dev
 
 ---
 
-## 7. Engineering Decisions for Technical Interviews
+## 7. Cloud Deployment Guide (Render / Railway + Vercel)
+
+OpsFlow is cloud-native and ready for 1-click PaaS/FaaS deployment:
+
+### Backend Deployment (Render or Railway)
+- **Render Blueprint**: Connect the repository and select `render.yaml` to provision Managed PostgreSQL 16, Redis 7, and the Dockerized Spring Boot 3 API with native health probes (`/api/v1/health`).
+- **Railway**: Deploy using the root `docker-compose.yml` or backend `Dockerfile` setting `SPRING_PROFILES_ACTIVE=prod`.
+
+### Frontend Deployment (Vercel)
+- Connect repository root specifying `Root Directory: frontend`.
+- Environment Variables:
+  - `VITE_API_BASE_URL`: `https://<your-backend-service>.onrender.com/api/v1`
+  - `VITE_WS_URL`: `https://<your-backend-service>.onrender.com/ws`
+- `vercel.json` provides automated SPA fallback routing and proxy handling.
+
+---
+
+## 8. Engineering Decisions for Technical Interviews
 
 - **Concurrency Control**: Pessimistic write locking on inventory entities prevents overselling or phantom reservations across parallel dispatch sessions.
 - **Virtual Threads**: Java 21 virtual threads handle high-concurrency I/O operations without thread pool exhaustion.
@@ -167,6 +186,6 @@ npm run dev
 
 ---
 
-## 8. License
+## 9. License
 
 This project is licensed under the [MIT License](LICENSE).
