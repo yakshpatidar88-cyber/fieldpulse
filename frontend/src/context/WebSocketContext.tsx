@@ -67,10 +67,13 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
 
     // Configure STOMP Client over SockJS fallback to ensure cross-environment stability
     const token = localStorage.getItem('opsflow_access_token');
+    const wsBaseUrl = import.meta.env.VITE_WS_URL || (
+      typeof window !== 'undefined' && window.location.hostname === 'localhost'
+        ? 'http://localhost:8080/ws'
+        : '/ws'
+    );
     const socketFactory = () => {
-      // Direct origin or fallback to localhost:8080/ws
-      const host = window.location.hostname === 'localhost' ? 'http://localhost:8080/ws' : '/ws';
-      return new SockJS(host);
+      return new SockJS(wsBaseUrl);
     };
 
     const client = new Client({
