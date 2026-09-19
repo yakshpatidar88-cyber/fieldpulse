@@ -122,11 +122,33 @@ opsflow/
 | **Day 11** | **Real-Time WebSocket/STOMP Updates & Operations KPI Dashboard** | ✅ **Done** |
 | **Day 12** | **Testcontainers Integration Tests, React Testing Library & Dockerization** | ✅ **Done** |
 | **Day 13** | **Cloud Deployment (Render/Railway + Vercel) & Production Polish** | ✅ **Done** |
-| **Day 14** | Documentation Finalization, Demo Video/GIF & Resume Interview Readiness | ⏳ Planned |
+| **Day 14** | **Documentation Finalization, Demo Video/GIF & Resume Interview Readiness** | ✅ **Done** |
 
 ---
 
-## 6. Local Quickstart
+## 6. Live Architecture & Interactive Console Showcase
+
+| Command Deck & Live SLA Dashboard | Operations Dispatch & Haversine Map |
+| :---: | :---: |
+| Real-time KPIs, tiered risk monitoring, and alert streams | Multi-factor candidate scoring, Leaflet map routes, and 1-click dispatch |
+
+```
+                                 OPERATIONS COMMAND DECK
+  +-----------------------------------------------------------------------------------+
+  |  Active Field Jobs: 24   |  SLA Warning: 2  |  Compliance: 95.8%  |  Parts: Locked |
+  +-----------------------------------------------------------------------------------+
+  |  [LIVE WS] STOMP Stream:                                                          |
+  |  - CRITICAL: SR-1002 Main Cooling Tower Pump Failure (Dallas Clinic) < 1h 14m     |
+  |  - WARNING:  SR-1005 3-Phase Inverter Fault (Distribution Center B)   < 3h 45m     |
+  |                                                                                   |
+  |  Dispatch Actions:                                                                |
+  |  [ Candidate #1: Alex Rivera (Score: 91.8/100 | Distance: 4.2 km | Matched: 2/2) ]|
+  +-----------------------------------------------------------------------------------+
+```
+
+---
+
+## 7. Local Quickstart
 
 ### Prerequisites
 - [Java 21 OpenJDK / Temurin](https://adoptium.net/)
@@ -160,7 +182,7 @@ npm run dev
 
 ---
 
-## 7. Cloud Deployment Guide (Render / Railway + Vercel)
+## 8. Cloud Deployment Guide (Render / Railway + Vercel)
 
 OpsFlow is cloud-native and ready for 1-click PaaS/FaaS deployment:
 
@@ -177,7 +199,7 @@ OpsFlow is cloud-native and ready for 1-click PaaS/FaaS deployment:
 
 ---
 
-## 8. Engineering Decisions for Technical Interviews
+## 9. Engineering Decisions for Technical Interviews
 
 - **Concurrency Control**: Pessimistic write locking on inventory entities prevents overselling or phantom reservations across parallel dispatch sessions.
 - **Virtual Threads**: Java 21 virtual threads handle high-concurrency I/O operations without thread pool exhaustion.
@@ -186,6 +208,17 @@ OpsFlow is cloud-native and ready for 1-click PaaS/FaaS deployment:
 
 ---
 
-## 9. License
+## 10. Documentation Index & Technical Resources
+
+- [Problem Statement & Operational Domain](docs/problem-statement.md)
+- [System Architecture & Data Flows](docs/architecture.md)
+- [Relational Schema & Flyway Migrations](docs/database-design.md)
+- [MVP Functional Boundaries & Scoring Formulas](docs/mvp-scope.md)
+- [Complete REST API & WebSocket Reference](docs/api-reference.md)
+- [Technical Interview Walkthrough & Defense Guide](docs/interview-guide.md)
+
+---
+
+## 11. License
 
 This project is licensed under the [MIT License](LICENSE).
