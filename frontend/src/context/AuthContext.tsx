@@ -17,9 +17,9 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const TOKEN_KEY = 'opsflow_access_token';
-const REFRESH_KEY = 'opsflow_refresh_token';
-const USER_KEY = 'opsflow_user';
+const TOKEN_KEY = 'fieldpulse_access_token';
+const REFRESH_KEY = 'fieldpulse_refresh_token';
+const USER_KEY = 'fieldpulse_user';
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);

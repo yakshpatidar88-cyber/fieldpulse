@@ -67,7 +67,7 @@ export const Sidebar: React.FC = () => {
           </div>
           <div>
             <h1 className="font-bold text-base tracking-tight text-white flex items-center gap-1.5">
-              OpsFlow
+              FieldPulse
               <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-teal-500/20 text-teal-300 border border-teal-500/30">
                 v1.0
               </span>

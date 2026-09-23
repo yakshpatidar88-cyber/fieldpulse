@@ -15,13 +15,13 @@ FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 
 # Create non-root user
-RUN addgroup -S opsflow && adduser -S opsflow -G opsflow
+RUN addgroup -S fieldpulse && adduser -S fieldpulse -G fieldpulse
 
 # Copy built artifact
-COPY --from=build /app/target/opsflow-backend-0.0.1-SNAPSHOT.jar app.jar
-RUN chown opsflow:opsflow app.jar
+COPY --from=build /app/target/fieldpulse-backend-0.0.1-SNAPSHOT.jar app.jar
+RUN chown fieldpulse:fieldpulse app.jar
 
-USER opsflow
+USER fieldpulse
 
 EXPOSE 8080
 

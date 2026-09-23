@@ -13,7 +13,7 @@ export const apiClient = axios.create({
 // Request Interceptor: Attach JWT Bearer Token
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    const token = localStorage.getItem('opsflow_access_token');
+    const token = localStorage.getItem('fieldpulse_access_token');
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -28,9 +28,9 @@ apiClient.interceptors.response.use(
   (error: AxiosError) => {
     if (error.response && error.response.status === 401) {
       // Clear expired credentials
-      localStorage.removeItem('opsflow_access_token');
-      localStorage.removeItem('opsflow_refresh_token');
-      localStorage.removeItem('opsflow_user');
+      localStorage.removeItem('fieldpulse_access_token');
+      localStorage.removeItem('fieldpulse_refresh_token');
+      localStorage.removeItem('fieldpulse_user');
 
       // Redirect to login if not already there
       if (typeof window !== 'undefined' && !window.location.pathname.includes('/login')) {

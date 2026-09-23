@@ -5,12 +5,12 @@ server:
 
 spring:
   application:
-    name: opsflow-backend
+    name: fieldpulse-backend
 
   datasource:
-    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:opsflow}
-    username: ${DB_USER:opsflow}
-    password: ${DB_PASSWORD:opsflow_dev_password}
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:fieldpulse}
+    username: ${DB_USER:fieldpulse}
+    password: ${DB_PASSWORD:fieldpulse_dev_password}
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: 10
@@ -39,13 +39,14 @@ spring:
       port: ${REDIS_PORT:6379}
       timeout: 2000ms
 
-opsflow:
+fieldpulse:
   jwt:
     secret: ${JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
     access-token-expiration-ms: 86400000 # 24 hours
     refresh-token-expiration-ms: 604800000 # 7 days
   sla:
     check-interval-ms: 60000
+    polling-rate-ms: 60000
     critical-resolution-minutes: 120
     high-resolution-minutes: 240
     medium-resolution-minutes: 480

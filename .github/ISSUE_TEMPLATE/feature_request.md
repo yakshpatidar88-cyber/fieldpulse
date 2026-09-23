@@ -1,6 +1,6 @@
 ---
 name: Feature Request
-about: Suggest an idea or operational improvement for OpsFlow
+about: Suggest an idea or operational improvement for FieldPulse
 title: '[FEAT] '
 labels: enhancement
 assignees: ''

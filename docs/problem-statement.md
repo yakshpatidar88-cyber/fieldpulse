@@ -1,4 +1,4 @@
-# OpsFlow: Problem Statement & Target User Personas
+# FieldPulse: Problem Statement & Target User Personas
 
 ## 1. Executive Summary
 
@@ -6,7 +6,7 @@ Modern field-service enterprises—including HVAC, commercial electrical, applia
 
 > **Who is the optimal technician to dispatch right now, taking into account their certified skills, geographical proximity, current shift workload, parts availability, and the customer's strict SLA deadline?**
 
-Misallocating field technicians results in delayed response times, missed Service Level Agreements (SLAs), costly secondary truck rolls (due to missing parts or unqualified personnel), technician burnout, and customer churn. **OpsFlow** is an intelligent, SLA-aware operations and dispatch platform engineered to transform reactive field coordination into an automated, constraint-driven dispatch engine.
+Misallocating field technicians results in delayed response times, missed Service Level Agreements (SLAs), costly secondary truck rolls (due to missing parts or unqualified personnel), technician burnout, and customer churn. **FieldPulse** is an intelligent, SLA-aware operations and dispatch platform engineered to transform reactive field coordination into an automated, constraint-driven dispatch engine.
 
 ---
 
@@ -25,7 +25,7 @@ When multiple dispatchers coordinate dozens of technicians simultaneously:
 - Job status updates from mobile technicians lack strict state-machine enforcement, leading to lost audit trails and untraceable customer disputes.
 
 ### 2.3 Operational Metrics Impacted
-| Operational Metric | Industry Baseline | Target with OpsFlow |
+| Operational Metric | Industry Baseline | Target with FieldPulse |
 | :--- | :--- | :--- |
 | **First-Time Fix Rate (FTFR)** | 65% – 72% | > 88% |
 | **SLA Breach Rate** | 14% – 18% | < 3% |
@@ -44,7 +44,7 @@ When multiple dispatchers coordinate dozens of technicians simultaneously:
   - Overwhelmed by simultaneous phone calls and tickets.
   - Has to mentally cross-reference technician skills, calendars, traffic, and inventory stock.
   - Anxious about missing enterprise contract SLAs that carry financial penalties.
-- **Goals with OpsFlow**: A unified real-time dispatch board with multi-criteria ranked recommendations and one-click dispatch approval.
+- **Goals with FieldPulse**: A unified real-time dispatch board with multi-criteria ranked recommendations and one-click dispatch approval.
 
 ### Persona 2: Marcus Vance – Senior Field Technician
 - **Role**: Certified HVAC & Electrical Field Specialist
@@ -53,7 +53,7 @@ When multiple dispatchers coordinate dozens of technicians simultaneously:
   - Sent to jobs without the required parts or tools.
   - Overloaded with unrealistic back-to-back schedules with overlapping travel windows.
   - Unclear customer history or safety requirements.
-- **Goals with OpsFlow**: A clean mobile-first view showing job details, attached part reservations, navigation, clear SLA countdowns, and quick status transitions.
+- **Goals with FieldPulse**: A clean mobile-first view showing job details, attached part reservations, navigation, clear SLA countdowns, and quick status transitions.
 
 ### Persona 3: David Sterling – Service Operations Director
 - **Role**: Executive / General Manager
@@ -62,7 +62,7 @@ When multiple dispatchers coordinate dozens of technicians simultaneously:
   - Lack of real-time visibility into active fleet operations.
   - Discovering SLA breaches only after customers escalate or penalize invoices.
   - Inability to trace why bad dispatch decisions were made due to lack of audit history.
-- **Goals with OpsFlow**: High-level KPI dashboard tracking active jobs, SLA risk distribution, technician utilization, and comprehensive audit trails.
+- **Goals with FieldPulse**: High-level KPI dashboard tracking active jobs, SLA risk distribution, technician utilization, and comprehensive audit trails.
 
 ### Persona 4: Elena Rostova – Commercial Facility Customer
 - **Role**: Facility Manager (Customer)
@@ -71,4 +71,4 @@ When multiple dispatchers coordinate dozens of technicians simultaneously:
   - Vague arrival windows ("technician will arrive between 8 AM and 5 PM").
   - Technicians who show up unprepared.
   - Breached maintenance contracts.
-- **Goals with OpsFlow**: Instant request acknowledgment, predictable SLA deadlines, real-time status updates, and digital proof-of-work completion.
+- **Goals with FieldPulse**: Instant request acknowledgment, predictable SLA deadlines, real-time status updates, and digital proof-of-work completion.

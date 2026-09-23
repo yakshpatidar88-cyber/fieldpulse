@@ -1,5 +1,5 @@
 -- ==============================================================================
--- OpsFlow Database Migration V2: Seed Realistic Demo Data
+-- FieldPulse Database Migration V2: Seed Realistic Demo Data
 -- ==============================================================================
 
 -- 1. Seed Roles
@@ -11,11 +11,11 @@ INSERT INTO roles (id, name) VALUES
 
 -- 2. Seed Users (Default BCrypt hash for 'Password123!': $2a$10$7EqJtq98hPqEX7fNZaFWoO.8kEZFq1hLgVvV3h9fGqP7Jc8j1H1dG)
 INSERT INTO users (id, email, password_hash, first_name, last_name, active) VALUES
-(1, 'admin@opsflow.io', '$2a$10$7EqJtq98hPqEX7fNZaFWoO.8kEZFq1hLgVvV3h9fGqP7Jc8j1H1dG', 'Alex', 'Sterling', TRUE),
-(2, 'dispatcher.sarah@opsflow.io', '$2a$10$7EqJtq98hPqEX7fNZaFWoO.8kEZFq1hLgVvV3h9fGqP7Jc8j1H1dG', 'Sarah', 'Jenkins', TRUE),
-(3, 'tech.marcus@opsflow.io', '$2a$10$7EqJtq98hPqEX7fNZaFWoO.8kEZFq1hLgVvV3h9fGqP7Jc8j1H1dG', 'Marcus', 'Vance', TRUE),
-(4, 'tech.elena@opsflow.io', '$2a$10$7EqJtq98hPqEX7fNZaFWoO.8kEZFq1hLgVvV3h9fGqP7Jc8j1H1dG', 'Elena', 'Rostova', TRUE),
-(5, 'tech.david@opsflow.io', '$2a$10$7EqJtq98hPqEX7fNZaFWoO.8kEZFq1hLgVvV3h9fGqP7Jc8j1H1dG', 'David', 'Kim', TRUE),
+(1, 'admin@fieldpulse.io', '$2a$10$7EqJtq98hPqEX7fNZaFWoO.8kEZFq1hLgVvV3h9fGqP7Jc8j1H1dG', 'Alex', 'Sterling', TRUE),
+(2, 'dispatcher.sarah@fieldpulse.io', '$2a$10$7EqJtq98hPqEX7fNZaFWoO.8kEZFq1hLgVvV3h9fGqP7Jc8j1H1dG', 'Sarah', 'Jenkins', TRUE),
+(3, 'tech.marcus@fieldpulse.io', '$2a$10$7EqJtq98hPqEX7fNZaFWoO.8kEZFq1hLgVvV3h9fGqP7Jc8j1H1dG', 'Marcus', 'Vance', TRUE),
+(4, 'tech.elena@fieldpulse.io', '$2a$10$7EqJtq98hPqEX7fNZaFWoO.8kEZFq1hLgVvV3h9fGqP7Jc8j1H1dG', 'Elena', 'Rostova', TRUE),
+(5, 'tech.david@fieldpulse.io', '$2a$10$7EqJtq98hPqEX7fNZaFWoO.8kEZFq1hLgVvV3h9fGqP7Jc8j1H1dG', 'David', 'Kim', TRUE),
 (6, 'customer.metro@facility.com', '$2a$10$7EqJtq98hPqEX7fNZaFWoO.8kEZFq1hLgVvV3h9fGqP7Jc8j1H1dG', 'Robert', 'Miller', TRUE);
 
 -- Map User Roles

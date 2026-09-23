@@ -1,8 +1,8 @@
-# OpsFlow: Database Design & Entity Relationship Specification
+# FieldPulse: Database Design & Entity Relationship Specification
 
 ## 1. Executive Summary
 
-The OpsFlow database schema is designed for high-concurrency field operations, multi-criteria dispatch optimization, transactional inventory tracking, and immutable audit logging. It enforces relational integrity through foreign keys, check constraints, and indexed lookup paths.
+The FieldPulse database schema is designed for high-concurrency field operations, multi-criteria dispatch optimization, transactional inventory tracking, and immutable audit logging. It enforces relational integrity through foreign keys, check constraints, and indexed lookup paths.
 
 ---
 

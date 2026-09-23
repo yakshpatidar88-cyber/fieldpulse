@@ -18,7 +18,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requir
       <div className="min-h-screen bg-slate-950 flex items-center justify-center">
         <div className="flex flex-col items-center space-y-4">
           <div className="w-10 h-10 border-4 border-teal-500/20 border-t-teal-500 rounded-full animate-spin"></div>
-          <p className="text-sm text-slate-400 font-medium">Authenticating OpsFlow session...</p>
+          <p className="text-sm text-slate-400 font-medium">Authenticating FieldPulse session...</p>
         </div>
       </div>
     );

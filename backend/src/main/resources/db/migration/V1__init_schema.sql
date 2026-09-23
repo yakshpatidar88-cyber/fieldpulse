@@ -1,5 +1,5 @@
 -- ==============================================================================
--- OpsFlow Database Migration V1: Initial Schema
+-- FieldPulse Database Migration V1: Initial Schema
 -- ==============================================================================
 
 -- 1. Roles Table

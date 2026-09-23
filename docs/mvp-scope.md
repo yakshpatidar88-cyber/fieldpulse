@@ -1,8 +1,8 @@
-# OpsFlow: MVP Scope & Business Logic Specification
+# FieldPulse: MVP Scope & Business Logic Specification
 
 ## 1. Product Scope & Functional Boundaries
 
-The Minimum Viable Product (MVP) of OpsFlow concentrates on the high-value core of field operations: translating incoming service requests into SLA-compliant, constraint-validated technician dispatches with inventory locking and real-time observability.
+The Minimum Viable Product (MVP) of FieldPulse concentrates on the high-value core of field operations: translating incoming service requests into SLA-compliant, constraint-validated technician dispatches with inventory locking and real-time observability.
 
 ### In-Scope for MVP (14-Day Roadmap)
 1. **Customer Service Request Management**: Ingestion, triage, geocoding coordinates, priority classification (`LOW`, `MEDIUM`, `HIGH`, `CRITICAL`), and skill requirement assignment.

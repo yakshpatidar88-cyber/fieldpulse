@@ -54,7 +54,7 @@ export const LoginPage: React.FC = () => {
           <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-teal-500/15 border border-teal-500/30 text-teal-400 mb-4 shadow-lg shadow-teal-950/50">
             <Activity className="w-8 h-8" />
           </div>
-          <h2 className="text-3xl font-extrabold text-white tracking-tight">OpsFlow</h2>
+          <h2 className="text-3xl font-extrabold text-white tracking-tight">FieldPulse</h2>
           <p className="mt-2 text-sm text-slate-400">
             Intelligent SLA-Aware Dispatch &amp; Operations
           </p>
@@ -81,7 +81,7 @@ export const LoginPage: React.FC = () => {
               label="Operator Email"
               type="email"
               autoComplete="email"
-              placeholder="name@opsflow.io"
+              placeholder="name@fieldpulse.io"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               leftIcon={<Mail className="w-4 h-4" />}
@@ -118,21 +118,21 @@ export const LoginPage: React.FC = () => {
             <div className="grid grid-cols-3 gap-2">
               <button
                 type="button"
-                onClick={() => handleQuickFill('dispatcher.sarah@opsflow.io')}
+                onClick={() => handleQuickFill('dispatcher.sarah@fieldpulse.io')}
                 className="px-2.5 py-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 text-slate-300 hover:text-white text-xs font-medium transition-colors text-center"
               >
                 Dispatcher
               </button>
               <button
                 type="button"
-                onClick={() => handleQuickFill('admin.marcus@opsflow.io')}
+                onClick={() => handleQuickFill('admin.marcus@fieldpulse.io')}
                 className="px-2.5 py-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 text-slate-300 hover:text-white text-xs font-medium transition-colors text-center"
               >
                 Admin
               </button>
               <button
                 type="button"
-                onClick={() => handleQuickFill('tech.alex@opsflow.io')}
+                onClick={() => handleQuickFill('tech.alex@fieldpulse.io')}
                 className="px-2.5 py-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 text-slate-300 hover:text-white text-xs font-medium transition-colors text-center"
               >
                 Technician
@@ -147,7 +147,7 @@ export const LoginPage: React.FC = () => {
 
         {/* Footer */}
         <p className="text-center text-xs text-slate-400">
-          OpsFlow &copy; 2026. SLA Breach Prevention &amp; Autonomous Dispatch.
+          FieldPulse &copy; 2026. SLA Breach Prevention &amp; Autonomous Dispatch.
         </p>
       </div>
     </div>

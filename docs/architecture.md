@@ -1,8 +1,8 @@
-# OpsFlow: System Architecture & Design Specification
+# FieldPulse: System Architecture & Design Specification
 
 ## 1. High-Level Architecture Overview
 
-OpsFlow is designed as a modern, decoupled client-server platform optimized for high concurrency, real-time operational reactivity, and strong data consistency.
+FieldPulse is designed as a modern, decoupled client-server platform optimized for high concurrency, real-time operational reactivity, and strong data consistency.
 
 ```
                   +----------------------------------------------+

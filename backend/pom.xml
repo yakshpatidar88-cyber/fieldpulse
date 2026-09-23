@@ -10,10 +10,10 @@
         <relativePath/>
     </parent>
 
-    <groupId>com.opsflow</groupId>
-    <artifactId>opsflow-backend</artifactId>
+    <groupId>com.fieldpulse</groupId>
+    <artifactId>fieldpulse-backend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>OpsFlow Backend</name>
+    <name>FieldPulse Backend</name>
     <description>Intelligent SLA-Aware Field Service Dispatch &amp; Operations Platform</description>
 
     <properties>

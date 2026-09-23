@@ -1,6 +1,6 @@
-# OpsFlow API Reference 📚
+# FieldPulse API Reference 📚
 
-OpsFlow provides a secure, OpenAPI 3 compliant REST API and a real-time WebSocket STOMP messaging bus.
+FieldPulse provides a secure, OpenAPI 3 compliant REST API and a real-time WebSocket STOMP messaging bus.
 
 - **Base Context Path**: `/api/v1`
 - **Swagger UI Interactive Explorer**: `http://localhost:8080/api/v1/docs/swagger-ui.html`
@@ -52,7 +52,7 @@ Authenticate user session and obtain access & refresh tokens.
 - **Request Body**:
   ```json
   {
-    "email": "dispatcher.sarah@opsflow.io",
+    "email": "dispatcher.sarah@fieldpulse.io",
     "password": "password123"
   }
   ```
@@ -66,7 +66,7 @@ Authenticate user session and obtain access & refresh tokens.
       "tokenType": "Bearer",
       "expiresIn": 86400000,
       "userId": 2,
-      "email": "dispatcher.sarah@opsflow.io",
+      "email": "dispatcher.sarah@fieldpulse.io",
       "fullName": "Sarah Jenkins",
       "role": "ROLE_DISPATCHER"
     }

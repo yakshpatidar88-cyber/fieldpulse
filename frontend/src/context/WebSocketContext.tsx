@@ -66,7 +66,7 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
     refreshNotifications();
 
     // Configure STOMP Client over SockJS fallback to ensure cross-environment stability
-    const token = localStorage.getItem('opsflow_access_token');
+    const token = localStorage.getItem('fieldpulse_access_token');
     const wsBaseUrl = import.meta.env.VITE_WS_URL || (
       typeof window !== 'undefined' && window.location.hostname === 'localhost'
         ? 'http://localhost:8080/ws'

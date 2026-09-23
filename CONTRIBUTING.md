@@ -1,6 +1,6 @@
-# Contributing to OpsFlow
+# Contributing to FieldPulse
 
-Thank you for your interest in contributing to **OpsFlow**! OpsFlow is an intelligent SLA-aware field service dispatch & operations platform built to provide production-grade field service management.
+Thank you for your interest in contributing to **FieldPulse**! FieldPulse is an intelligent SLA-aware field service dispatch & operations platform built to provide production-grade field service management.
 
 ---
 
@@ -25,7 +25,7 @@ We follow a structured branch naming convention based on GitFlow:
 
 ## 3. Commit Message Conventions
 
-OpsFlow adheres strictly to the [Conventional Commits specification](https://www.conventionalcommits.org/):
+FieldPulse adheres strictly to the [Conventional Commits specification](https://www.conventionalcommits.org/):
 
 ```
 <type>(<scope>): <short summary>

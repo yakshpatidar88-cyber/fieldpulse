@@ -1,7 +1,7 @@
 services:
   # Spring Boot 3 Java 21 Backend Web Service
   - type: web
-    name: opsflow-api
+    name: fieldpulse-api
     env: docker
     dockerfilePath: ./backend/Dockerfile
     dockerContext: ./backend
@@ -16,50 +16,50 @@ services:
         generateValue: true
       - key: DB_HOST
         fromDatabase:
-          name: opsflow-postgres
+          name: fieldpulse-postgres
           property: host
       - key: DB_PORT
         fromDatabase:
-          name: opsflow-postgres
+          name: fieldpulse-postgres
           property: port
       - key: DB_NAME
         fromDatabase:
-          name: opsflow-postgres
+          name: fieldpulse-postgres
           property: database
       - key: DB_USER
         fromDatabase:
-          name: opsflow-postgres
+          name: fieldpulse-postgres
           property: user
       - key: DB_PASSWORD
         fromDatabase:
-          name: opsflow-postgres
+          name: fieldpulse-postgres
           property: password
       - key: REDIS_HOST
         fromService:
           type: redis
-          name: opsflow-redis
+          name: fieldpulse-redis
           property: host
       - key: REDIS_PORT
         fromService:
           type: redis
-          name: opsflow-redis
+          name: fieldpulse-redis
           property: port
       - key: REDIS_PASSWORD
         fromService:
           type: redis
-          name: opsflow-redis
+          name: fieldpulse-redis
           property: password
 
   # Redis 7 In-Memory Cache and Pub/Sub Broker
   - type: redis
-    name: opsflow-redis
+    name: fieldpulse-redis
     plan: starter
     maxmemoryPolicy: allkeys-lru
 
 databases:
   # Managed PostgreSQL 16 Database
-  - name: opsflow-postgres
+  - name: fieldpulse-postgres
     plan: starter
     postgresMajorVersion: 16
-    databaseName: opsflow
-    user: opsflow
+    databaseName: fieldpulse
+    user: fieldpulse

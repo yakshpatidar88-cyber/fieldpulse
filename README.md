@@ -1,4 +1,4 @@
-# OpsFlow ⚡
+# FieldPulse ⚡
 
 ### Intelligent SLA-Aware Field Service Dispatch & Operations Platform
 
@@ -11,11 +11,11 @@
 [![Docker](https://img.shields.io/badge/Docker-Compose-2496ED.svg?style=flat&logo=docker)](https://www.docker.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-OpsFlow transforms reactive customer service requests into an automated, constraint-driven field dispatch engine. Built for HVAC, commercial electrical, appliance repair, and industrial equipment maintenance companies, OpsFlow evaluates certified technician skills, live geolocation proximity, shift workload, part reservations, and SLA breach deadlines to recommend the optimal technician assignment in real time.
+FieldPulse transforms reactive customer service requests into an automated, constraint-driven field dispatch engine. Built for HVAC, commercial electrical, appliance repair, and industrial equipment maintenance companies, FieldPulse evaluates certified technician skills, live geolocation proximity, shift workload, part reservations, and SLA breach deadlines to recommend the optimal technician assignment in real time.
 
 ---
 
-## 1. What Problem Does OpsFlow Solve?
+## 1. What Problem Does FieldPulse Solve?
 
 In field service operations, the challenge is rarely storing a service ticket; it is deciding **who should handle the job, when they can reach the site, whether they hold mandatory certifications, whether required replacement parts are in stock, and whether contract SLAs will be breached**.
 
@@ -72,7 +72,7 @@ In field service operations, the challenge is rarely storing a service ticket; i
 ## 4. Repository Structure
 
 ```
-opsflow/
+FieldPulse/
 ├── .github/
 │   └── ISSUE_TEMPLATE/        # Standardized bug report & feature request templates
 ├── docs/
@@ -83,8 +83,8 @@ opsflow/
 │   ├── pom.xml
 │   └── src/
 │       ├── main/
-│       │   ├── java/com/opsflow/
-│       │   │   └── OpsFlowApplication.java
+│       │   ├── java/com/FieldPulse/
+│       │   │   └── FieldPulseApplication.java
 │       │   └── resources/
 │       │       └── application.yml
 │       └── test/
@@ -160,10 +160,10 @@ opsflow/
 docker compose up -d
 ```
 This spins up:
-- **PostgreSQL 16** on `localhost:5432` (`opsflow` / `opsflow_dev_password`)
+- **PostgreSQL 16** on `localhost:5432` (`FieldPulse` / `fieldpulse_dev_password`)
 - **Redis 7** on `localhost:6379`
-- **OpsFlow Backend** on `localhost:8080`
-- **OpsFlow Frontend** on `localhost:3000`
+- **FieldPulse Backend** on `localhost:8080`
+- **FieldPulse Frontend** on `localhost:3000`
 
 ### 2. Run Backend Locally
 ```bash
@@ -184,7 +184,7 @@ npm run dev
 
 ## 8. Cloud Deployment Guide (Render / Railway + Vercel)
 
-OpsFlow is cloud-native and ready for 1-click PaaS/FaaS deployment:
+FieldPulse is cloud-native and ready for 1-click PaaS/FaaS deployment:
 
 ### Backend Deployment (Render or Railway)
 - **Render Blueprint**: Connect the repository and select `render.yaml` to provision Managed PostgreSQL 16, Redis 7, and the Dockerized Spring Boot 3 API with native health probes (`/api/v1/health`).

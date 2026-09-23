@@ -1,6 +1,6 @@
 ---
 name: Bug Report
-about: Create a report to help us improve OpsFlow
+about: Create a report to help us improve FieldPulse
 title: '[BUG] '
 labels: bug
 assignees: ''
