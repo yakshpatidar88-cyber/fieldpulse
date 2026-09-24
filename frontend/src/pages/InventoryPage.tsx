@@ -8,9 +8,7 @@ import {
   RefreshCw,
   Warehouse,
   Tag,
-  DollarSign,
   ArrowUpDown,
-  Filter,
   PackageCheck,
   ShieldCheck,
   X,
@@ -18,7 +16,6 @@ import {
 import { Card } from '../components/ui/Card';
 import { Badge } from '../components/ui/Badge';
 import { Button } from '../components/ui/Button';
-import { Input } from '../components/ui/Input';
 import { inventoryApi } from '../api/inventory';
 import { InventoryItem, LowStockAlert, InventoryAdjustmentRequest } from '../types/inventory';
 import { useAuth } from '../context/AuthContext';

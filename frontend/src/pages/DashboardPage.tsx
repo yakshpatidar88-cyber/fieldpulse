@@ -11,7 +11,6 @@ import {
   Play,
   RefreshCw,
   CheckCircle2,
-  AlertCircle,
 } from 'lucide-react';
 import { Card } from '../components/ui/Card';
 import { Badge } from '../components/ui/Badge';

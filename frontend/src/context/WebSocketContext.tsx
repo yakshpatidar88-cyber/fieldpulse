@@ -79,9 +79,9 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
     const client = new Client({
       webSocketFactory: socketFactory,
       connectHeaders: token ? { Authorization: `Bearer ${token}` } : {},
-      debug: (str) => {
+      debug: (_str) => {
         if (import.meta.env.DEV) {
-          // console.debug('[STOMP]', str);
+          // console.debug('[STOMP]', _str);
         }
       },
       reconnectDelay: 5000,

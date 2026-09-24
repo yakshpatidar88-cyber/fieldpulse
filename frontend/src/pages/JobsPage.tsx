@@ -23,7 +23,6 @@ import {
   RefreshCw,
   Wrench,
   CheckCircle2,
-  AlertTriangle,
   Clock,
   Flame,
 } from 'lucide-react';

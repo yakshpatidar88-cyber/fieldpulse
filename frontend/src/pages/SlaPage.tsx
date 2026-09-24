@@ -3,13 +3,10 @@ import {
   ShieldAlert,
   ShieldCheck,
   AlertTriangle,
-  Flame,
   Clock,
   Play,
   RefreshCw,
   CheckCircle2,
-  AlertCircle,
-  ExternalLink,
   ChevronRight,
   TrendingUp,
 } from 'lucide-react';
