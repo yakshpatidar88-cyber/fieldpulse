@@ -24,7 +24,7 @@ export const LoginPage: React.FC = () => {
     try {
       setIsLoading(true);
       setError(null);
-      await login(email, password);
+      await login({ email, password });
       navigate('/dashboard');
     } catch (err: unknown) {
       const errorResponse = err as { response?: { data?: { message?: string } } };
@@ -39,7 +39,7 @@ export const LoginPage: React.FC = () => {
 
   const handleQuickFill = (demoEmail: string) => {
     setEmail(demoEmail);
-    setPassword('password123');
+    setPassword('Password123!');
     setError(null);
   };
 
@@ -125,14 +125,14 @@ export const LoginPage: React.FC = () => {
               </button>
               <button
                 type="button"
-                onClick={() => handleQuickFill('admin.marcus@fieldpulse.io')}
+                onClick={() => handleQuickFill('admin@fieldpulse.io')}
                 className="px-2.5 py-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 text-slate-300 hover:text-white text-xs font-medium transition-colors text-center"
               >
                 Admin
               </button>
               <button
                 type="button"
-                onClick={() => handleQuickFill('tech.alex@fieldpulse.io')}
+                onClick={() => handleQuickFill('tech.marcus@fieldpulse.io')}
                 className="px-2.5 py-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 text-slate-300 hover:text-white text-xs font-medium transition-colors text-center"
               >
                 Technician
@@ -140,7 +140,7 @@ export const LoginPage: React.FC = () => {
             </div>
             <p className="text-[10px] text-slate-400 text-center mt-2.5 flex items-center justify-center gap-1">
               <ShieldCheck className="w-3 h-3 text-emerald-400" />
-              Pre-seeded in Flyway migration V5 (Password: password123)
+              Pre-seeded demo accounts (Password: Password123!)
             </p>
           </div>
         </div>

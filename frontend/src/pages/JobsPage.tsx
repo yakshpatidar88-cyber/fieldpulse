@@ -65,7 +65,7 @@ export const JobsPage: React.FC = () => {
       if (showLoadingSpinner) setIsLoading(true);
       const [jobsData, reqsData] = await Promise.all([
         jobApi.getAllJobs().catch(() => []),
-        jobApi.getAllRequests('PENDING').catch(() => []),
+        jobApi.getAllRequests('RECEIVED').catch(() => []),
       ]);
       setJobs(jobsData);
       setPendingRequests(reqsData);

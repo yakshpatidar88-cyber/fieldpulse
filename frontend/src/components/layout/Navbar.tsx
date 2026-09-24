@@ -193,23 +193,29 @@ export const Navbar: React.FC = () => {
         <div className="h-5 w-[1px] bg-slate-200 dark:bg-slate-800" />
 
         {/* User Card */}
-        <div className="flex items-center space-x-3">
-          <div className="w-8 h-8 rounded-full bg-teal-500/15 border border-teal-500/30 flex items-center justify-center text-teal-600 dark:text-teal-300 font-bold text-xs">
-            <UserIcon className="w-4 h-4" />
-          </div>
-          <div className="text-left hidden sm:block">
-            <div className="flex items-center space-x-2">
-              <span className="text-sm font-semibold text-slate-800 dark:text-slate-200">
-                {user?.fullName || 'Operator'}
-              </span>
-              <Badge variant={getRoleBadgeVariant(user?.role)} size="sm">
-                <Shield className="w-2.5 h-2.5 mr-1 inline" />
-                {formatRoleName(user?.role)}
-              </Badge>
+        {(() => {
+          const primaryRole = user?.role || (user?.roles && user.roles[0]);
+          const displayName = user?.fullName || (user?.firstName ? `${user.firstName} ${user.lastName || ''}`.trim() : 'Operator');
+          return (
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 rounded-full bg-teal-500/15 border border-teal-500/30 flex items-center justify-center text-teal-600 dark:text-teal-300 font-bold text-xs">
+                <UserIcon className="w-4 h-4" />
+              </div>
+              <div className="text-left hidden sm:block">
+                <div className="flex items-center space-x-2">
+                  <span className="text-sm font-semibold text-slate-800 dark:text-slate-200">
+                    {displayName}
+                  </span>
+                  <Badge variant={getRoleBadgeVariant(primaryRole)} size="sm">
+                    <Shield className="w-2.5 h-2.5 mr-1 inline" />
+                    {formatRoleName(primaryRole)}
+                  </Badge>
+                </div>
+                <p className="text-[11px] text-slate-500">{user?.email}</p>
+              </div>
             </div>
-            <p className="text-[11px] text-slate-500">{user?.email}</p>
-          </div>
-        </div>
+          );
+        })()}
 
         {/* Logout Button */}
         <button

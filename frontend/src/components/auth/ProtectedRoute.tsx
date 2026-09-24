@@ -7,11 +7,13 @@ import { ShieldAlert } from 'lucide-react';
 interface ProtectedRouteProps {
   children?: ReactNode;
   requiredRoles?: Role[];
+  allowedRoles?: Role[];
 }
 
-export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requiredRoles }) => {
+export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requiredRoles, allowedRoles }) => {
   const { isAuthenticated, loading, user, hasRole, isAdmin } = useAuth();
   const location = useLocation();
+  const effectiveRoles = requiredRoles || allowedRoles;
 
   if (loading) {
     return (
@@ -29,8 +31,8 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requir
   }
 
   // Check RBAC permissions if roles are required
-  if (requiredRoles && requiredRoles.length > 0) {
-    const hasAnyRole = isAdmin || requiredRoles.some((role) => hasRole(role));
+  if (effectiveRoles && effectiveRoles.length > 0) {
+    const hasAnyRole = isAdmin || effectiveRoles.some((role) => hasRole(role));
     if (!hasAnyRole) {
       return (
         <div className="min-h-screen bg-slate-950 flex items-center justify-center p-6">
@@ -40,7 +42,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requir
             </div>
             <h2 className="text-xl font-bold text-white">Access Denied</h2>
             <p className="text-sm text-slate-400">
-              Your account (<span className="text-slate-200">{user?.email}</span>) does not hold the required permissions ({requiredRoles.join(', ')}) to access this view.
+              Your account (<span className="text-slate-200">{user?.email}</span>) does not hold the required permissions ({effectiveRoles.join(', ')}) to access this view.
             </p>
             <div className="pt-2">
               <a

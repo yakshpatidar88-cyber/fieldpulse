@@ -9,10 +9,8 @@ import { LoginPage } from './pages/LoginPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { DispatchConsolePage } from './pages/DispatchConsolePage';
 import { JobsPage } from './pages/JobsPage';
-import {
-  InventoryPage,
-  SlaPage,
-} from './pages/PlaceholderPages';
+import { InventoryPage } from './pages/InventoryPage';
+import { SlaPage } from './pages/SlaPage';
 
 export default function App() {
   return (

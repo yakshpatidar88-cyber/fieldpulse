@@ -50,11 +50,13 @@ const navItems: NavItem[] = [
 
 export const Sidebar: React.FC = () => {
   const { user } = useAuth();
-  const userRole = user?.role;
+  const userRoles = user?.roles || (user?.role ? [user.role] : []);
+  const isAdmin = userRoles.includes('ROLE_ADMIN');
 
   const filteredItems = navItems.filter((item) => {
-    if (!item.roles) return true;
-    return userRole && item.roles.includes(userRole);
+    if (!item.roles || item.roles.length === 0) return true;
+    if (isAdmin) return true;
+    return item.roles.some((r) => userRoles.includes(r as any));
   });
 
   return (
