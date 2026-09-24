@@ -3,399 +3,428 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FieldPulse - Intelligent Field Operations &amp; Autonomous Dispatch</title>
-  <!-- Tailwind CDN & Leaflet CSS/JS for live mapping -->
+  <title>FieldPulse - Tactical Command Deck &amp; Autonomous Dispatch</title>
+  <!-- Tailwind CDN & Leaflet CSS/JS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
   <script>
     tailwind.config = {
       darkMode: 'class',
       theme: {
         extend: {
           colors: {
-            brand: {
-              50: '#f0fdfa',
-              100: '#ccfbf1',
-              500: '#14b8a6',
-              600: '#0d9488',
-              700: '#0f766e',
-              900: '#134e4a',
+            obsidian: {
+              DEFAULT: '#0C1215',
+              900: '#0C1215',
+              800: '#10171B',
+            },
+            pine: {
+              800: '#131D21',
+              700: '#18252A',
+              600: '#22353A',
+            },
+            sage: {
+              100: '#E8F5E9',
+              200: '#C8E6C9',
+              300: '#AFD19B',
+              400: '#8FB878',
+              500: '#628E6A',
+            },
+            crimson: {
+              500: '#F43F5E',
+            },
+            amber: {
+              500: '#E5A93C',
             }
+          },
+          boxShadow: {
+            'tactical-glow': '0 0 20px rgba(175, 209, 155, 0.35)',
+            'crimson-glow': '0 0 16px rgba(244, 63, 94, 0.4)',
           }
         }
       }
     }
   </script>
   <style>
-    * { transition: background-color 0.2s ease, border-color 0.2s ease, color 0.15s ease; }
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.25); border-radius: 9999px; }
-    ::-webkit-scrollbar-thumb:hover { background: rgba(148, 163, 184, 0.45); }
+    * { transition: background-color 80ms cubic-bezier(0, 0, 0.2, 1), border-color 80ms cubic-bezier(0, 0, 0.2, 1); }
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: #0C1215; }
+    ::-webkit-scrollbar-thumb { background: #22353A; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #AFD19B; }
     .custom-job-marker, .custom-tech-marker { display: flex; align-items: center; justify-content: center; }
   </style>
 </head>
-<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 antialiased font-sans min-h-screen">
+<body class="bg-[#0C1215] text-slate-100 antialiased font-sans min-h-screen selection:bg-sage-300 selection:text-black">
 
   <div class="flex h-screen overflow-hidden">
 
-    <!-- Sidebar -->
-    <aside class="w-64 bg-white/95 dark:bg-slate-900/90 border-r border-slate-200 dark:border-slate-800 flex flex-col justify-between shrink-0 select-none">
+    <!-- Expandable Tactical Rail (Option A: 64px Slim Expanding to 240px) -->
+    <aside id="tactical-rail" class="w-16 hover:w-60 bg-[#131D21] border-r border-[#22353A] flex flex-col justify-between shrink-0 select-none transition-all duration-150 ease-out z-40 group">
       <div>
         <!-- Brand Header -->
-        <div class="h-16 flex items-center px-6 border-b border-slate-200 dark:border-slate-800 space-x-3">
-          <div class="w-9 h-9 rounded-xl bg-teal-500/15 border border-teal-500/30 flex items-center justify-center text-teal-600 dark:text-teal-400 font-bold text-lg shadow-inner">
-            ⚡
+        <div class="h-14 flex items-center px-4 border-b border-[#22353A] space-x-3 overflow-hidden">
+          <div class="w-8 h-8 rounded-lg bg-sage-300/15 border border-sage-300/30 flex items-center justify-center text-sage-300 font-mono font-bold text-sm shadow-[0_0_12px_rgba(175,209,155,0.25)] shrink-0">
+            FP
           </div>
-          <div>
-            <h1 class="font-extrabold text-base tracking-tight text-slate-900 dark:text-white flex items-center gap-1.5">
+          <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-100 whitespace-nowrap overflow-hidden">
+            <h1 class="font-extrabold text-sm tracking-tight text-white flex items-center gap-1.5 font-mono">
               FieldPulse
-              <span class="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-teal-500/15 text-teal-600 dark:text-teal-400 border border-teal-500/30 font-semibold">
-                v1.0
+              <span class="text-[9px] uppercase px-1.5 py-0.2 rounded bg-sage-300/20 text-sage-300 border border-sage-300/30 font-mono">
+                v2.0
               </span>
             </h1>
-            <p class="text-[11px] text-slate-500 dark:text-slate-400">Intelligent Dispatch</p>
+            <p class="text-[10px] text-slate-400 font-mono">Tactical Ops</p>
           </div>
         </div>
 
-        <!-- Navigation Menu -->
-        <div class="p-4 space-y-1">
-          <p class="px-3 text-[11px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2">
-            Operations Deck
-          </p>
-          <button id="nav-dashboard" onclick="setTab('dashboard')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-semibold bg-teal-500/15 text-teal-700 dark:text-teal-300 border border-teal-500/30 shadow-xs">
-            <span class="flex items-center gap-3">📊 Command Deck</span>
+        <!-- Rail Navigation Items -->
+        <nav class="p-2 space-y-1.5 overflow-hidden">
+          <!-- Command Deck -->
+          <button id="nav-dashboard" onclick="setTab('dashboard')" class="w-full flex items-center h-10 px-3 rounded-lg text-xs font-semibold bg-sage-300/15 text-sage-300 border border-sage-300/30 shadow-xs relative overflow-hidden group/item">
+            <span class="text-base shrink-0">📊</span>
+            <span class="ml-3.5 opacity-0 group-hover:opacity-100 transition-opacity duration-100 font-mono tracking-wide whitespace-nowrap">Deck</span>
+            <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-sage-300 rounded-r"></span>
           </button>
-          <button id="nav-dispatch" onclick="setTab('dispatch')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800/60">
-            <span class="flex items-center gap-3">🗺️ Dispatch Matrix</span>
-            <span class="text-[10px] px-1.5 py-0.2 bg-teal-500/20 text-teal-600 dark:text-teal-300 rounded font-mono">1 QUEUE</span>
+
+          <!-- Dispatch Console -->
+          <button id="nav-dispatch" onclick="setTab('dispatch')" class="w-full flex items-center h-10 px-3 rounded-lg text-xs font-medium text-slate-400 hover:text-white hover:bg-[#18252a] hover:border hover:border-[#22353A] relative overflow-hidden group/item">
+            <span class="text-base shrink-0">🗺️</span>
+            <span class="ml-3.5 opacity-0 group-hover:opacity-100 transition-opacity duration-100 font-mono tracking-wide whitespace-nowrap">Dispatch</span>
           </button>
-          <button id="nav-jobs" onclick="setTab('jobs')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800/60">
-            <span class="flex items-center gap-3">💼 Field Jobs</span>
-            <span id="sidebar-job-count" class="text-[10px] px-1.5 py-0.2 bg-slate-200 dark:bg-slate-800 rounded font-mono">3</span>
+
+          <!-- Field Jobs -->
+          <button id="nav-jobs" onclick="setTab('jobs')" class="w-full flex items-center h-10 px-3 rounded-lg text-xs font-medium text-slate-400 hover:text-white hover:bg-[#18252a] hover:border hover:border-[#22353A] relative overflow-hidden group/item">
+            <span class="text-base shrink-0">💼</span>
+            <span class="ml-3.5 opacity-0 group-hover:opacity-100 transition-opacity duration-100 font-mono tracking-wide whitespace-nowrap">Jobs</span>
           </button>
-          <button id="nav-inventory" onclick="setTab('inventory')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800/60">
-            <span class="flex items-center gap-3">📦 Parts &amp; Inventory</span>
-            <span class="text-[10px] px-1.5 py-0.2 bg-amber-500/20 text-amber-600 dark:text-amber-400 rounded font-mono">2 LOW</span>
+
+          <!-- Parts & Inventory -->
+          <button id="nav-inventory" onclick="setTab('inventory')" class="w-full flex items-center h-10 px-3 rounded-lg text-xs font-medium text-slate-400 hover:text-white hover:bg-[#18252a] hover:border hover:border-[#22353A] relative overflow-hidden group/item">
+            <span class="text-base shrink-0">📦</span>
+            <span class="ml-3.5 opacity-0 group-hover:opacity-100 transition-opacity duration-100 font-mono tracking-wide whitespace-nowrap">Inventory</span>
           </button>
-          <button id="nav-sla" onclick="setTab('sla')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800/60">
-            <span class="flex items-center gap-3">🛡️ SLA Escalations</span>
-            <span class="text-[10px] px-1.5 py-0.2 bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 rounded font-mono">96.4%</span>
+
+          <!-- SLA Escalations -->
+          <button id="nav-sla" onclick="setTab('sla')" class="w-full flex items-center h-10 px-3 rounded-lg text-xs font-medium text-slate-400 hover:text-white hover:bg-[#18252a] hover:border hover:border-[#22353A] relative overflow-hidden group/item">
+            <span class="text-base shrink-0">🛡️</span>
+            <span class="ml-3.5 opacity-0 group-hover:opacity-100 transition-opacity duration-100 font-mono tracking-wide whitespace-nowrap">SLA Guard</span>
           </button>
-        </div>
+        </nav>
       </div>
 
-      <!-- Engine Status Footer -->
-      <div class="p-4 border-t border-slate-200 dark:border-slate-800">
-        <div class="bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 rounded-lg p-3 text-xs flex items-center justify-between">
-          <div class="flex items-center space-x-2">
-            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span class="text-slate-700 dark:text-slate-300 font-semibold text-[11px]">Engine Active</span>
+      <!-- Telemetry Footer -->
+      <div class="p-3 border-t border-[#22353A] overflow-hidden">
+        <div class="flex items-center space-x-2.5">
+          <span class="w-2.5 h-2.5 rounded-full bg-sage-300 animate-ping shrink-0"></span>
+          <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-100 text-[10px] font-mono text-slate-400 truncate">
+            <div>GPS TELEMETRY</div>
+            <div class="text-sage-300">41.8781°N 87.6298°W</div>
           </div>
-          <span class="text-[10px] text-slate-500 dark:text-slate-400 font-mono">24/7 SLA Guard</span>
         </div>
       </div>
     </aside>
 
     <!-- Main Content Area -->
-    <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+    <div class="flex-1 flex flex-col min-w-0 overflow-hidden bg-[#0C1215]">
 
-      <!-- Top Navbar -->
-      <header class="h-16 border-b border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-900/70 backdrop-blur px-6 flex items-center justify-between shrink-0">
+      <!-- Minimal Frosted Glass Top HUD (56px Header per Option A) -->
+      <header class="h-14 border-b border-[#22353A] bg-[#131D21]/90 backdrop-blur-md px-6 flex items-center justify-between shrink-0 z-30">
+        <!-- Breadcrumb & Status -->
         <div class="flex items-center space-x-3">
-          <span class="text-xs text-slate-500 dark:text-slate-400 font-medium">Workspace:</span>
-          <span class="text-xs font-semibold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800/80 px-2.5 py-1 rounded-md border border-slate-200 dark:border-slate-700/60">
-            Central Dispatch Hub (Chicago Metro)
+          <span class="text-[11px] font-mono text-slate-400">SECTOR / CENTRAL HUB:</span>
+          <span class="text-xs font-mono font-bold text-white bg-[#0C1215] px-2.5 py-1 rounded-md border border-[#22353A]">
+            Chicago Loop Sector 1
           </span>
-          <div class="flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
-            <span>LIVE STOMP WS</span>
+          <div class="flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-sage-300/15 text-sage-300 border border-sage-300/30">
+            <span class="w-1.5 h-1.5 rounded-full bg-sage-300 animate-pulse"></span>
+            <span>● LIVE WS</span>
           </div>
         </div>
 
+        <!-- Command Palette Trigger & Profile Chip -->
         <div class="flex items-center space-x-3">
-          <!-- Theme Toggle -->
-          <button id="themeToggleBtn" onclick="toggleTheme()" class="p-2 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-xs font-semibold flex items-center gap-1.5 shadow-xs">
-            <span id="themeIcon">☀️</span>
-            <span id="themeLabel" class="hidden sm:inline">Dark</span>
-          </button>
-
-          <!-- Notification Bell -->
-          <div class="relative">
-            <button onclick="toggleAlertsDropdown()" class="p-2 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800/60 border border-slate-200 dark:border-slate-700 relative">
-              🔔
-              <span id="alert-pill-count" class="absolute -top-1 -right-1 w-4 h-4 bg-rose-500 text-white rounded-full text-[9px] font-bold flex items-center justify-center">1</span>
-            </button>
-            <div id="alertsDropdown" class="hidden absolute right-0 mt-2 w-80 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-2xl p-3 z-50 text-xs space-y-2">
-              <div class="flex items-center justify-between font-bold pb-2 border-b border-slate-200 dark:border-slate-800">
-                <span>Active Operational Alerts</span>
-                <span class="text-[10px] text-amber-500 font-mono">1 Pending</span>
-              </div>
-              <div class="p-2 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-800 dark:text-amber-200 space-y-1">
-                <div class="flex items-center justify-between font-semibold">
-                  <span>⚠️ SLA Warning Threshold</span>
-                  <span class="text-[10px] text-slate-400">10:14 AM</span>
-                </div>
-                <p class="text-[11px] text-slate-600 dark:text-slate-300">Job #JOB-2026-0002 has 35m left before breach.</p>
-              </div>
-            </div>
+          <div class="hidden md:flex items-center gap-2 bg-[#0C1215] border border-[#22353A] rounded-lg px-3 py-1 text-xs text-slate-400">
+            <span>Quick Jump</span>
+            <kbd class="px-1.5 py-0.5 rounded bg-[#131D21] border border-[#22353A] text-[10px] font-mono text-sage-300">⌘K</kbd>
           </div>
 
-          <div class="h-5 w-[1px] bg-slate-200 dark:bg-slate-800"></div>
+          <!-- Alert Notification Bell -->
+          <button onclick="toggleAlertsDropdown()" class="p-2 rounded-lg bg-[#0C1215] border border-[#22353A] hover:border-sage-300/40 text-slate-400 hover:text-white relative transition-all duration-80">
+            🔔
+            <span class="absolute -top-1 -right-1 w-4 h-4 bg-crimson-500 text-white rounded-full text-[9px] font-bold flex items-center justify-center font-mono">1</span>
+          </button>
 
-          <!-- User Badge -->
-          <div class="flex items-center space-x-2.5">
-            <div class="w-8 h-8 rounded-full bg-teal-500/15 border border-teal-500/30 flex items-center justify-center text-teal-600 dark:text-teal-300 font-bold text-xs">
+          <!-- User Chip -->
+          <div class="flex items-center space-x-2 pl-2 border-l border-[#22353A]">
+            <div class="w-7 h-7 rounded-lg bg-sage-300/20 border border-sage-300/40 text-sage-300 font-mono font-bold text-xs flex items-center justify-center">
               SJ
             </div>
-            <div class="text-left hidden sm:block">
-              <div class="flex items-center space-x-1.5">
-                <span class="text-xs font-bold text-slate-800 dark:text-slate-200">Sarah Jenkins</span>
-                <span class="text-[10px] px-1.5 py-0.2 bg-teal-500/15 text-teal-600 dark:text-teal-400 border border-teal-500/30 rounded font-semibold">DISPATCHER</span>
-              </div>
-              <p class="text-[10px] text-slate-400">dispatcher.sarah@fieldpulse.io</p>
+            <div class="hidden sm:block text-left font-mono">
+              <div class="text-xs font-bold text-white">Sarah J.</div>
+              <div class="text-[9px] text-sage-400">DISPATCHER</div>
             </div>
           </div>
         </div>
       </header>
 
-      <!-- Main Body Panels -->
-      <main class="flex-1 overflow-y-auto p-6 bg-slate-50 dark:bg-slate-950/90">
+      <!-- Main Panels Scroll Container -->
+      <main class="flex-1 overflow-y-auto p-6 bg-[#0C1215]">
 
         <!-- ================= TAB 1: COMMAND DECK (DASHBOARD) ================= -->
         <section id="panel-dashboard" class="space-y-6 max-w-7xl mx-auto">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <h2 class="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
+              <h2 class="text-2xl font-bold text-white tracking-tight flex items-center gap-2.5">
                 Operations Command Deck
               </h2>
-              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+              <p class="text-xs text-slate-400 mt-1">
                 Real-time SLA monitoring, active technician fleet, and automated dispatch pipeline.
               </p>
             </div>
-            <div class="flex items-center gap-2">
-              <button onclick="runWatchdogScan()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-teal-600 hover:bg-teal-500 text-white shadow-xs flex items-center gap-1.5">
-                <span>▶ Run SLA Watchdog</span>
+            <div class="flex items-center gap-2.5">
+              <button onclick="runWatchdogScan()" class="px-3.5 py-2 rounded-lg text-xs font-mono font-bold bg-sage-300 hover:bg-sage-400 text-[#0C1215] shadow-tactical-glow active:scale-[0.98] transition-all duration-80 flex items-center gap-2">
+                <span>▶ RUN SLA WATCHDOG</span>
               </button>
             </div>
           </div>
 
-          <!-- KPI Grid -->
+          <!-- Real-Time Metric Cards (Obsidian Bevel Cards per Option A) -->
           <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <div class="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 space-y-1 shadow-xs">
-              <div class="flex items-center justify-between text-xs text-slate-500">
+            <div class="bg-[#131D21] border border-[#22353A] border-t-2 border-t-sage-300/40 rounded-xl p-5 shadow-lg relative overflow-hidden group hover:border-[#2f4950] transition-all duration-80">
+              <div class="flex items-center justify-between text-xs font-mono uppercase tracking-wider text-slate-400">
                 <span>Active Field Jobs</span>
                 <span>💼</span>
               </div>
-              <div class="text-2xl font-extrabold text-slate-900 dark:text-white" id="dash-active-jobs">3</div>
-              <div class="text-[11px] text-slate-400">2 In-Flight &bull; 1 Triaged</div>
+              <div class="mt-3">
+                <span class="text-3xl font-extrabold font-mono text-white">3</span>
+                <div class="text-xs text-sage-300 mt-1 font-mono">2 In-Flight &bull; 1 Triaged</div>
+              </div>
             </div>
-            <div class="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 space-y-1 shadow-xs">
-              <div class="flex items-center justify-between text-xs text-slate-500">
+
+            <div class="bg-[#131D21] border border-[#22353A] border-t-2 border-t-amber-500/50 rounded-xl p-5 shadow-lg relative overflow-hidden group hover:border-[#2f4950] transition-all duration-80">
+              <div class="flex items-center justify-between text-xs font-mono uppercase tracking-wider text-slate-400">
                 <span>SLA Warnings</span>
                 <span>⚠️</span>
               </div>
-              <div class="text-2xl font-extrabold text-amber-500">1</div>
-              <div class="text-[11px] text-slate-400">Escalated to Tier 2</div>
+              <div class="mt-3">
+                <span class="text-3xl font-extrabold font-mono text-amber-400">1</span>
+                <div class="text-xs text-amber-300 mt-1 font-mono">Escalated to Tier 2</div>
+              </div>
             </div>
-            <div class="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 space-y-1 shadow-xs">
-              <div class="flex items-center justify-between text-xs text-slate-500">
-                <span>Compliance Rate</span>
+
+            <div class="bg-[#131D21] border border-[#22353A] border-t-2 border-t-sage-300/50 rounded-xl p-5 shadow-lg relative overflow-hidden group hover:border-[#2f4950] transition-all duration-80">
+              <div class="flex items-center justify-between text-xs font-mono uppercase tracking-wider text-slate-400">
+                <span>SLA Compliance</span>
                 <span>🛡️</span>
               </div>
-              <div class="text-2xl font-extrabold text-teal-600 dark:text-teal-400">96.4%</div>
-              <div class="text-[11px] text-slate-400">0 Total Breaches</div>
-            </div>
-            <div class="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 space-y-1 shadow-xs">
-              <div class="flex items-center justify-between text-xs text-slate-500">
-                <span>Available Techs</span>
-                <span>🔧</span>
+              <div class="mt-3">
+                <span class="text-3xl font-extrabold font-mono text-sage-300">96.4%</span>
+                <div class="text-xs text-slate-400 mt-1 font-mono">0 Total Breaches</div>
               </div>
-              <div class="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400">2 / 3</div>
-              <div class="text-[11px] text-slate-400">1 On Job in Loop</div>
+            </div>
+
+            <div class="bg-[#131D21] border border-[#22353A] border-t-2 border-t-cyan-500/50 rounded-xl p-5 shadow-lg relative overflow-hidden group hover:border-[#2f4950] transition-all duration-80">
+              <div class="flex items-center justify-between text-xs font-mono uppercase tracking-wider text-slate-400">
+                <span>Inventory Guard</span>
+                <span>🔒</span>
+              </div>
+              <div class="mt-3">
+                <span class="text-3xl font-extrabold font-mono text-white">Guarded</span>
+                <div class="text-xs text-cyan-300 mt-1 font-mono">Pessimistic write lock</div>
+              </div>
             </div>
           </div>
 
-          <!-- Watchdog Notice -->
-          <div id="watchdog-banner" class="hidden bg-teal-500/10 border border-teal-500/30 rounded-2xl p-4 flex items-center justify-between text-xs text-teal-700 dark:text-teal-300">
-            <span id="watchdog-msg">Watchdog scan completed in 3ms: 3 jobs evaluated, 0 breaches recorded.</span>
-            <button onclick="document.getElementById('watchdog-banner').classList.add('hidden')" class="p-1">✕</button>
+          <!-- Watchdog Scan Result Alert -->
+          <div id="watchdog-banner" class="hidden bg-[#131D21] border border-sage-300/40 rounded-xl p-4 flex items-center justify-between text-xs text-sage-300 shadow-xl">
+            <span id="watchdog-msg">Watchdog scan evaluated 3 active jobs in 4ms: 1 warning evaluated, 0 breaches recorded.</span>
+            <button onclick="document.getElementById('watchdog-banner').classList.add('hidden')" class="p-1 font-mono text-slate-400 hover:text-white">✕</button>
           </div>
 
-          <!-- Jobs & Map Preview -->
+          <!-- Two-Column Layout: Active SLA Monitor & Alert Stream -->
           <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div class="lg:col-span-2 bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 space-y-4">
-              <div class="flex items-center justify-between">
-                <h3 class="text-sm font-bold text-slate-900 dark:text-white">Active Operational Workstream</h3>
-                <button onclick="setTab('jobs')" class="text-xs text-teal-600 dark:text-teal-400 hover:underline">View All &rarr;</button>
+            <div class="lg:col-span-2 bg-[#131D21] border border-[#22353A] border-t-2 border-t-sage-300/30 rounded-xl p-5 shadow-xl">
+              <div class="flex items-center justify-between pb-3 mb-3 border-b border-[#22353A]">
+                <h3 class="text-sm font-bold text-white font-mono uppercase tracking-wider">
+                  Active SLA Guardrail Monitor
+                </h3>
+                <button onclick="setTab('jobs')" class="text-xs text-sage-300 hover:text-white font-mono">
+                  View All &rarr;
+                </button>
               </div>
-              <div class="space-y-3" id="dash-jobs-list">
-                <!-- Populated via JS -->
+              <!-- Floating Card Strips (Option C) -->
+              <div class="space-y-2" id="dash-jobs-list">
+                <!-- Injected via JS -->
               </div>
             </div>
 
-            <!-- Technician Fleet Summary -->
-            <div class="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 space-y-4">
-              <h3 class="text-sm font-bold text-slate-900 dark:text-white">Technician Fleet Status</h3>
-              <div class="space-y-3 text-xs">
-                <div class="p-3 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center justify-between">
-                  <div>
-                    <span class="font-bold text-slate-900 dark:text-white">Marcus Vance (TECH-001)</span>
-                    <p class="text-slate-400">HVAC Universal, Chiller &bull; ⭐ 4.95</p>
+            <!-- Operational Alert Feed -->
+            <div class="bg-[#131D21] border border-[#22353A] border-t-2 border-t-sage-300/30 rounded-xl p-5 shadow-xl flex flex-col">
+              <div class="pb-3 mb-3 border-b border-[#22353A]">
+                <h3 class="text-sm font-bold text-white font-mono uppercase tracking-wider flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-sage-300 animate-ping"></span>
+                  Operational Alert Feed
+                </h3>
+                <p class="text-[11px] font-mono text-slate-400">Live STOMP /topic/alerts</p>
+              </div>
+              <div class="space-y-2.5 flex-1 overflow-y-auto max-h-72 pr-1">
+                <div class="p-3 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs space-y-1">
+                  <div class="flex items-center justify-between font-bold">
+                    <span>⚠️ SLA 50% Threshold Exceeded</span>
+                    <span class="font-mono text-[10px]">10:14 AM</span>
                   </div>
-                  <span class="px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 font-semibold font-mono text-[10px]">AVAILABLE</span>
+                  <p class="text-[11px] text-slate-300">JOB-2026-0002 has 35m left before breach in Floor 18.</p>
                 </div>
-                <div class="p-3 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center justify-between">
-                  <div>
-                    <span class="font-bold text-slate-900 dark:text-white">Elena Rostova (TECH-002)</span>
-                    <p class="text-slate-400">Smart Controls, Heat Pump &bull; ⭐ 4.88</p>
+                <div class="p-3 rounded-lg bg-[#0C1215] border border-[#22353A] text-slate-300 text-xs space-y-1">
+                  <div class="flex items-center justify-between font-bold">
+                    <span>✓ Dispatcher Assigned Marcus Vance</span>
+                    <span class="font-mono text-[10px]">09:50 AM</span>
                   </div>
-                  <span class="px-2 py-0.5 rounded bg-amber-500/15 text-amber-600 dark:text-amber-400 font-semibold font-mono text-[10px]">ON_JOB (1/1)</span>
-                </div>
-                <div class="p-3 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center justify-between">
-                  <div>
-                    <span class="font-bold text-slate-900 dark:text-white">David Kim (TECH-003)</span>
-                    <p class="text-slate-400">High Voltage 480V &bull; ⭐ 4.75</p>
-                  </div>
-                  <span class="px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 font-semibold font-mono text-[10px]">AVAILABLE</span>
+                  <p class="text-[11px] text-slate-400">En route to 710 S Paulina St with reserved dual-capacitor.</p>
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        <!-- ================= TAB 2: DISPATCH MATRIX ================= -->
-        <section id="panel-dispatch" class="hidden space-y-6 max-w-7xl mx-auto">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div>
-              <h2 class="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
-                Operations Dispatch Console
-              </h2>
-              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                Multi-factor recommendation engine (certified skills, Haversine distance, workload balance, SLA urgency).
-              </p>
+        <!-- ================= TAB 2: DISPATCH CONSOLE (Option B Fullscreen Tactical Map) ================= -->
+        <section id="panel-dispatch" class="hidden space-y-4 max-w-7xl mx-auto">
+          <!-- Top HUD Bar -->
+          <div class="bg-[#131D21] border border-[#22353A] rounded-xl p-3.5 shadow-xl flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+            <div class="flex items-center gap-3 flex-1 min-w-0">
+              <div class="p-2 rounded-lg bg-sage-300/10 text-sage-300 border border-sage-300/20 shrink-0">
+                🗺️
+              </div>
+              <div class="flex-1 min-w-0">
+                <label class="text-[10px] font-mono uppercase text-slate-400 block mb-0.5">
+                  Service Queue Ticket
+                </label>
+                <select id="dispatch-ticket-select" class="w-full bg-[#0C1215] border border-[#22353A] rounded-lg px-2.5 py-1 text-xs text-white focus:outline-none focus:ring-1 focus:ring-sage-300 font-mono truncate">
+                  <option value="JOB-2026-0003">JOB-2026-0003 &bull; CRITICAL &bull; 350 N Clark St (TXV freezer)</option>
+                  <option value="JOB-2026-0001">JOB-2026-0001 &bull; HIGH &bull; 710 S Paulina St</option>
+                </select>
+              </div>
             </div>
-            <div id="dispatch-success-banner" class="hidden px-3 py-1.5 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 text-xs font-semibold">
-              Dispatched successfully!
+
+            <!-- Distance Slider -->
+            <div class="w-full md:w-56 shrink-0 space-y-1">
+              <div class="flex items-center justify-between text-[11px] font-mono text-slate-400">
+                <span>Radius Limit</span>
+                <span class="font-bold text-sage-300">50 km</span>
+              </div>
+              <input type="range" min="10" max="150" value="50" class="w-full accent-sage-300 h-1 bg-[#0C1215] rounded-lg appearance-none cursor-pointer">
+            </div>
+
+            <div class="flex items-center gap-4 border-t md:border-t-0 md:border-l border-[#22353A] pt-2 md:pt-0 md:pl-4 text-center shrink-0">
+              <div>
+                <span class="text-[10px] font-mono uppercase text-slate-500 block">Evaluated</span>
+                <span class="text-sm font-mono font-bold text-white">3</span>
+              </div>
+              <div>
+                <span class="text-[10px] font-mono uppercase text-slate-500 block">Eligible</span>
+                <span class="text-sm font-mono font-bold text-sage-300">2</span>
+              </div>
             </div>
           </div>
 
-          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <!-- Left 2 Cols: Interactive Leaflet Map -->
-            <div class="lg:col-span-2 bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 space-y-3">
-              <div class="flex items-center justify-between text-xs">
-                <span class="font-bold text-slate-900 dark:text-white">Interactive Fleet GPS &amp; Target Destination</span>
-                <span class="font-mono text-slate-400">Chicago Loop (41.8781° N, -87.6298° W)</span>
-              </div>
-              <div id="dispatch-map" class="h-96 w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-900 z-10"></div>
-            </div>
+          <!-- Fullscreen Tactical Map with Floating Glass Drawer (Option B) -->
+          <div class="relative w-full h-[600px] rounded-2xl overflow-hidden border border-[#22353A] shadow-2xl">
+            <div id="dispatch-map" class="w-full h-full bg-[#0C1215]"></div>
 
-            <!-- Right Col: Candidate Ranking -->
-            <div class="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 space-y-4">
-              <div>
-                <h3 class="text-sm font-bold text-slate-900 dark:text-white">Selected Ticket: JOB-2026-0003</h3>
-                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">350 N Clark St &bull; Walk-in freezer TXV repair</p>
-                <div class="mt-2 flex gap-1.5">
-                  <span class="text-[10px] px-1.5 py-0.5 rounded bg-rose-500/15 text-rose-600 dark:text-rose-400 font-bold">CRITICAL</span>
-                  <span class="text-[10px] px-1.5 py-0.5 rounded bg-teal-500/15 text-teal-600 dark:text-teal-400 font-bold">Needs: EPA Universal</span>
-                </div>
+            <!-- Floating Collapsible Glass Candidate Ranking Drawer -->
+            <div id="candidate-glass-dock" class="absolute top-3 right-3 z-[1000] w-80 sm:w-96 max-h-[560px] bg-[#131D21]/90 backdrop-blur-xl border border-[#22353A] shadow-2xl rounded-2xl p-4 flex flex-col">
+              <div class="flex items-center justify-between pb-2.5 mb-2.5 border-b border-[#22353A] shrink-0">
+                <h3 class="text-xs font-bold text-white font-mono uppercase tracking-wider flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-sage-300"></span>
+                  Ranked Candidates (2)
+                </h3>
+                <span class="text-[10px] font-mono text-slate-400">Sorted by score</span>
               </div>
 
-              <div class="border-t border-slate-200 dark:border-slate-800 pt-3 space-y-3">
-                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block">Ranked Candidates</span>
-
+              <!-- Candidate Cards -->
+              <div class="space-y-2.5 flex-1 overflow-y-auto pr-1">
                 <!-- Candidate 1 -->
-                <div class="p-3 rounded-xl border-2 border-teal-500 bg-teal-500/5 dark:bg-teal-950/20 space-y-2">
-                  <div class="flex items-center justify-between">
-                    <div>
-                      <span class="font-bold text-xs text-slate-900 dark:text-white">1. Marcus Vance</span>
-                      <p class="text-[11px] text-slate-400">2.1 km &bull; 0 active jobs</p>
+                <div class="rounded-xl p-3.5 border border-sage-300 ring-1 ring-sage-300/40 bg-[#162227] shadow-lg space-y-2.5">
+                  <div class="flex items-start justify-between">
+                    <div class="flex items-center space-x-2">
+                      <span class="w-6 h-6 rounded bg-sage-300/20 text-sage-300 font-mono font-bold text-xs flex items-center justify-center border border-sage-300/40">#1</span>
+                      <div>
+                        <h4 class="text-xs font-bold text-white">Marcus Vance</h4>
+                        <p class="text-[10px] font-mono text-slate-400">2.1 km &bull; 0 active jobs</p>
+                      </div>
                     </div>
-                    <span class="text-xs font-extrabold text-teal-600 dark:text-teal-400 font-mono">94.5 / 100</span>
+                    <span class="px-2 py-0.5 rounded font-mono font-bold text-xs bg-sage-300/15 text-sage-300 border border-sage-300/30">94.5 pts</span>
                   </div>
-                  <p class="text-[11px] text-emerald-600 dark:text-emerald-400 font-medium">✓ Matched 2/2 skills (EPA Universal, Chiller)</p>
-                  <button id="btn-assign-marcus" onclick="assignTechnician('Marcus Vance', 'JOB-2026-0003')" class="w-full py-1.5 rounded-lg bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold shadow-xs">
-                    Confirm Dispatch
+                  <div class="flex flex-wrap gap-1 text-[10px] font-mono">
+                    <span class="px-1.5 py-0.2 rounded bg-sage-300/10 text-sage-300 border border-sage-300/20">✓ EPA Universal</span>
+                    <span class="px-1.5 py-0.2 rounded bg-sage-300/10 text-sage-300 border border-sage-300/20">✓ Chiller</span>
+                  </div>
+                  <button onclick="confirmAssignmentDemo('Marcus Vance')" class="w-full py-2 rounded-lg bg-sage-300 hover:bg-sage-400 text-[#0C1215] font-mono font-bold text-xs shadow-tactical-glow active:scale-[0.98] transition-all duration-80">
+                    Assign #1 &bull; Marcus Vance
                   </button>
                 </div>
 
                 <!-- Candidate 2 -->
-                <div class="p-3 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1.5 opacity-80">
-                  <div class="flex items-center justify-between">
-                    <div>
-                      <span class="font-bold text-xs text-slate-900 dark:text-white">2. David Kim</span>
-                      <p class="text-[11px] text-slate-400">4.8 km &bull; 0 active jobs</p>
+                <div class="rounded-xl p-3.5 border border-[#22353A] bg-[#131D21] opacity-75 hover:opacity-100 space-y-2">
+                  <div class="flex items-start justify-between">
+                    <div class="flex items-center space-x-2">
+                      <span class="w-6 h-6 rounded bg-[#0C1215] text-slate-400 font-mono font-bold text-xs flex items-center justify-center border border-[#22353A]">#2</span>
+                      <div>
+                        <h4 class="text-xs font-bold text-white">David Kim</h4>
+                        <p class="text-[10px] font-mono text-slate-400">4.8 km &bull; 0 active jobs</p>
+                      </div>
                     </div>
-                    <span class="text-xs font-bold text-slate-500 font-mono">72.0 / 100</span>
+                    <span class="px-2 py-0.5 rounded font-mono font-bold text-xs bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">72.0 pts</span>
                   </div>
-                  <p class="text-[11px] text-amber-500">Partial skill match (Heat Pump certified)</p>
+                  <div class="text-[10px] font-mono text-amber-400">Partial skills: Heat Pump</div>
                 </div>
               </div>
+            </div>
+
+            <!-- Target Site Mini Overlay (Bottom Left) -->
+            <div class="absolute bottom-3 left-3 z-[1000] bg-[#131D21]/90 backdrop-blur-xl border border-[#22353A] rounded-xl p-3 shadow-2xl text-xs space-y-1 hidden sm:block">
+              <div class="flex items-center gap-2">
+                <span class="font-mono font-bold text-sage-300">JOB-2026-0003</span>
+                <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-crimson-500/15 text-rose-300 border border-crimson-500/40">CRITICAL</span>
+              </div>
+              <p class="text-[11px] text-white">350 N Clark St &bull; Walk-in freezer TXV valve failure</p>
+              <p class="text-[10px] font-mono text-slate-400">SLA: 2h Emergency Resolution Target</p>
             </div>
           </div>
         </section>
 
-        <!-- ================= TAB 3: FIELD JOBS & LIFECYCLE ================= -->
+        <!-- ================= TAB 3: FIELD JOBS (Option C Elevated Floating Strips) ================= -->
         <section id="panel-jobs" class="hidden space-y-6 max-w-7xl mx-auto">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <h2 class="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
+              <h2 class="text-2xl font-bold text-white tracking-tight flex items-center gap-2">
                 Field Jobs &amp; Lifecycle Management
               </h2>
-              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+              <p class="text-xs text-slate-400 mt-1">
                 State machine: Created &rarr; Triaged &rarr; Dispatched &rarr; In Progress &rarr; Completed.
               </p>
             </div>
-            <div class="flex items-center gap-2">
-              <button onclick="openCreateTicketModal()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-teal-600 hover:bg-teal-500 text-white shadow-xs">
+            <div class="flex items-center gap-2.5">
+              <button onclick="alert('Ticket Ingestion Modal Triggered')" class="px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold bg-sage-300 hover:bg-sage-400 text-[#0C1215] shadow-tactical-glow active:scale-[0.98]">
                 + New Service Ticket
               </button>
-              <div class="bg-slate-200 dark:bg-slate-800 p-0.5 rounded-lg flex items-center">
-                <button id="viewBtnTable" onclick="switchJobView('table')" class="px-2.5 py-1 rounded text-xs font-semibold bg-white dark:bg-slate-900 text-teal-600 dark:text-teal-400 shadow-xs">Table</button>
-                <button id="viewBtnKanban" onclick="switchJobView('kanban')" class="px-2.5 py-1 rounded text-xs font-semibold text-slate-500 hover:text-slate-900 dark:hover:text-white">Kanban</button>
-              </div>
             </div>
           </div>
 
-          <!-- Jobs Table View -->
-          <div id="jobs-table-container" class="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
-            <table class="w-full text-left text-xs">
-              <thead class="bg-slate-50 dark:bg-slate-950/60 border-b border-slate-200 dark:border-slate-800 text-slate-500 uppercase tracking-wider font-semibold">
-                <tr>
-                  <th class="py-3 px-4">Ticket</th>
-                  <th class="py-3 px-4">Priority</th>
-                  <th class="py-3 px-4">Status</th>
-                  <th class="py-3 px-4">Technician</th>
-                  <th class="py-3 px-4">SLA Clock</th>
-                  <th class="py-3 px-4 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody id="jobs-table-body" class="divide-y divide-slate-200 dark:divide-slate-800">
-                <!-- Dynamically rendered -->
-              </tbody>
-            </table>
+          <!-- Table Header Labels -->
+          <div class="hidden lg:grid grid-cols-12 gap-4 px-4 py-2 text-[11px] font-mono uppercase tracking-wider text-slate-400 font-semibold">
+            <div class="col-span-2">Job Number</div>
+            <div class="col-span-3">Scope &amp; Address</div>
+            <div class="col-span-1">Priority</div>
+            <div class="col-span-2">Status</div>
+            <div class="col-span-2">SLA Window</div>
+            <div class="col-span-2 text-right">Actions</div>
           </div>
 
-          <!-- Jobs Kanban View -->
-          <div id="jobs-kanban-container" class="hidden grid grid-cols-1 md:grid-cols-4 gap-4">
-            <!-- Kanban Columns -->
-            <div class="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 space-y-3">
-              <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">TRIAGED (1)</span>
-              <div id="kanban-triaged" class="space-y-2"></div>
-            </div>
-            <div class="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 space-y-3">
-              <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">ASSIGNED (1)</span>
-              <div id="kanban-assigned" class="space-y-2"></div>
-            </div>
-            <div class="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 space-y-3">
-              <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">IN_PROGRESS (1)</span>
-              <div id="kanban-inprogress" class="space-y-2"></div>
-            </div>
-            <div class="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 space-y-3">
-              <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">COMPLETED (0)</span>
-              <div id="kanban-completed" class="space-y-2"></div>
-            </div>
+          <!-- Elevated Floating Cards List (Option C) -->
+          <div class="space-y-2" id="jobs-table-body">
+            <!-- Dynamically populated -->
           </div>
         </section>
 
@@ -403,96 +432,69 @@
         <section id="panel-inventory" class="hidden space-y-6 max-w-7xl mx-auto">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <h2 class="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
+              <h2 class="text-2xl font-bold text-white tracking-tight flex items-center gap-2">
                 Parts &amp; Inventory Management
               </h2>
-              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+              <p class="text-xs text-slate-400 mt-1">
                 Warehouse stock levels with pessimistic reservation lock guarding.
               </p>
             </div>
-            <button onclick="openAdjustStockModal()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-teal-600 hover:bg-teal-500 text-white shadow-xs">
+            <button onclick="alert('Stock Adjustment Modal Triggered')" class="px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold bg-sage-300 hover:bg-sage-400 text-[#0C1215] shadow-tactical-glow">
               + Stock Adjustment
             </button>
           </div>
 
-          <!-- Low Stock Alert Banner -->
-          <div class="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-4 space-y-2">
-            <span class="text-xs font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wider">Automated Replenishment Watchlist</span>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs" id="inventory-low-stock-list">
+          <!-- Low Stock Urgent Replenishment Notice -->
+          <div class="bg-[#131D21] border border-amber-500/40 rounded-xl p-5 shadow-xl">
+            <span class="text-xs font-bold font-mono text-amber-400 uppercase tracking-wider block mb-3">
+              Automated Replenishment Watchlist
+            </span>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="inventory-low-stock-list">
               <!-- Populated via JS -->
             </div>
           </div>
 
-          <!-- Catalog Table -->
-          <div class="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
-            <table class="w-full text-left text-xs">
-              <thead class="bg-slate-50 dark:bg-slate-950/60 border-b border-slate-200 dark:border-slate-800 text-slate-500 uppercase tracking-wider font-semibold">
-                <tr>
-                  <th class="py-3 px-4">Part / SKU</th>
-                  <th class="py-3 px-4">Category</th>
-                  <th class="py-3 px-4">Warehouse Bin</th>
-                  <th class="py-3 px-4 text-center">Stock Levels</th>
-                  <th class="py-3 px-4 text-right">Unit Price</th>
-                  <th class="py-3 px-4 text-center">Health</th>
-                  <th class="py-3 px-4 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody id="inventory-table-body" class="divide-y divide-slate-200 dark:divide-slate-800">
-                <!-- Dynamically rendered -->
-              </tbody>
-            </table>
+          <!-- Catalog Floating Strips (Option C) -->
+          <div class="space-y-2" id="inventory-table-body">
+            <!-- Populated via JS -->
           </div>
         </section>
 
-        <!-- ================= TAB 5: SLA ESCALATIONS ================= -->
+        <!-- ================= TAB 5: SLA GUARDRAIL ================= -->
         <section id="panel-sla" class="hidden space-y-6 max-w-7xl mx-auto">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <h2 class="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
+              <h2 class="text-2xl font-bold text-white tracking-tight flex items-center gap-2">
                 SLA Escalation Guardrail
               </h2>
-              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+              <p class="text-xs text-slate-400 mt-1">
                 Tiered breach prevention: WARNING at 50% elapsed, CRITICAL at 75%, BREACHED at 100%.
               </p>
             </div>
-            <button onclick="runWatchdogScan()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-teal-600 hover:bg-teal-500 text-white shadow-xs">
+            <button onclick="runWatchdogScan()" class="px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold bg-sage-300 hover:bg-sage-400 text-[#0C1215] shadow-tactical-glow">
               Run Escalation Scan
             </button>
           </div>
 
-          <!-- Tier Protocol Card -->
+          <!-- Tier Protocol Visualizer -->
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div class="p-4 rounded-xl border border-emerald-500/30 bg-emerald-500/5 dark:bg-emerald-950/20 space-y-1 text-xs">
-              <span class="font-bold text-emerald-600 dark:text-emerald-400">TIER 1: HEALTHY (0 - 49%)</span>
-              <p class="text-slate-600 dark:text-slate-400">Normal transit and diagnosis in flight.</p>
+            <div class="p-4 rounded-xl border border-sage-300/30 bg-sage-300/5 space-y-2">
+              <span class="font-mono font-bold text-xs text-sage-300">TIER 1: HEALTHY (0 - 49%)</span>
+              <p class="text-xs text-slate-400">Normal transit and diagnosis in flight.</p>
             </div>
-            <div class="p-4 rounded-xl border border-amber-500/30 bg-amber-500/5 dark:bg-amber-950/20 space-y-1 text-xs">
-              <span class="font-bold text-amber-600 dark:text-amber-400">TIER 2: WARNING (50 - 75%)</span>
-              <p class="text-slate-600 dark:text-slate-400">STOMP alert broadcast to dispatch deck.</p>
+            <div class="p-4 rounded-xl border border-amber-500/30 bg-amber-500/5 space-y-2">
+              <span class="font-mono font-bold text-xs text-amber-300">TIER 2: WARNING (50 - 75%)</span>
+              <p class="text-xs text-slate-400">STOMP alert broadcast to dispatch deck.</p>
             </div>
-            <div class="p-4 rounded-xl border border-rose-500/30 bg-rose-500/5 dark:bg-rose-950/20 space-y-1 text-xs">
-              <span class="font-bold text-rose-600 dark:text-rose-400">TIER 3: BREACH RISK (&gt; 75%)</span>
-              <p class="text-slate-600 dark:text-slate-400">Supervisor notification &amp; audit infraction.</p>
+            <div class="p-4 rounded-xl border border-crimson-500/30 bg-crimson-500/5 space-y-2">
+              <span class="font-mono font-bold text-xs text-rose-300">TIER 3: BREACH RISK (&gt; 75%)</span>
+              <p class="text-xs text-slate-400">Supervisor notification &amp; audit infraction.</p>
             </div>
           </div>
 
-          <!-- Monitored SLA Table -->
-          <div class="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
-            <div class="p-4 border-b border-slate-200 dark:border-slate-800 font-bold text-xs">Active SLA Watchlist Clocks</div>
-            <table class="w-full text-left text-xs">
-              <thead class="bg-slate-50 dark:bg-slate-950/60 border-b border-slate-200 dark:border-slate-800 text-slate-500 uppercase tracking-wider font-semibold">
-                <tr>
-                  <th class="py-3 px-4">Ticket</th>
-                  <th class="py-3 px-4">Assigned Tech</th>
-                  <th class="py-3 px-4">Priority</th>
-                  <th class="py-3 px-4">Resolution Deadline</th>
-                  <th class="py-3 px-4 text-center">Risk Tier</th>
-                </tr>
-              </thead>
-              <tbody id="sla-table-body" class="divide-y divide-slate-200 dark:divide-slate-800">
-                <!-- Dynamically populated -->
-              </tbody>
-            </table>
+          <!-- Watchlist Floating Cards -->
+          <div class="space-y-2" id="sla-table-body">
+            <!-- Dynamically populated -->
           </div>
         </section>
 
@@ -500,64 +502,75 @@
     </div>
   </div>
 
-  <!-- Slide-Over Job Detail Drawer -->
-  <div id="jobDrawerOverlay" class="hidden fixed inset-0 z-50 flex justify-end bg-slate-950/60 backdrop-blur-xs">
-    <div class="w-full max-w-md bg-white dark:bg-slate-900 h-full shadow-2xl border-l border-slate-200 dark:border-slate-800 flex flex-col justify-between p-6 overflow-y-auto">
+  <!-- Slide-Over Job Inspector Drawer (480px Frosted Glass per Option A) -->
+  <div id="jobDrawerOverlay" class="hidden fixed inset-0 z-50 flex justify-end bg-[#0C1215]/80 backdrop-blur-sm transition-all duration-150">
+    <div class="w-full max-w-[480px] bg-[#131D21] h-full shadow-2xl border-l border-[#22353A] flex flex-col justify-between p-6 overflow-y-auto">
       <div class="space-y-5">
-        <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+        <div class="flex items-center justify-between pb-3 border-b border-[#22353A]">
           <div>
-            <span id="drawerJobNumber" class="font-mono text-xs font-bold text-teal-600 dark:text-teal-400 bg-teal-500/10 px-2 py-0.5 rounded">JOB-2026-0001</span>
-            <h3 id="drawerAddress" class="text-base font-bold text-slate-900 dark:text-white mt-1">710 S Paulina St, Chicago</h3>
+            <span id="drawerJobNumber" class="font-mono text-xs font-bold text-sage-300 bg-[#0C1215] px-2 py-0.5 rounded border border-[#22353A]">JOB-2026-0001</span>
+            <h3 id="drawerAddress" class="text-base font-bold text-white mt-1">710 S Paulina St, Chicago</h3>
           </div>
-          <button onclick="closeDrawer()" class="p-1 rounded text-slate-400 hover:text-slate-900 dark:hover:text-white">✕</button>
+          <button onclick="closeDrawer()" class="p-1 rounded text-slate-400 hover:text-white">✕</button>
         </div>
 
         <div class="space-y-3 text-xs">
-          <div>
-            <span class="text-slate-400">Current Status:</span>
-            <span id="drawerStatus" class="font-bold text-slate-900 dark:text-white ml-2 font-mono">ASSIGNED</span>
+          <div class="flex items-center justify-between">
+            <span class="text-slate-400 font-mono">Current Status:</span>
+            <span id="drawerStatus" class="font-bold text-sage-300 font-mono">ASSIGNED</span>
           </div>
-          <div>
-            <span class="text-slate-400">Assigned Technician:</span>
-            <span id="drawerTech" class="font-bold text-slate-900 dark:text-white ml-2">Marcus Vance</span>
+          <div class="flex items-center justify-between">
+            <span class="text-slate-400 font-mono">Assigned Engineer:</span>
+            <span id="drawerTech" class="font-bold text-white">Marcus Vance</span>
           </div>
-          <div>
-            <span class="text-slate-400">SLA Resolution Target:</span>
-            <span id="drawerSla" class="font-bold text-emerald-600 dark:text-emerald-400 ml-2">110 minutes remaining (Healthy)</span>
+          <div class="flex items-center justify-between">
+            <span class="text-slate-400 font-mono">SLA Resolution Target:</span>
+            <span id="drawerSla" class="font-bold text-sage-300 font-mono">110m remaining (Healthy)</span>
           </div>
-          <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60">
-            <span class="font-bold text-slate-700 dark:text-slate-300 block mb-1">Issue Description</span>
-            <p id="drawerDesc" class="text-slate-500 dark:text-slate-400 leading-relaxed">Main ICU ventilation chiller pressure drop alert. Ambient temperature rising.</p>
+          <div class="p-3.5 rounded-xl bg-[#0C1215] border border-[#22353A]">
+            <span class="font-mono text-[10px] uppercase font-bold text-slate-400 block mb-1">Issue Description</span>
+            <p id="drawerDesc" class="text-slate-300 leading-relaxed">Main ICU ventilation chiller pressure drop alert. Ambient temperature rising.</p>
           </div>
         </div>
 
-        <!-- Audit Trail -->
-        <div class="border-t border-slate-200 dark:border-slate-800 pt-4 space-y-2">
-          <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block">Audit Trail Log</span>
-          <div class="space-y-2 text-[11px] font-mono" id="drawerAuditTrail">
-            <div class="p-2 rounded bg-slate-100 dark:bg-slate-800/40">✓ JOB_CREATED &bull; Dispatcher Sarah</div>
-            <div class="p-2 rounded bg-slate-100 dark:bg-slate-800/40">✓ JOB_TRIAGED &bull; Skills Matched</div>
-            <div class="p-2 rounded bg-slate-100 dark:bg-slate-800/40">✓ JOB_ASSIGNED &bull; Marcus Vance</div>
+        <!-- Vertical Audit Stepper Timeline -->
+        <div class="border-t border-[#22353A] pt-4 space-y-3">
+          <span class="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider block">Audit Trail Stepper</span>
+          <div class="relative pl-6 space-y-4 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-[#22353A] text-xs font-mono">
+            <div class="relative">
+              <div class="absolute -left-6 mt-1 w-2.5 h-2.5 rounded-full bg-sage-300 border-2 border-[#0C1215]"></div>
+              <div class="text-white font-bold">JOB_CREATED</div>
+              <div class="text-slate-500 text-[10px]">Ingested via API &bull; 09:30 AM</div>
+            </div>
+            <div class="relative">
+              <div class="absolute -left-6 mt-1 w-2.5 h-2.5 rounded-full bg-sage-300 border-2 border-[#0C1215]"></div>
+              <div class="text-white font-bold">JOB_TRIAGED</div>
+              <div class="text-slate-500 text-[10px]">Skills Matched &bull; 09:35 AM</div>
+            </div>
+            <div class="relative">
+              <div class="absolute -left-6 mt-1 w-2.5 h-2.5 rounded-full bg-sage-300 border-2 border-[#0C1215]"></div>
+              <div class="text-white font-bold">JOB_ASSIGNED</div>
+              <div class="text-slate-500 text-[10px]">Dispatched to Marcus Vance &bull; 09:40 AM</div>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="pt-4 border-t border-slate-200 dark:border-slate-800 flex gap-2">
-        <button onclick="closeDrawer()" class="flex-1 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-300">Close</button>
-        <button id="drawerTransitionBtn" onclick="promptStatusTransition()" class="flex-1 py-2 rounded-lg bg-teal-600 text-xs font-semibold text-white">Transition Status</button>
+      <div class="pt-4 border-t border-[#22353A] flex gap-2">
+        <button onclick="closeDrawer()" class="flex-1 py-2 rounded-lg bg-[#0C1215] border border-[#22353A] text-xs font-mono font-semibold text-slate-300 hover:text-white">Close</button>
+        <button onclick="advanceStatusDemo()" class="flex-1 py-2 rounded-lg bg-sage-300 text-xs font-mono font-bold text-[#0C1215] shadow-tactical-glow">Advance State</button>
       </div>
     </div>
   </div>
 
   <!-- Interactive JavaScript State Store & Event Handlers -->
   <script>
-    // State Store
     const state = {
       currentTab: 'dashboard',
       jobs: [
-        { id: 1, jobNumber: 'JOB-2026-0001', priority: 'CRITICAL', status: 'ASSIGNED', address: '710 S Paulina St, Chicago, IL 60612', tech: 'Marcus Vance', slaMin: 110, risk: 'HEALTHY', desc: 'Main ICU ventilation chiller pressure drop alert. Ambient temperature rising.' },
-        { id: 2, jobNumber: 'JOB-2026-0002', priority: 'HIGH', status: 'IN_PROGRESS', address: '111 W Monroe St, Chicago, IL 60603', tech: 'Elena Rostova', slaMin: 35, risk: 'WARNING', desc: 'Floor 18 server room auxiliary AC intermittent tripping on high voltage relay.' },
-        { id: 3, jobNumber: 'JOB-2026-0003', priority: 'HIGH', status: 'TRIAGED', address: '350 N Clark St, Chicago, IL 60654', tech: null, slaMin: 210, risk: 'HEALTHY', desc: 'Walk-in freezer temperature at 28F instead of 0F. Possible TXV valve blockage.' },
+        { id: 1, jobNumber: 'JOB-2026-0001', priority: 'CRITICAL', status: 'ASSIGNED', address: '710 S Paulina St, Chicago, IL', tech: 'Marcus Vance', slaMin: 110, risk: 'HEALTHY', desc: 'Main ICU ventilation chiller pressure drop alert. Ambient temperature rising.' },
+        { id: 2, jobNumber: 'JOB-2026-0002', priority: 'HIGH', status: 'IN_PROGRESS', address: '111 W Monroe St, Chicago, IL', tech: 'Elena Rostova', slaMin: 35, risk: 'WARNING', desc: 'Floor 18 server room auxiliary AC intermittent tripping on high voltage relay.' },
+        { id: 3, jobNumber: 'JOB-2026-0003', priority: 'CRITICAL', status: 'TRIAGED', address: '350 N Clark St, Chicago, IL', tech: null, slaMin: 210, risk: 'HEALTHY', desc: 'Walk-in freezer temperature at 28F instead of 0F. Possible TXV valve blockage.' },
       ],
       inventory: [
         { id: 1, sku: 'CAP-45-5-RD', name: 'Dual Run Capacitor 45/5 uF', category: 'ELECTRICAL', avail: 45, reserved: 2, min: 10, bin: 'BIN-A12-04', price: 24.50 },
@@ -565,7 +578,6 @@
         { id: 3, sku: 'TXV-R410A-3T', name: 'Thermostatic Expansion Valve 3-Ton', category: 'HVAC_PARTS', avail: 4, reserved: 2, min: 8, bin: 'BIN-B04-02', price: 88.75 },
         { id: 4, sku: 'REF-R410A-25LB', name: 'R-410A Refrigerant Cylinder 25 lb', category: 'REFRIGERANT', avail: 18, reserved: 0, min: 4, bin: 'BAY-GAS-01', price: 215.00 },
         { id: 5, sku: 'MOT-ECM-1-3HP', name: 'Variable Speed ECM Motor 1/3 HP', category: 'MOTORS', avail: 2, reserved: 1, min: 5, bin: 'BIN-C08-11', price: 245.00 },
-        { id: 6, sku: 'CTL-BACNET-VAV', name: 'BACnet MS/TP VAV Zone Board', category: 'CONTROLS', avail: 6, reserved: 1, min: 2, bin: 'BIN-E01-03', price: 310.00 },
       ],
       selectedJob: null
     };
@@ -575,46 +587,41 @@
     function initMap() {
       if (leafletMap || !document.getElementById('dispatch-map')) return;
       try {
-        leafletMap = L.map('dispatch-map').setView([41.8781, -87.6298], 12);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution: '&copy; OpenStreetMap'
+        leafletMap = L.map('dispatch-map').setView([41.8781, -87.6298], 13);
+        // CartoDB Dark Matter tiles
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+          attribution: '&copy; CARTO'
         }).addTo(leafletMap);
 
-        // Job Site Marker (Red)
-        L.marker([41.8892, -87.6312]).addTo(leafletMap)
+        // Job Site Pin (Red Halo)
+        const jobIcon = L.divIcon({
+          className: 'custom-job-marker',
+          html: '<div style="background:#F43F5E;color:white;width:32px;height:32px;border-radius:50%;border:2px solid white;box-shadow:0 0 16px rgba(244,63,94,0.8);display:flex;align-items:center;justify-content:center;font-weight:bold;">📍</div>',
+          iconSize: [32, 32],
+          iconAnchor: [16, 16]
+        });
+        L.marker([41.8892, -87.6312], { icon: jobIcon }).addTo(leafletMap)
           .bindPopup('<b>JOB-2026-0003 (Site)</b><br>350 N Clark St');
 
-        // Tech 1 Marcus
-        L.marker([41.8845, -87.6320]).addTo(leafletMap)
-          .bindPopup('<b>Marcus Vance (#1 Candidate)</b><br>2.1 km away &bull; Available');
+        // Tech 1 Marcus Pin (Electric Sage Glow)
+        const techIcon = L.divIcon({
+          className: 'custom-tech-marker',
+          html: '<div style="background:#AFD19B;color:#0C1215;width:34px;height:34px;border-radius:50%;border:2px solid white;box-shadow:0 0 16px rgba(175,209,155,0.8);display:flex;align-items:center;justify-content:center;font-weight:bold;font-family:monospace;">#1</div>',
+          iconSize: [34, 34],
+          iconAnchor: [17, 17]
+        });
+        L.marker([41.8845, -87.6320], { icon: techIcon }).addTo(leafletMap)
+          .bindPopup('<b>Marcus Vance (#1 Match)</b><br>2.1 km &bull; Available');
 
-        // Tech 2 Elena
-        L.marker([41.8550, -87.6580]).addTo(leafletMap)
-          .bindPopup('<b>Elena Rostova</b><br>On Job (Floor 18)');
+        // Polyline connecting job to tech
+        L.polyline([[41.8892, -87.6312], [41.8845, -87.6320]], {
+          color: '#AFD19B',
+          weight: 3,
+          dashArray: '6, 8'
+        }).addTo(leafletMap);
       } catch (e) {
-        console.warn('Map initialization:', e);
+        console.warn('Map error:', e);
       }
-    }
-
-    function toggleTheme() {
-      const html = document.documentElement;
-      const isDark = html.classList.contains('dark');
-      const icon = document.getElementById('themeIcon');
-      const label = document.getElementById('themeLabel');
-
-      if (isDark) {
-        html.classList.remove('dark');
-        icon.innerText = '🌙';
-        label.innerText = 'Light';
-      } else {
-        html.classList.add('dark');
-        icon.innerText = '☀️';
-        label.innerText = 'Dark';
-      }
-    }
-
-    function toggleAlertsDropdown() {
-      document.getElementById('alertsDropdown').classList.toggle('hidden');
     }
 
     function setTab(tabName) {
@@ -624,15 +631,15 @@
         const btn = document.getElementById('nav-' + t);
         if (t === tabName) {
           panel.classList.remove('hidden');
-          btn.className = 'w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-semibold bg-teal-500/15 text-teal-700 dark:text-teal-300 border border-teal-500/30 shadow-xs';
+          btn.className = 'w-full flex items-center h-10 px-3 rounded-lg text-xs font-semibold bg-sage-300/15 text-sage-300 border border-sage-300/30 shadow-xs relative overflow-hidden group/item';
         } else {
           panel.classList.add('hidden');
-          btn.className = 'w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800/60';
+          btn.className = 'w-full flex items-center h-10 px-3 rounded-lg text-xs font-medium text-slate-400 hover:text-white hover:bg-[#18252a] hover:border hover:border-[#22353A] relative overflow-hidden group/item';
         }
       });
 
       if (tabName === 'dispatch') {
-        setTimeout(initMap, 100);
+        setTimeout(initMap, 80);
       }
       renderAll();
     }
@@ -640,7 +647,6 @@
     function renderAll() {
       renderDashboard();
       renderJobsTable();
-      renderKanban();
       renderInventory();
       renderSla();
     }
@@ -649,17 +655,20 @@
       const list = document.getElementById('dash-jobs-list');
       if (!list) return;
       list.innerHTML = state.jobs.map(j => `
-        <div class="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center justify-between hover:bg-slate-50/50 dark:hover:bg-slate-800/40 cursor-pointer" onclick="openDrawer(${j.id})">
+        <div class="p-3.5 rounded-xl bg-[#0C1215] border border-[#22353A] hover:border-sage-300/40 hover:bg-[#162227] flex items-center justify-between cursor-pointer transition-all duration-80" onclick="openDrawer(${j.id})">
           <div class="space-y-1">
             <div class="flex items-center gap-2">
-              <span class="font-mono text-xs font-bold text-teal-600 dark:text-teal-400">${j.jobNumber}</span>
-              <span class="text-xs font-bold text-slate-900 dark:text-white">${j.address.split(',')[0]}</span>
+              <span class="font-mono text-xs font-bold text-sage-300">${j.jobNumber}</span>
+              <span class="text-xs font-semibold text-white">${j.address.split(',')[0]}</span>
             </div>
-            <p class="text-[11px] text-slate-400">${j.desc}</p>
+            <p class="text-[11px] text-slate-400 truncate max-w-xs">${j.desc}</p>
           </div>
           <div class="text-right space-y-1">
-            <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold ${j.status === 'IN_PROGRESS' ? 'bg-amber-500/15 text-amber-600' : j.status === 'ASSIGNED' ? 'bg-indigo-500/15 text-indigo-500' : 'bg-slate-200 dark:bg-slate-800'}">${j.status}</span>
-            <p class="text-[10px] ${j.risk === 'WARNING' ? 'text-amber-500 font-bold' : 'text-slate-400'}">${j.slaMin}m remaining</p>
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-mono font-bold ${j.status === 'IN_PROGRESS' ? 'bg-amber-500/15 text-amber-300 border border-amber-500/30' : j.status === 'ASSIGNED' ? 'bg-sage-300/15 text-sage-300 border border-sage-300/30' : 'bg-slate-800 text-slate-400'}">
+              <span class="w-1.5 h-1.5 rounded-full mr-1.5 ${j.status === 'IN_PROGRESS' ? 'bg-amber-400 animate-pulse' : 'bg-sage-300'}"></span>
+              ${j.status}
+            </span>
+            <p class="text-[10px] font-mono ${j.risk === 'WARNING' ? 'text-amber-400 font-bold' : 'text-slate-400'}">${j.slaMin}m left</p>
           </div>
         </div>
       `).join('');
@@ -669,57 +678,34 @@
       const tbody = document.getElementById('jobs-table-body');
       if (!tbody) return;
       tbody.innerHTML = state.jobs.map(j => `
-        <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
-          <td class="py-3 px-4">
-            <span class="font-mono font-bold text-teal-600 dark:text-teal-400">${j.jobNumber}</span>
-            <p class="text-slate-400 truncate max-w-[180px]">${j.address}</p>
-          </td>
-          <td class="py-3 px-4 font-bold text-[10px] ${j.priority === 'CRITICAL' ? 'text-rose-500' : 'text-amber-500'}">${j.priority}</td>
-          <td class="py-3 px-4 font-mono font-semibold">${j.status}</td>
-          <td class="py-3 px-4">${j.tech || '<span class="text-slate-400 italic">Unassigned</span>'}</td>
-          <td class="py-3 px-4 ${j.risk === 'WARNING' ? 'text-amber-500 font-bold' : 'text-slate-400'}">${j.slaMin} min left</td>
-          <td class="py-3 px-4 text-right">
-            <button onclick="openDrawer(${j.id})" class="px-2.5 py-1 rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-xs font-semibold">Inspect</button>
-          </td>
-        </tr>
-      `).join('');
-    }
-
-    function renderKanban() {
-      ['triaged', 'assigned', 'inprogress', 'completed'].forEach(col => {
-        const el = document.getElementById('kanban-' + col);
-        if (!el) return;
-        const matching = state.jobs.filter(j => j.status.toLowerCase().replace('_', '') === col);
-        el.innerHTML = matching.map(j => `
-          <div class="p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xs cursor-pointer hover:border-teal-500" onclick="openDrawer(${j.id})">
-            <div class="flex items-center justify-between font-mono text-[11px] font-bold text-teal-600 dark:text-teal-400">
-              <span>${j.jobNumber}</span>
-              <span class="${j.priority === 'CRITICAL' ? 'text-rose-500' : 'text-amber-500'}">${j.priority}</span>
+        <div class="bg-[#131D21] border border-[#22353A] hover:border-sage-300/40 hover:bg-[#162227] rounded-xl p-4 transition-all duration-80 cursor-pointer shadow-sm group" onclick="openDrawer(${j.id})">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-3 lg:gap-4 items-center">
+            <div class="lg:col-span-2 space-y-0.5">
+              <span class="font-mono text-xs font-bold text-sage-300 group-hover:text-white">${j.jobNumber}</span>
+              <p class="text-[10px] font-mono text-slate-400">${j.tech || 'Unassigned'}</p>
             </div>
-            <p class="text-xs font-semibold mt-1 truncate">${j.address.split(',')[0]}</p>
-            <p class="text-[10px] text-slate-400 mt-2">${j.tech || 'No technician assigned'}</p>
+            <div class="lg:col-span-3">
+              <h4 class="text-xs font-semibold text-white truncate">${j.address.split(',')[0]}</h4>
+              <p class="text-[11px] text-slate-400 truncate">${j.desc}</p>
+            </div>
+            <div class="lg:col-span-1">
+              <span class="inline-flex items-center text-[10px] font-mono font-bold px-2 py-0.5 rounded-full ${j.priority === 'CRITICAL' ? 'bg-crimson-500/15 text-rose-300 border border-crimson-500/30' : 'bg-amber-500/15 text-amber-300 border border-amber-500/30'}">${j.priority}</span>
+            </div>
+            <div class="lg:col-span-2">
+              <span class="inline-flex items-center text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full ${j.status === 'IN_PROGRESS' ? 'bg-amber-500/15 text-amber-300 border border-amber-500/30' : 'bg-sage-300/15 text-sage-300 border border-sage-300/30'}">
+                <span class="w-1.5 h-1.5 rounded-full mr-1.5 ${j.status === 'IN_PROGRESS' ? 'bg-amber-400 animate-pulse' : 'bg-sage-300'}"></span>
+                ${j.status}
+              </span>
+            </div>
+            <div class="lg:col-span-2 font-mono text-xs ${j.risk === 'WARNING' ? 'text-amber-400 font-bold' : 'text-slate-300'}">
+              ${j.slaMin}m remaining
+            </div>
+            <div class="lg:col-span-2 text-right">
+              <button onclick="event.stopPropagation(); openDrawer(${j.id})" class="px-2.5 py-1 rounded bg-[#0C1215] border border-[#22353A] hover:border-sage-300 text-xs font-mono text-slate-300 hover:text-white">Inspect</button>
+            </div>
           </div>
-        `).join('') || '<div class="text-[11px] text-slate-400 italic text-center py-4">No tickets</div>';
-      });
-    }
-
-    function switchJobView(mode) {
-      const tbl = document.getElementById('jobs-table-container');
-      const knb = document.getElementById('jobs-kanban-container');
-      const btnTbl = document.getElementById('viewBtnTable');
-      const btnKnb = document.getElementById('viewBtnKanban');
-
-      if (mode === 'table') {
-        tbl.classList.remove('hidden');
-        knb.classList.add('hidden');
-        btnTbl.className = 'px-2.5 py-1 rounded text-xs font-semibold bg-white dark:bg-slate-900 text-teal-600 dark:text-teal-400 shadow-xs';
-        btnKnb.className = 'px-2.5 py-1 rounded text-xs font-semibold text-slate-500';
-      } else {
-        tbl.classList.add('hidden');
-        knb.classList.remove('hidden');
-        btnKnb.className = 'px-2.5 py-1 rounded text-xs font-semibold bg-white dark:bg-slate-900 text-teal-600 dark:text-teal-400 shadow-xs';
-        btnTbl.className = 'px-2.5 py-1 rounded text-xs font-semibold text-slate-500';
-      }
+        </div>
+      `).join('');
     }
 
     function renderInventory() {
@@ -729,55 +715,52 @@
 
       const lowItems = state.inventory.filter(i => i.avail <= i.min);
       lowList.innerHTML = lowItems.map(i => `
-        <div class="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-amber-400/40 flex items-center justify-between">
+        <div class="p-3 rounded-lg bg-[#0C1215] border border-amber-500/30 flex items-center justify-between">
           <div>
-            <span class="font-mono font-bold text-amber-600">${i.sku}</span> &bull; <strong>${i.name}</strong>
-            <p class="text-slate-400">Available: <span class="text-rose-500 font-bold">${i.avail}</span> / Min: ${i.min}</p>
+            <span class="font-mono text-xs font-bold text-amber-300 bg-amber-500/10 px-1.5 py-0.5 rounded border border-amber-500/20">${i.sku}</span> &bull; <strong class="text-white text-xs">${i.name}</strong>
+            <p class="text-slate-400 text-[11px] mt-0.5">Avail: <span class="text-rose-400 font-bold">${i.avail}</span> / Min: ${i.min}</p>
           </div>
-          <button onclick="quickRestock(${i.id})" class="px-2 py-1 rounded bg-amber-500/20 text-amber-700 dark:text-amber-300 font-bold text-[10px]">Restock +10</button>
+          <button onclick="quickRestock(${i.id})" class="px-2.5 py-1 rounded bg-amber-500/20 text-amber-300 font-mono font-bold text-[10px]">Restock +10</button>
         </div>
       `).join('');
 
-      tbody.innerHTML = state.inventory.map(i => {
-        const isLow = i.avail <= i.min;
-        return `
-          <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
-            <td class="py-3 px-4">
-              <span class="font-mono font-bold text-teal-600 dark:text-teal-400">${i.sku}</span>
-              <p class="font-semibold text-slate-900 dark:text-white">${i.name}</p>
-            </td>
-            <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-[10px] font-semibold">${i.category}</span></td>
-            <td class="py-3 px-4 font-mono">${i.bin}</td>
-            <td class="py-3 px-4 text-center">
-              <span class="font-bold text-slate-900 dark:text-white">${i.avail}</span> avail &bull; <span class="text-indigo-500">${i.reserved}</span> res
-            </td>
-            <td class="py-3 px-4 text-right font-mono font-semibold">$${i.price.toFixed(2)}</td>
-            <td class="py-3 px-4 text-center">
-              <span class="px-2 py-0.5 rounded text-[10px] font-bold ${isLow ? 'bg-amber-500/15 text-amber-600' : 'bg-emerald-500/15 text-emerald-600'}">
-                ${isLow ? 'Low Stock' : 'Adequate'}
-              </span>
-            </td>
-            <td class="py-3 px-4 text-right">
-              <button onclick="quickRestock(${i.id})" class="px-2 py-1 rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-xs font-semibold">Adjust</button>
-            </td>
-          </tr>
-        `;
-      }).join('');
+      tbody.innerHTML = state.inventory.map(i => `
+        <div class="bg-[#131D21] border border-[#22353A] hover:border-sage-300/40 hover:bg-[#162227] rounded-xl p-4 transition-all duration-80 shadow-sm">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-3 items-center">
+            <div class="lg:col-span-3 space-y-0.5">
+              <span class="font-mono text-xs font-bold text-sage-300 bg-sage-300/10 px-1.5 py-0.5 rounded border border-sage-300/20">${i.sku}</span>
+              <p class="font-bold text-white text-xs">${i.name}</p>
+            </div>
+            <div class="lg:col-span-2 font-mono text-xs text-slate-300">${i.category}</div>
+            <div class="lg:col-span-2 font-mono text-xs text-slate-400">Bin: ${i.bin}</div>
+            <div class="lg:col-span-2 font-mono text-xs text-white">${i.avail} avail &bull; ${i.reserved} res</div>
+            <div class="lg:col-span-2 font-mono font-bold text-white text-sm">$${i.price.toFixed(2)}</div>
+            <div class="lg:col-span-1 text-right">
+              <button onclick="quickRestock(${i.id})" class="px-2 py-1 rounded bg-[#0C1215] border border-[#22353A] text-xs font-mono text-sage-300 hover:text-white">Adjust</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
     }
 
     function renderSla() {
       const tbody = document.getElementById('sla-table-body');
       if (!tbody) return;
       tbody.innerHTML = state.jobs.map(j => `
-        <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
-          <td class="py-3 px-4 font-mono font-bold text-teal-600 dark:text-teal-400">${j.jobNumber}</td>
-          <td class="py-3 px-4">${j.tech || '<span class="italic text-slate-400">Unassigned</span>'}</td>
-          <td class="py-3 px-4 font-bold text-[10px] ${j.priority === 'CRITICAL' ? 'text-rose-500' : 'text-amber-500'}">${j.priority}</td>
-          <td class="py-3 px-4 ${j.risk === 'WARNING' ? 'text-amber-500 font-bold' : 'text-slate-400'}">${j.slaMin} min remaining</td>
-          <td class="py-3 px-4 text-center">
-            <span class="px-2 py-0.5 rounded text-[10px] font-bold ${j.risk === 'WARNING' ? 'bg-amber-500/15 text-amber-600' : 'bg-emerald-500/15 text-emerald-600'}">${j.risk}</span>
-          </td>
-        </tr>
+        <div class="bg-[#131D21] border border-[#22353A] hover:border-sage-300/40 rounded-xl p-4 transition-all duration-80">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-3 items-center">
+            <div class="lg:col-span-3 space-y-0.5">
+              <span class="font-mono text-xs font-bold text-sage-300">${j.jobNumber}</span>
+              <p class="text-xs text-white">${j.address.split(',')[0]}</p>
+            </div>
+            <div class="lg:col-span-2 text-xs font-medium text-slate-300">${j.tech || 'Unassigned'}</div>
+            <div class="lg:col-span-2 text-xs font-mono text-slate-400">${j.status}</div>
+            <div class="lg:col-span-3 font-mono font-semibold ${j.risk === 'WARNING' ? 'text-amber-400 font-bold' : 'text-slate-300'}">${j.slaMin}m remaining</div>
+            <div class="lg:col-span-2 text-right">
+              <span class="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full ${j.risk === 'WARNING' ? 'bg-amber-500/15 text-amber-300 border border-amber-500/30' : 'bg-sage-300/15 text-sage-300 border border-sage-300/30'}">${j.risk}</span>
+            </div>
+          </div>
+        </div>
       `).join('');
     }
 
@@ -788,7 +771,7 @@
       document.getElementById('drawerJobNumber').innerText = j.jobNumber;
       document.getElementById('drawerAddress').innerText = j.address;
       document.getElementById('drawerStatus').innerText = j.status;
-      document.getElementById('drawerTech').innerText = j.tech || 'Unassigned';
+      document.getElementById('drawerTech').innerText = j.tech || 'Unassigned (Needs Dispatch)';
       document.getElementById('drawerSla').innerText = `${j.slaMin}m remaining (${j.risk})`;
       document.getElementById('drawerDesc').innerText = j.desc;
       document.getElementById('jobDrawerOverlay').classList.remove('hidden');
@@ -798,73 +781,39 @@
       document.getElementById('jobDrawerOverlay').classList.add('hidden');
     }
 
-    function promptStatusTransition() {
+    function advanceStatusDemo() {
       if (!state.selectedJob) return;
-      const cur = state.selectedJob.status;
-      let next = 'COMPLETED';
-      if (cur === 'TRIAGED') next = 'ASSIGNED';
-      else if (cur === 'ASSIGNED') next = 'IN_PROGRESS';
-      else if (cur === 'IN_PROGRESS') next = 'COMPLETED';
-
-      state.selectedJob.status = next;
+      if (state.selectedJob.status === 'ASSIGNED') state.selectedJob.status = 'IN_PROGRESS';
+      else if (state.selectedJob.status === 'IN_PROGRESS') state.selectedJob.status = 'COMPLETED';
       closeDrawer();
       renderAll();
-      alert(`Job #${state.selectedJob.jobNumber} transitioned to ${next}!`);
     }
 
-    function assignTechnician(techName, jobNum) {
-      const j = state.jobs.find(x => x.jobNumber === jobNum);
-      if (j) {
-        j.tech = techName;
-        j.status = 'ASSIGNED';
+    function confirmAssignmentDemo(techName) {
+      const job = state.jobs.find(j => j.jobNumber === 'JOB-2026-0003');
+      if (job) {
+        job.tech = techName;
+        job.status = 'ASSIGNED';
       }
-      const banner = document.getElementById('dispatch-success-banner');
-      banner.innerText = `Dispatched ${techName} to ${jobNum}!`;
-      banner.classList.remove('hidden');
-      document.getElementById('btn-assign-marcus').innerText = '✓ Dispatched';
-      document.getElementById('btn-assign-marcus').disabled = true;
+      alert(`Successfully dispatched ${techName} to JOB-2026-0003!`);
       renderAll();
     }
 
-    function quickRestock(id) {
-      const item = state.inventory.find(i => i.id === id);
-      if (item) {
-        item.avail += 10;
+    function quickRestock(itemId) {
+      const it = state.inventory.find(x => x.id === itemId);
+      if (it) {
+        it.avail += 10;
         renderInventory();
-        alert(`Restocked 10 units of ${item.name} (${item.sku})! Available: ${item.avail}`);
       }
     }
 
     function runWatchdogScan() {
       const banner = document.getElementById('watchdog-banner');
       banner.classList.remove('hidden');
-      setTimeout(() => {
-        alert('SLA Escalation Watchdog completed scan across 3 active jobs. 0 breaches recorded.');
-      }, 50);
+      setTimeout(() => banner.classList.add('hidden'), 5000);
     }
 
-    function openCreateTicketModal() {
-      const customer = prompt('Enter customer / facility name:', 'Lincoln Park Plaza');
-      if (!customer) return;
-      const newJob = {
-        id: state.jobs.length + 1,
-        jobNumber: `JOB-2026-000${state.jobs.length + 1}`,
-        priority: 'MEDIUM',
-        status: 'TRIAGED',
-        address: `${customer}, Chicago, IL`,
-        tech: null,
-        slaMin: 240,
-        risk: 'HEALTHY',
-        desc: 'New intake ticket converted to field job.'
-      };
-      state.jobs.push(newJob);
-      document.getElementById('sidebar-job-count').innerText = state.jobs.length;
-      document.getElementById('dash-active-jobs').innerText = state.jobs.length;
-      renderAll();
-      alert(`Created ticket ${newJob.jobNumber} successfully!`);
-    }
-
-    // Initial boot render
+    // Initial render
     renderAll();
   </script>
 </body>

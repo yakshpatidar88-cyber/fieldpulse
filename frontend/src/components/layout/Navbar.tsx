@@ -12,6 +12,8 @@ import {
   Info,
   Sun,
   Moon,
+  Search,
+  Command,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useWebSocket } from '../../context/WebSocketContext';
@@ -31,9 +33,9 @@ export const Navbar: React.FC = () => {
       case 'ROLE_ADMIN':
         return 'danger';
       case 'ROLE_DISPATCHER':
-        return 'info';
-      case 'ROLE_TECHNICIAN':
         return 'success';
+      case 'ROLE_TECHNICIAN':
+        return 'info';
       default:
         return 'default';
     }
@@ -51,114 +53,128 @@ export const Navbar: React.FC = () => {
       case 'WARNING':
         return <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />;
       default:
-        return <Info className="w-4 h-4 text-teal-400 shrink-0 mt-0.5" />;
+        return <Info className="w-4 h-4 text-sage-300 shrink-0 mt-0.5" />;
     }
   };
 
+  const primaryRole = user?.role || (user?.roles && user.roles[0]);
+  const displayName = user?.fullName || (user?.firstName ? `${user.firstName} ${user.lastName || ''}`.trim() : 'Operator');
+
   return (
-    <header className="h-16 border-b border-slate-200 dark:border-slate-800/80 bg-white/90 dark:bg-slate-900/70 backdrop-blur px-6 flex items-center justify-between shrink-0 relative z-30 transition-colors">
-      <div className="flex items-center space-x-3">
-        <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">Workspace:</span>
-        <span className="text-xs font-semibold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800/80 px-2.5 py-1 rounded-md border border-slate-200 dark:border-slate-700/60">
-          Central Dispatch Hub (North America)
+    <header className="h-14 border-b border-pine-600 bg-pine-900/90 backdrop-blur-md px-4 sm:px-6 flex items-center justify-between shrink-0 relative z-30 transition-all duration-80">
+      {/* Left Breadcrumb & Hub */}
+      <div className="flex items-center space-x-2.5">
+        <span className="text-xs text-slate-400 font-medium hidden sm:inline">Hub:</span>
+        <span className="text-xs font-semibold text-slate-200 bg-pine-800 px-2 py-0.5 rounded-md border border-pine-600 font-mono">
+          Chicago Loop [ORD-01]
         </span>
 
         {/* Live WebSocket Status Pill */}
         <div
-          title={
+          title={isConnected ? 'STOMP Broker Online (14ms)' : 'Connecting to STOMP Broker...'}
+          className={`flex items-center space-x-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono border ${
             isConnected
-              ? 'Real-Time STOMP Broker Connected'
-              : 'Connecting to STOMP Broker...'
-          }
-          className={`flex items-center space-x-1 px-2 py-0.5 rounded-full text-[10px] font-mono border ${
-            isConnected
-              ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20'
-              : 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20'
+              ? 'bg-sage-300/10 text-sage-300 border-sage-300/30 shadow-tactical-glow'
+              : 'bg-amber-500/10 text-amber-400 border-amber-500/30'
           }`}
         >
           {isConnected ? (
             <>
-              <Wifi className="w-3 h-3" />
-              <span>LIVE WS</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-sage-300 animate-pulse" />
+              <span className="font-bold">LIVE WS</span>
             </>
           ) : (
             <>
-              <WifiOff className="w-3 h-3" />
+              <WifiOff className="w-3 h-3 text-amber-400" />
               <span>OFFLINE</span>
             </>
           )}
         </div>
       </div>
 
-      <div className="flex items-center space-x-3 sm:space-x-4">
+      {/* Center ⌘K Command Palette Trigger */}
+      <div className="hidden md:flex items-center">
+        <button
+          type="button"
+          onClick={() => {
+            const query = prompt('Quick Command Palette: Search ticket, technician, or inventory part:');
+            if (query) alert(`Searching for "${query}" across operations...`);
+          }}
+          className="flex items-center space-x-2 px-3 py-1.5 rounded-xl bg-pine-800/80 border border-pine-600 hover:border-sage-300/40 text-xs text-slate-400 hover:text-slate-200 w-64 justify-between transition-all duration-80 cursor-pointer"
+        >
+          <div className="flex items-center space-x-2">
+            <Search className="w-3.5 h-3.5 text-slate-400" />
+            <span className="text-[11px]">Command search...</span>
+          </div>
+          <div className="flex items-center space-x-0.5 text-[10px] font-mono px-1.5 py-0.2 rounded bg-pine-700 border border-pine-600 text-slate-300">
+            <Command className="w-2.5 h-2.5" />
+            <span>K</span>
+          </div>
+        </button>
+      </div>
+
+      {/* Right Controls */}
+      <div className="flex items-center space-x-2 sm:space-x-3">
         {/* Theme Toggle Button */}
         <button
           type="button"
           onClick={toggleTheme}
           title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-          className="p-2 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-all"
+          className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-pine-800 border border-pine-600 transition-all duration-80"
         >
-          {theme === 'dark' ? (
-            <Sun className="w-4 h-4 text-amber-400 hover:rotate-45 transition-transform" />
-          ) : (
-            <Moon className="w-4 h-4 text-indigo-600 hover:-rotate-12 transition-transform" />
-          )}
+          {theme === 'dark' ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-300" />}
         </button>
 
-        {/* Live Notification Indicator & Dropdown */}
+        {/* Notifications Popover */}
         <div className="relative">
           <button
             type="button"
-            aria-label="Notifications"
             onClick={() => setShowDropdown(!showDropdown)}
-            className="relative p-2 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-colors"
+            title="Operational Alerts"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-pine-800 border border-pine-600 relative transition-all duration-80"
           >
             <Bell className="w-4 h-4" />
             {unreadCount > 0 && (
-              <>
-                <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping" />
-                <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-rose-500 text-[10px] font-bold text-white flex items-center justify-center border-2 border-white dark:border-slate-950">
-                  {unreadCount > 9 ? '9+' : unreadCount}
-                </span>
-              </>
+              <span className="absolute -top-1 -right-1 w-4 h-4 bg-tactical-amber text-obsidian rounded-full text-[9px] font-bold flex items-center justify-center shadow-xs">
+                {unreadCount > 9 ? '9+' : unreadCount}
+              </span>
             )}
           </button>
 
-          {/* Notifications Dropdown Panel */}
           {showDropdown && (
-            <div className="absolute right-0 mt-2 w-80 sm:w-96 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl p-3 space-y-2 z-50">
-              <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
-                <span className="text-xs font-semibold text-slate-900 dark:text-white">
+            <div className="absolute right-0 mt-2 w-80 sm:w-96 rounded-2xl bg-pine-900 border border-pine-600 shadow-2xl p-4 z-50 animate-in fade-in duration-80 space-y-3">
+              <div className="flex items-center justify-between pb-2 border-b border-pine-600">
+                <span className="text-xs font-bold text-white tracking-wide">
                   Operational Alerts
                 </span>
-                <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400">
+                <span className="text-[10px] font-mono text-sage-300">
                   {unreadCount} unacknowledged
                 </span>
               </div>
 
               <div className="max-h-80 overflow-y-auto space-y-2 pr-1">
                 {notifications.length === 0 ? (
-                  <p className="text-xs text-slate-500 text-center py-6">
+                  <p className="text-xs text-slate-400 text-center py-6">
                     No active operational alerts.
                   </p>
                 ) : (
                   notifications.map((n) => (
                     <div
                       key={n.id}
-                      className={`p-2.5 rounded-lg border text-xs space-y-1 transition-colors ${
+                      className={`p-2.5 rounded-xl border text-xs space-y-1 transition-all ${
                         n.acknowledged
-                          ? 'bg-slate-50 dark:bg-slate-950/40 border-slate-200 dark:border-slate-800/50 text-slate-400 dark:text-slate-500'
-                          : 'bg-slate-100/80 dark:bg-slate-800/70 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300'
+                          ? 'bg-pine-800/40 border-pine-700 text-slate-400'
+                          : 'bg-pine-800 border-pine-600 text-slate-200'
                       }`}
                     >
                       <div className="flex items-start justify-between gap-2">
                         <div className="flex items-start space-x-2">
                           {getSeverityIcon(n.severity)}
                           <div>
-                            <span className="font-semibold text-slate-900 dark:text-slate-200 block">
+                            <span className="font-semibold text-white block">
                               {n.title}
                             </span>
-                            <span className="text-[11px] text-slate-500 dark:text-slate-400">
+                            <span className="text-[10px] text-slate-400">
                               Job #{n.jobNumber} &bull;{' '}
                               {new Date(n.createdAt).toLocaleTimeString([], {
                                 hour: '2-digit',
@@ -173,13 +189,13 @@ export const Navbar: React.FC = () => {
                             type="button"
                             title="Acknowledge Alert"
                             onClick={() => acknowledgeAlert(n.id)}
-                            className="p-1 rounded hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-400 hover:text-emerald-500 transition-colors"
+                            className="p-1 rounded hover:bg-pine-700 text-slate-400 hover:text-sage-300 transition-colors"
                           >
                             <CheckCheck className="w-3.5 h-3.5" />
                           </button>
                         )}
                       </div>
-                      <p className="text-[11px] leading-relaxed text-slate-600 dark:text-slate-400 pl-6">
+                      <p className="text-[11px] leading-relaxed text-slate-400 pl-6">
                         {n.message}
                       </p>
                     </div>
@@ -190,38 +206,31 @@ export const Navbar: React.FC = () => {
           )}
         </div>
 
-        <div className="h-5 w-[1px] bg-slate-200 dark:bg-slate-800" />
+        <div className="h-4 w-[1px] bg-pine-600" />
 
         {/* User Card */}
-        {(() => {
-          const primaryRole = user?.role || (user?.roles && user.roles[0]);
-          const displayName = user?.fullName || (user?.firstName ? `${user.firstName} ${user.lastName || ''}`.trim() : 'Operator');
-          return (
-            <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 rounded-full bg-teal-500/15 border border-teal-500/30 flex items-center justify-center text-teal-600 dark:text-teal-300 font-bold text-xs">
-                <UserIcon className="w-4 h-4" />
-              </div>
-              <div className="text-left hidden sm:block">
-                <div className="flex items-center space-x-2">
-                  <span className="text-sm font-semibold text-slate-800 dark:text-slate-200">
-                    {displayName}
-                  </span>
-                  <Badge variant={getRoleBadgeVariant(primaryRole)} size="sm">
-                    <Shield className="w-2.5 h-2.5 mr-1 inline" />
-                    {formatRoleName(primaryRole)}
-                  </Badge>
-                </div>
-                <p className="text-[11px] text-slate-500">{user?.email}</p>
-              </div>
+        <div className="flex items-center space-x-2.5">
+          <div className="w-7 h-7 rounded-xl bg-sage-300/15 border border-sage-300/30 flex items-center justify-center text-sage-300 font-bold text-xs shadow-tactical-glow">
+            <UserIcon className="w-3.5 h-3.5" />
+          </div>
+          <div className="text-left hidden sm:block">
+            <div className="flex items-center space-x-1.5">
+              <span className="text-xs font-bold text-white">
+                {displayName}
+              </span>
+              <Badge variant={getRoleBadgeVariant(primaryRole)} size="sm">
+                <Shield className="w-2.5 h-2.5 mr-1 inline" />
+                {formatRoleName(primaryRole)}
+              </Badge>
             </div>
-          );
-        })()}
+          </div>
+        </div>
 
         {/* Logout Button */}
         <button
           onClick={logout}
           title="Sign Out"
-          className="p-2 text-slate-400 hover:text-rose-500 hover:bg-rose-500/10 rounded-lg transition-colors"
+          className="p-1.5 text-slate-400 hover:text-tactical-crimson hover:bg-rose-500/10 rounded-lg transition-colors"
         >
           <LogOut className="w-4 h-4" />
         </button>
@@ -229,3 +238,5 @@ export const Navbar: React.FC = () => {
     </header>
   );
 };
+
+export default Navbar;

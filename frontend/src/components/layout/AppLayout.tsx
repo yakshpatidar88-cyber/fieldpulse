@@ -9,8 +9,8 @@ export const AppLayout: React.FC = () => {
   const { latestAlert, dismissBanner, acknowledgeAlert } = useWebSocket();
 
   return (
-    <div className="flex h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 overflow-hidden transition-colors">
-      {/* Fixed Sidebar */}
+    <div className="flex h-screen bg-obsidian text-slate-100 overflow-hidden">
+      {/* Tactical Expandable Sidebar Rail */}
       <Sidebar />
 
       {/* Main Content Area */}
@@ -20,7 +20,7 @@ export const AppLayout: React.FC = () => {
         {/* Real-time Inbound Alert Toast Banner */}
         {latestAlert && !latestAlert.acknowledged && (
           <div
-            className={`px-6 py-2.5 flex items-center justify-between text-xs border-b animate-in fade-in slide-in-from-top-2 duration-200 ${
+            className={`px-6 py-2.5 flex items-center justify-between text-xs border-b animate-in fade-in duration-80 ${
               latestAlert.severity === 'CRITICAL'
                 ? 'bg-rose-950/80 border-rose-800 text-rose-200'
                 : 'bg-amber-950/80 border-amber-800 text-amber-200'
@@ -56,10 +56,12 @@ export const AppLayout: React.FC = () => {
           </div>
         )}
 
-        <main className="flex-1 overflow-y-auto p-4 sm:p-6 bg-slate-50 dark:bg-slate-950/90 transition-colors">
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6 bg-obsidian">
           <Outlet />
         </main>
       </div>
     </div>
   );
 };
+
+export default AppLayout;

@@ -10,7 +10,6 @@ import {
   ChevronRight,
   TrendingUp,
 } from 'lucide-react';
-import { Card } from '../components/ui/Card';
 import { Badge } from '../components/ui/Badge';
 import { Button } from '../components/ui/Button';
 import { slaApi, SlaEscalationSummary } from '../api/notifications';
@@ -18,6 +17,8 @@ import { jobApi } from '../api/jobs';
 import { SlaDashboardMetrics } from '../types/sla';
 import { JobSummary } from '../types/job';
 import { useNavigate } from 'react-router-dom';
+import { JobPriorityBadge } from '../components/jobs/JobPriorityBadge';
+import { JobStatusBadge } from '../components/jobs/JobStatusBadge';
 
 export const SlaPage: React.FC = () => {
   const navigate = useNavigate();
@@ -43,7 +44,6 @@ export const SlaPage: React.FC = () => {
       if (m) {
         setMetrics(m);
       } else {
-        // Fallback default metrics matching realistic seeds
         setMetrics({
           totalActiveJobs: 3,
           healthyCount: 2,
@@ -53,7 +53,6 @@ export const SlaPage: React.FC = () => {
         });
       }
 
-      // Filter active non-completed jobs
       const active = jobs.filter((j) => j.status !== 'COMPLETED' && j.status !== 'CANCELLED');
       setActiveJobs(active.length > 0 ? active : [
         {
@@ -113,7 +112,6 @@ export const SlaPage: React.FC = () => {
       await loadSlaData();
     } catch (err) {
       console.error('Failed to run SLA scan:', err);
-      // Demo fallback summary
       setScanResult({
         scannedCount: activeJobs.length,
         warningsEscalated: 1,
@@ -143,11 +141,11 @@ export const SlaPage: React.FC = () => {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight flex items-center gap-2.5">
-            <ShieldAlert className="w-7 h-7 text-teal-600 dark:text-teal-400" />
+          <h2 className="text-2xl font-bold text-white tracking-tight flex items-center gap-2.5">
+            <ShieldAlert className="w-6 h-6 text-sage-300" />
             SLA Escalation Guardrail
           </h2>
-          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+          <p className="text-xs text-slate-400 mt-1">
             Proactive breach prevention: tiered escalation, real-time deadline watchdog, and automated alerts.
           </p>
         </div>
@@ -176,23 +174,23 @@ export const SlaPage: React.FC = () => {
 
       {/* Escalation Scan Summary Toast */}
       {scanResult && (
-        <div className="bg-teal-500/10 border border-teal-500/30 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs shadow-sm">
+        <div className="bg-[#131D21] border border-sage-300/30 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs shadow-xl">
           <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 rounded-xl bg-teal-500/20 text-teal-600 dark:text-teal-400 flex items-center justify-center shrink-0">
+            <div className="w-8 h-8 rounded-xl bg-sage-300/20 text-sage-300 flex items-center justify-center shrink-0">
               <CheckCircle2 className="w-5 h-5" />
             </div>
             <div>
-              <p className="font-bold text-slate-900 dark:text-white text-sm">
+              <p className="font-bold text-white text-sm">
                 Watchdog Scan Completed in {scanResult.executionDurationMs}ms
               </p>
-              <p className="text-slate-500 dark:text-slate-400">
+              <p className="text-slate-400">
                 Scanned <strong>{scanResult.scannedCount}</strong> active jobs &bull;{' '}
-                <strong className="text-amber-600 dark:text-amber-400">{scanResult.warningsEscalated}</strong> warnings evaluated &bull;{' '}
-                <strong className="text-rose-600 dark:text-rose-400">{scanResult.breachesRecorded}</strong> breaches detected.
+                <strong className="text-amber-400">{scanResult.warningsEscalated}</strong> warnings evaluated &bull;{' '}
+                <strong className="text-rose-400">{scanResult.breachesRecorded}</strong> breaches detected.
               </p>
             </div>
           </div>
-          <span className="font-mono text-[11px] text-slate-400">
+          <span className="font-mono text-[11px] text-slate-500">
             {new Date(scanResult.scannedAt).toLocaleTimeString()}
           </span>
         </div>
@@ -200,247 +198,237 @@ export const SlaPage: React.FC = () => {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5">
-        <div className="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 space-y-1 shadow-xs transition-colors">
-          <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 text-xs">
+        <div className="bg-[#131D21] border border-[#22353A] border-t-2 border-t-sage-300/40 rounded-xl p-4 space-y-1 shadow-md hover:border-[#2f4950] transition-all duration-80">
+          <div className="flex items-center justify-between text-slate-400 text-xs font-mono uppercase">
             <span>Active Monitored</span>
-            <Clock className="w-4 h-4 text-teal-500" />
+            <Clock className="w-4 h-4 text-sage-300" />
           </div>
-          <div className="text-2xl font-extrabold text-slate-900 dark:text-white">
+          <div className="text-2xl font-mono font-bold text-white">
             {totalActive}
           </div>
-          <div className="text-[11px] text-slate-400">Live operational jobs</div>
+          <div className="text-[11px] text-slate-500">Live operational jobs</div>
         </div>
 
-        <div className="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 space-y-1 shadow-xs transition-colors">
-          <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 text-xs">
+        <div className="bg-[#131D21] border border-[#22353A] border-t-2 border-t-sage-300/50 rounded-xl p-4 space-y-1 shadow-md hover:border-[#2f4950] transition-all duration-80">
+          <div className="flex items-center justify-between text-slate-400 text-xs font-mono uppercase">
             <span>Healthy SLAs</span>
-            <ShieldCheck className="w-4 h-4 text-emerald-500" />
+            <ShieldCheck className="w-4 h-4 text-sage-300" />
           </div>
-          <div className="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400">
+          <div className="text-2xl font-mono font-bold text-sage-300">
             {healthyCount}
           </div>
-          <div className="text-[11px] text-slate-400">&lt; 50% time elapsed</div>
+          <div className="text-[11px] text-slate-500">&lt; 50% elapsed</div>
         </div>
 
-        <div className="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 space-y-1 shadow-xs transition-colors">
-          <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 text-xs">
+        <div className="bg-[#131D21] border border-[#22353A] border-t-2 border-t-amber-500/50 rounded-xl p-4 space-y-1 shadow-md hover:border-[#2f4950] transition-all duration-80">
+          <div className="flex items-center justify-between text-slate-400 text-xs font-mono uppercase">
             <span>Warning Risk</span>
-            <AlertTriangle className="w-4 h-4 text-amber-500" />
+            <AlertTriangle className="w-4 h-4 text-amber-400" />
           </div>
-          <div className="text-2xl font-extrabold text-amber-600 dark:text-amber-400">
+          <div className="text-2xl font-mono font-bold text-amber-400">
             {warningCount}
           </div>
-          <div className="text-[11px] text-slate-400">50% &ndash; 75% elapsed</div>
+          <div className="text-[11px] text-slate-500">50% &ndash; 75% elapsed</div>
         </div>
 
-        <div className="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 space-y-1 shadow-xs transition-colors">
-          <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 text-xs">
+        <div className="bg-[#131D21] border border-[#22353A] border-t-2 border-t-cyan-500/50 rounded-xl p-4 space-y-1 shadow-md hover:border-[#2f4950] transition-all duration-80">
+          <div className="flex items-center justify-between text-slate-400 text-xs font-mono uppercase">
             <span>Compliance Rate</span>
-            <TrendingUp className="w-4 h-4 text-teal-500" />
+            <TrendingUp className="w-4 h-4 text-cyan-400" />
           </div>
-          <div className="text-2xl font-extrabold text-teal-600 dark:text-teal-400">
+          <div className="text-2xl font-mono font-bold text-white">
             {complianceRate.toFixed(1)}%
           </div>
-          <div className="text-[11px] text-slate-400">{breachedCount} total breaches recorded</div>
+          <div className="text-[11px] text-slate-500">{breachedCount} breaches recorded</div>
         </div>
       </div>
 
-      {/* Escalation Tier Visualizer Card */}
-      <Card
-        title="Tiered SLA Escalation Protocol"
-        subtitle="Automated threshold evaluation executed on each job lifecycle transition and periodic background check"
-      >
+      {/* Escalation Tier Visualizer */}
+      <div className="bg-[#131D21] border border-[#22353A] rounded-xl p-5 shadow-xl space-y-3">
+        <div className="border-b border-[#22353A] pb-3">
+          <h3 className="text-sm font-bold text-white font-mono uppercase tracking-wider">
+            Tiered SLA Escalation Protocol
+          </h3>
+          <p className="text-xs text-slate-400">
+            Automated threshold evaluation executed on each job lifecycle transition and periodic background check
+          </p>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-1">
-          <div className="p-4 rounded-xl border border-emerald-500/30 bg-emerald-500/5 dark:bg-emerald-950/20 space-y-2">
+          <div className="p-4 rounded-xl border border-sage-300/30 bg-sage-300/5 space-y-2">
             <div className="flex items-center justify-between">
-              <span className="font-bold text-xs text-emerald-700 dark:text-emerald-300">
+              <span className="font-bold font-mono text-xs text-sage-300">
                 TIER 1: HEALTHY
               </span>
-              <span className="text-[11px] font-mono text-emerald-600 dark:text-emerald-400">
+              <span className="text-[11px] font-mono text-slate-400">
                 0% &ndash; 49%
               </span>
             </div>
-            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+            <p className="text-xs text-slate-400 leading-relaxed">
               Standard operations. Technician travel and on-site diagnosis progressing within expected target windows.
             </p>
           </div>
 
-          <div className="p-4 rounded-xl border border-amber-500/30 bg-amber-500/5 dark:bg-amber-950/20 space-y-2">
+          <div className="p-4 rounded-xl border border-amber-500/30 bg-amber-500/5 space-y-2">
             <div className="flex items-center justify-between">
-              <span className="font-bold text-xs text-amber-700 dark:text-amber-300">
+              <span className="font-bold font-mono text-xs text-amber-300">
                 TIER 2: WARNING
               </span>
-              <span className="text-[11px] font-mono text-amber-600 dark:text-amber-400">
+              <span className="text-[11px] font-mono text-slate-400">
                 50% &ndash; 75%
               </span>
             </div>
-            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+            <p className="text-xs text-slate-400 leading-relaxed">
               Automated warning broadcast over STOMP bus. Dispatcher console flashes alert for potential technician reassignment.
             </p>
           </div>
 
-          <div className="p-4 rounded-xl border border-rose-500/30 bg-rose-500/5 dark:bg-rose-950/20 space-y-2">
+          <div className="p-4 rounded-xl border border-rose-500/30 bg-rose-500/5 space-y-2">
             <div className="flex items-center justify-between">
-              <span className="font-bold text-xs text-rose-700 dark:text-rose-300">
+              <span className="font-bold font-mono text-xs text-rose-300">
                 TIER 3: BREACH RISK
               </span>
-              <span className="text-[11px] font-mono text-rose-600 dark:text-rose-400">
+              <span className="text-[11px] font-mono text-slate-400">
                 &gt; 75% &ndash; 100%+
               </span>
             </div>
-            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+            <p className="text-xs text-slate-400 leading-relaxed">
               Critical escalation banner triggered. Immediate supervisor notification dispatched and non-compliance recorded.
             </p>
           </div>
         </div>
-      </Card>
+      </div>
 
-      {/* Monitored Jobs SLA Watchlist */}
-      <div className="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden transition-colors">
-        <div className="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+      {/* Monitored Jobs SLA Watchlist: Elevated Floating Cards (Option C) */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between px-1">
           <div>
-            <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+            <h3 className="text-sm font-bold text-white font-mono uppercase tracking-wider">
               Active SLA Watchlist &amp; Deadlines
             </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
+            <p className="text-xs text-slate-400">
               Live countdown clocks for pending response and resolution milestones
             </p>
           </div>
-          <span className="font-mono text-xs font-semibold px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+          <span className="font-mono text-xs font-semibold px-2.5 py-0.5 rounded-full bg-[#131D21] text-sage-300 border border-[#22353A]">
             {activeJobs.length} Active Monitored
           </span>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead className="bg-slate-50 dark:bg-slate-950/60 border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">
-              <tr>
-                <th className="py-3 px-4">Job Ticket</th>
-                <th className="py-3 px-4">Assigned Tech</th>
-                <th className="py-3 px-4">Priority</th>
-                <th className="py-3 px-4">Lifecycle Status</th>
-                <th className="py-3 px-4">Resolution Deadline</th>
-                <th className="py-3 px-4 text-center">Risk Level</th>
-                <th className="py-3 px-4 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
-              {isLoading ? (
-                <tr>
-                  <td colSpan={7} className="py-16 text-center text-slate-400">
-                    <div className="w-7 h-7 border-3 border-teal-500/20 border-t-teal-500 rounded-full animate-spin mx-auto mb-2" />
-                    Evaluating SLA compliance states...
-                  </td>
-                </tr>
-              ) : activeJobs.length === 0 ? (
-                <tr>
-                  <td colSpan={7} className="py-12 text-center text-slate-500">
-                    No active monitored jobs in flight.
-                  </td>
-                </tr>
-              ) : (
-                activeJobs.map((job) => {
-                  const remMin = calculateRemainingMinutes(job.resolutionDeadline);
-                  const isOverdue = remMin !== null && remMin <= 0;
-                  const isWarning = job.slaRiskLevel === 'WARNING' || (remMin !== null && remMin > 0 && remMin <= 45);
+        {/* Floating Table Header */}
+        <div className="hidden lg:grid grid-cols-12 gap-4 px-4 py-2 text-[11px] font-mono uppercase tracking-wider text-slate-400 font-semibold">
+          <div className="col-span-3">Job Ticket</div>
+          <div className="col-span-2">Assigned Tech</div>
+          <div className="col-span-1">Priority</div>
+          <div className="col-span-2">Lifecycle Status</div>
+          <div className="col-span-2">Resolution Window</div>
+          <div className="col-span-1 text-center">Risk Level</div>
+          <div className="col-span-1 text-right">Actions</div>
+        </div>
 
-                  return (
-                    <tr
-                      key={job.id}
-                      className="hover:bg-slate-50/70 dark:hover:bg-slate-800/40 transition-colors"
-                    >
-                      <td className="py-3 px-4">
-                        <div className="space-y-0.5">
-                          <span className="font-mono text-xs font-bold text-teal-700 dark:text-teal-400 bg-teal-500/10 px-1.5 py-0.5 rounded border border-teal-500/20 inline-block">
-                            {job.jobNumber}
-                          </span>
-                          <p className="font-medium text-slate-800 dark:text-slate-200 truncate max-w-[220px]">
-                            {job.address}
-                          </p>
-                        </div>
-                      </td>
+        {/* Floating Cards */}
+        <div className="space-y-2">
+          {isLoading ? (
+            <div className="bg-[#131D21] border border-[#22353A] rounded-xl p-16 text-center text-slate-400">
+              <div className="w-7 h-7 border-3 border-sage-300/20 border-t-sage-300 rounded-full animate-spin mx-auto mb-2" />
+              Evaluating SLA compliance states...
+            </div>
+          ) : activeJobs.length === 0 ? (
+            <div className="bg-[#131D21] border border-[#22353A] rounded-xl p-12 text-center text-slate-500 font-mono text-xs">
+              No active monitored jobs in flight.
+            </div>
+          ) : (
+            activeJobs.map((job) => {
+              const remMin = calculateRemainingMinutes(job.resolutionDeadline);
+              const isOverdue = remMin !== null && remMin <= 0;
+              const isWarning = job.slaRiskLevel === 'WARNING' || (remMin !== null && remMin > 0 && remMin <= 45);
 
-                      <td className="py-3 px-4">
-                        <span className="font-medium text-slate-900 dark:text-white">
-                          {job.assignedTechnicianName || (
-                            <span className="italic text-slate-400">Unassigned</span>
-                          )}
+              return (
+                <div
+                  key={job.id}
+                  className="bg-[#131D21] border border-[#22353A] hover:border-sage-300/40 hover:bg-[#162227] rounded-xl p-4 transition-all duration-80 shadow-sm"
+                >
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 lg:gap-4 items-center">
+                    {/* Column 1: Ticket & Address */}
+                    <div className="lg:col-span-3 space-y-0.5">
+                      <span className="font-mono text-xs font-bold text-sage-300 bg-sage-300/10 px-1.5 py-0.5 rounded border border-sage-300/20 inline-block">
+                        {job.jobNumber}
+                      </span>
+                      <p className="font-medium text-white text-xs truncate max-w-[220px]">
+                        {job.address}
+                      </p>
+                    </div>
+
+                    {/* Column 2: Technician */}
+                    <div className="lg:col-span-2 text-xs font-medium text-slate-300">
+                      {job.assignedTechnicianName || (
+                        <span className="italic text-slate-500">Unassigned</span>
+                      )}
+                    </div>
+
+                    {/* Column 3: Priority */}
+                    <div className="lg:col-span-1">
+                      <JobPriorityBadge priority={job.priority} size="sm" />
+                    </div>
+
+                    {/* Column 4: Status */}
+                    <div className="lg:col-span-2">
+                      <JobStatusBadge status={job.status} size="sm" />
+                    </div>
+
+                    {/* Column 5: Resolution Window */}
+                    <div className="lg:col-span-2 space-y-0.5">
+                      <div className="flex items-center gap-1.5 text-xs">
+                        <Clock className="w-3.5 h-3.5 text-slate-400" />
+                        <span className={`font-mono font-semibold ${isOverdue ? 'text-rose-400 font-bold' : isWarning ? 'text-amber-400' : 'text-slate-300'}`}>
+                          {remMin !== null
+                            ? isOverdue
+                              ? `${Math.abs(remMin)}m overdue`
+                              : `${remMin}m remaining`
+                            : 'No deadline'}
                         </span>
-                      </td>
+                      </div>
+                      {job.resolutionDeadline && (
+                        <p className="text-[10px] font-mono text-slate-500 pl-5">
+                          Target: {new Date(job.resolutionDeadline).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </p>
+                      )}
+                    </div>
 
-                      <td className="py-3 px-4">
-                        <span
-                          className={`px-2 py-0.5 rounded text-[11px] font-bold ${
-                            job.priority === 'CRITICAL'
-                              ? 'bg-rose-500/15 text-rose-700 dark:text-rose-400 border border-rose-500/30'
-                              : job.priority === 'HIGH'
-                              ? 'bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-500/30'
-                              : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300'
-                          }`}
-                        >
-                          {job.priority}
+                    {/* Column 6: Risk Level */}
+                    <div className="lg:col-span-1 text-left lg:text-center">
+                      {job.slaRiskLevel === 'BREACHED' || isOverdue ? (
+                        <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-rose-500/15 text-rose-300 border border-rose-500/30">
+                          Breached
                         </span>
-                      </td>
-
-                      <td className="py-3 px-4">
-                        <span className="font-mono text-[11px] font-semibold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-700">
-                          {job.status}
+                      ) : job.slaRiskLevel === 'WARNING' || isWarning ? (
+                        <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30">
+                          Warning
                         </span>
-                      </td>
+                      ) : (
+                        <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-sage-300/15 text-sage-300 border border-sage-300/30">
+                          Healthy
+                        </span>
+                      )}
+                    </div>
 
-                      <td className="py-3 px-4">
-                        <div className="space-y-0.5">
-                          <div className="flex items-center gap-1.5">
-                            <Clock className="w-3.5 h-3.5 text-slate-400" />
-                            <span className={`font-semibold ${isOverdue ? 'text-rose-600 dark:text-rose-400 font-bold' : isWarning ? 'text-amber-600 dark:text-amber-400' : 'text-slate-700 dark:text-slate-300'}`}>
-                              {remMin !== null
-                                ? isOverdue
-                                  ? `${Math.abs(remMin)}m overdue`
-                                  : `${remMin} min remaining`
-                                : 'No deadline'}
-                            </span>
-                          </div>
-                          {job.resolutionDeadline && (
-                            <p className="text-[10px] text-slate-400 pl-5">
-                              Target: {new Date(job.resolutionDeadline).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                            </p>
-                          )}
-                        </div>
-                      </td>
-
-                      <td className="py-3 px-4 text-center">
-                        {job.slaRiskLevel === 'BREACHED' || isOverdue ? (
-                          <Badge variant="danger" size="sm">
-                            Breached
-                          </Badge>
-                        ) : job.slaRiskLevel === 'WARNING' || isWarning ? (
-                          <Badge variant="warning" size="sm">
-                            Warning
-                          </Badge>
-                        ) : (
-                          <Badge variant="success" size="sm">
-                            Healthy
-                          </Badge>
-                        )}
-                      </td>
-
-                      <td className="py-3 px-4 text-right">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => navigate('/jobs')}
-                          className="text-xs"
-                          rightIcon={<ChevronRight className="w-3 h-3" />}
-                        >
-                          View Job
-                        </Button>
-                      </td>
-                    </tr>
-                  );
-                })
-              )}
-            </tbody>
-          </table>
+                    {/* Column 7: Actions */}
+                    <div className="lg:col-span-1 text-right">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => navigate('/jobs')}
+                        className="text-xs px-2 text-slate-300"
+                        rightIcon={<ChevronRight className="w-3 h-3" />}
+                      >
+                        View
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              );
+            })
+          )}
         </div>
       </div>
     </div>

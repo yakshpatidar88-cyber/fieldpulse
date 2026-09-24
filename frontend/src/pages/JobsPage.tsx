@@ -133,11 +133,11 @@ export const JobsPage: React.FC = () => {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight flex items-center gap-2.5">
-            <Briefcase className="w-7 h-7 text-teal-600 dark:text-teal-400" />
+          <h2 className="text-2xl font-bold text-white tracking-tight flex items-center gap-2.5">
+            <Briefcase className="w-6 h-6 text-sage-300" />
             Field Jobs &amp; Lifecycle Management
           </h2>
-          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+          <p className="text-xs text-slate-400 mt-1">
             End-to-end SLA tracked operational state machine: Created &rarr; Triaged &rarr; Dispatched &rarr; In Progress &rarr; Completed.
           </p>
         </div>
@@ -149,12 +149,12 @@ export const JobsPage: React.FC = () => {
             <Button
               variant="outline"
               size="sm"
-              leftIcon={<Wrench className="w-3.5 h-3.5 text-amber-500" />}
+              leftIcon={<Wrench className="w-3.5 h-3.5 text-amber-400" />}
               onClick={() => {
                 setSelectedTriageRequest(pendingRequests[0]);
                 setIsTriageModalOpen(true);
               }}
-              className="border-amber-400/40 text-amber-600 dark:text-amber-400 bg-amber-500/10"
+              className="border-amber-400/30 text-amber-300 bg-amber-500/10"
             >
               Triage Queue ({pendingRequests.length})
             </Button>
@@ -181,32 +181,32 @@ export const JobsPage: React.FC = () => {
           </Button>
 
           {/* View Switcher Toggle: Table vs Kanban */}
-          <div className="bg-slate-200/80 dark:bg-slate-800 p-0.5 rounded-lg border border-slate-300 dark:border-slate-700 flex items-center">
+          <div className="bg-[#131D21] p-1 rounded-lg border border-[#22353A] flex items-center gap-1">
             <button
               type="button"
               onClick={() => setViewMode('table')}
               title="Table View"
-              className={`p-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-all ${
+              className={`px-2.5 py-1 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-all duration-80 ${
                 viewMode === 'table'
-                  ? 'bg-white dark:bg-slate-900 text-teal-700 dark:text-teal-300 shadow-xs'
-                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+                  ? 'bg-sage-300 text-[#0C1215] shadow-sm'
+                  : 'text-slate-400 hover:text-white'
               }`}
             >
               <TableIcon className="w-3.5 h-3.5" />
-              <span className="hidden md:inline">Table</span>
+              <span className="hidden md:inline font-mono">Table</span>
             </button>
             <button
               type="button"
               onClick={() => setViewMode('kanban')}
               title="Kanban Board View"
-              className={`p-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-all ${
+              className={`px-2.5 py-1 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-all duration-80 ${
                 viewMode === 'kanban'
-                  ? 'bg-white dark:bg-slate-900 text-teal-700 dark:text-teal-300 shadow-xs'
-                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+                  ? 'bg-sage-300 text-[#0C1215] shadow-sm'
+                  : 'text-slate-400 hover:text-white'
               }`}
             >
               <LayoutGrid className="w-3.5 h-3.5" />
-              <span className="hidden md:inline">Kanban</span>
+              <span className="hidden md:inline font-mono">Kanban</span>
             </button>
           </div>
         </div>
@@ -214,56 +214,56 @@ export const JobsPage: React.FC = () => {
 
       {/* KPI Summary Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5">
-        <div className="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 space-y-1 shadow-xs transition-colors">
-          <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 text-xs">
+        <div className="bg-[#131D21] border border-[#22353A] border-t-2 border-t-sage-300/40 rounded-xl p-4 space-y-1 shadow-md hover:border-[#2f4950] transition-all duration-80">
+          <div className="flex items-center justify-between text-slate-400 text-xs font-mono uppercase">
             <span>Total Tickets</span>
-            <Briefcase className="w-4 h-4 text-teal-500" />
+            <Briefcase className="w-4 h-4 text-sage-300" />
           </div>
-          <div className="text-2xl font-extrabold text-slate-900 dark:text-white">
+          <div className="text-2xl font-mono font-bold text-white">
             {totalJobs}
           </div>
-          <div className="text-[11px] text-slate-400">Tracked in lifecycle</div>
+          <div className="text-[11px] text-slate-500">Tracked in lifecycle</div>
         </div>
 
-        <div className="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 space-y-1 shadow-xs transition-colors">
-          <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 text-xs">
+        <div className="bg-[#131D21] border border-[#22353A] border-t-2 border-t-crimson-500/50 rounded-xl p-4 space-y-1 shadow-md hover:border-[#2f4950] transition-all duration-80">
+          <div className="flex items-center justify-between text-slate-400 text-xs font-mono uppercase">
             <span>Critical SLA Risk</span>
-            <Flame className="w-4 h-4 text-rose-500" />
+            <Flame className="w-4 h-4 text-rose-400 animate-pulse" />
           </div>
-          <div className="text-2xl font-extrabold text-rose-600 dark:text-rose-400">
+          <div className="text-2xl font-mono font-bold text-rose-400">
             {criticalSlaJobs}
           </div>
-          <div className="text-[11px] text-slate-400">Needs immediate dispatch</div>
+          <div className="text-[11px] text-slate-500">Immediate attention</div>
         </div>
 
-        <div className="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 space-y-1 shadow-xs transition-colors">
-          <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 text-xs">
+        <div className="bg-[#131D21] border border-[#22353A] border-t-2 border-t-amber-500/50 rounded-xl p-4 space-y-1 shadow-md hover:border-[#2f4950] transition-all duration-80">
+          <div className="flex items-center justify-between text-slate-400 text-xs font-mono uppercase">
             <span>In-Progress Jobs</span>
-            <Clock className="w-4 h-4 text-amber-500" />
+            <Clock className="w-4 h-4 text-amber-400" />
           </div>
-          <div className="text-2xl font-extrabold text-amber-600 dark:text-amber-400">
+          <div className="text-2xl font-mono font-bold text-amber-400">
             {inProgressJobs}
           </div>
-          <div className="text-[11px] text-slate-400">Active technician fieldwork</div>
+          <div className="text-[11px] text-slate-500">Active fieldwork</div>
         </div>
 
-        <div className="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 space-y-1 shadow-xs transition-colors">
-          <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 text-xs">
+        <div className="bg-[#131D21] border border-[#22353A] border-t-2 border-t-sage-300/50 rounded-xl p-4 space-y-1 shadow-md hover:border-[#2f4950] transition-all duration-80">
+          <div className="flex items-center justify-between text-slate-400 text-xs font-mono uppercase">
             <span>Completed</span>
-            <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+            <CheckCircle2 className="w-4 h-4 text-sage-300" />
           </div>
-          <div className="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400">
+          <div className="text-2xl font-mono font-bold text-sage-300">
             {completedJobs}
           </div>
-          <div className="text-[11px] text-slate-400">Resolution SLA fulfilled</div>
+          <div className="text-[11px] text-slate-500">SLA fulfilled</div>
         </div>
       </div>
 
       {/* Main View: Table vs Kanban */}
       {isLoading ? (
-        <div className="flex flex-col items-center justify-center py-24 space-y-3 bg-white dark:bg-slate-900/40 rounded-2xl border border-slate-200 dark:border-slate-800">
-          <div className="w-8 h-8 border-3 border-teal-500/20 border-t-teal-500 rounded-full animate-spin" />
-          <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
+        <div className="flex flex-col items-center justify-center py-24 space-y-3 bg-[#131D21] rounded-2xl border border-[#22353A]">
+          <div className="w-8 h-8 border-3 border-sage-300/20 border-t-sage-300 rounded-full animate-spin" />
+          <p className="text-xs font-mono text-slate-400">
             Loading field jobs and SLA states...
           </p>
         </div>
@@ -281,7 +281,7 @@ export const JobsPage: React.FC = () => {
         />
       )}
 
-      {/* Slide-Over Job Inspector Drawer */}
+      {/* Slide-Over Job Inspector Drawer (480px Frosted Glass) */}
       <JobDetailDrawer
         jobId={selectedJobId}
         isOpen={isDrawerOpen}

@@ -14,34 +14,34 @@ export const JobPriorityBadge: React.FC<JobPriorityBadgeProps> = ({ priority, si
     case 'CRITICAL':
       return (
         <span
-          className={`inline-flex items-center font-bold rounded-md border bg-rose-50 dark:bg-rose-500/15 text-rose-700 dark:text-rose-400 border-rose-200 dark:border-rose-500/30 ${sizeClasses}`}
+          className={`inline-flex items-center font-bold font-mono rounded-full border bg-crimson-500/15 text-rose-300 border-crimson-500/40 shadow-[0_0_8px_rgba(244,63,94,0.25)] ${sizeClasses}`}
         >
-          <Flame className="w-3 h-3 mr-1 text-rose-500 animate-pulse" />
+          <Flame className="w-3 h-3 mr-1 text-rose-400 animate-pulse" />
           CRITICAL
         </span>
       );
     case 'HIGH':
       return (
         <span
-          className={`inline-flex items-center font-semibold rounded-md border bg-amber-50 dark:bg-amber-500/15 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-500/30 ${sizeClasses}`}
+          className={`inline-flex items-center font-semibold font-mono rounded-full border bg-amber-500/15 text-amber-300 border-amber-500/30 ${sizeClasses}`}
         >
-          <AlertTriangle className="w-3 h-3 mr-1 text-amber-500" />
+          <AlertTriangle className="w-3 h-3 mr-1 text-amber-400" />
           HIGH
         </span>
       );
     case 'MEDIUM':
       return (
         <span
-          className={`inline-flex items-center font-medium rounded-md border bg-blue-50 dark:bg-blue-500/15 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-500/30 ${sizeClasses}`}
+          className={`inline-flex items-center font-medium font-mono rounded-full border bg-cyan-500/15 text-cyan-300 border-cyan-500/30 ${sizeClasses}`}
         >
-          <Clock className="w-3 h-3 mr-1 text-blue-500" />
+          <Clock className="w-3 h-3 mr-1 text-cyan-400" />
           MEDIUM
         </span>
       );
     case 'LOW':
       return (
         <span
-          className={`inline-flex items-center font-medium rounded-md border bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700 ${sizeClasses}`}
+          className={`inline-flex items-center font-medium font-mono rounded-full border bg-slate-800/80 text-slate-400 border-slate-700 ${sizeClasses}`}
         >
           <ArrowDown className="w-3 h-3 mr-1 text-slate-400" />
           LOW
@@ -49,7 +49,7 @@ export const JobPriorityBadge: React.FC<JobPriorityBadgeProps> = ({ priority, si
       );
     default:
       return (
-        <span className={`inline-flex items-center font-medium rounded-md border ${sizeClasses}`}>
+        <span className={`inline-flex items-center font-medium font-mono rounded-full border ${sizeClasses}`}>
           {priority}
         </span>
       );

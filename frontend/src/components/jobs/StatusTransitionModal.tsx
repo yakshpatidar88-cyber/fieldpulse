@@ -57,21 +57,21 @@ export const StatusTransitionModal: React.FC<StatusTransitionModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0C1215]/80 backdrop-blur-md animate-in fade-in duration-150">
+      <div className="bg-[#131D21] border border-[#22353A] rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-800">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-[#22353A]">
           <div>
-            <h3 className="text-base font-bold text-slate-900 dark:text-white">
+            <h3 className="text-base font-bold text-white">
               Advance Job Lifecycle State
             </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+            <p className="text-xs text-slate-400 mt-0.5 font-mono">
               Job #{job.jobNumber} &bull; {job.title || job.address}
             </p>
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-[#0C1215] transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -80,27 +80,27 @@ export const StatusTransitionModal: React.FC<StatusTransitionModalProps> = ({
         {/* Content Form */}
         <form onSubmit={handleSubmit} className="p-6 space-y-5">
           {error && (
-            <div className="bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/20 text-rose-700 dark:text-rose-400 p-3 rounded-lg text-xs flex items-center gap-2">
-              <AlertTriangle className="w-4 h-4 shrink-0 text-rose-500" />
+            <div className="bg-rose-500/10 border border-rose-500/30 text-rose-300 p-3 rounded-lg text-xs flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4 shrink-0 text-rose-400" />
               <span>{error}</span>
             </div>
           )}
 
           {/* Current State to Target State Visual */}
-          <div className="bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 rounded-xl p-4 flex items-center justify-between">
+          <div className="bg-[#0C1215] border border-[#22353A] rounded-xl p-4 flex items-center justify-between">
             <div className="text-center sm:text-left">
-              <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider block mb-1">
+              <span className="text-[10px] font-mono uppercase font-bold text-slate-400 tracking-wider block mb-1">
                 Current Status
               </span>
               <JobStatusBadge status={job.status} />
             </div>
 
-            <div className="flex items-center justify-center px-3 text-slate-400">
-              <ArrowRight className="w-5 h-5" />
+            <div className="flex items-center justify-center px-3 text-slate-500">
+              <ArrowRight className="w-5 h-5 text-sage-300" />
             </div>
 
             <div className="text-center sm:text-right">
-              <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider block mb-1">
+              <span className="text-[10px] font-mono uppercase font-bold text-slate-400 tracking-wider block mb-1">
                 Target Status
               </span>
               <JobStatusBadge status={selectedStatus} />
@@ -109,7 +109,7 @@ export const StatusTransitionModal: React.FC<StatusTransitionModalProps> = ({
 
           {/* Target Status Selector */}
           <div>
-            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-2">
+            <label className="block text-xs font-semibold text-slate-300 mb-2 font-mono">
               Select Next State (SLA Guardrail Enforced)
             </label>
             <div className="grid grid-cols-2 gap-2">
@@ -118,15 +118,15 @@ export const StatusTransitionModal: React.FC<StatusTransitionModalProps> = ({
                   key={st}
                   type="button"
                   onClick={() => setSelectedStatus(st)}
-                  className={`p-3 rounded-xl border text-left text-xs font-medium transition-all flex items-center justify-between ${
+                  className={`p-3 rounded-xl border text-left text-xs font-medium transition-all duration-80 flex items-center justify-between ${
                     selectedStatus === st
-                      ? 'bg-teal-500/15 border-teal-500 text-teal-700 dark:text-teal-300 shadow-sm'
-                      : 'bg-white dark:bg-slate-800/60 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-slate-300 dark:hover:border-slate-600'
+                      ? 'bg-sage-300/15 border-sage-300 text-sage-300 shadow-sm'
+                      : 'bg-[#0C1215] border-[#22353A] text-slate-400 hover:border-slate-600'
                   }`}
                 >
                   <span>{st.replace('_', ' ')}</span>
                   {selectedStatus === st && (
-                    <span className="w-2 h-2 rounded-full bg-teal-500" />
+                    <span className="w-2 h-2 rounded-full bg-sage-300" />
                   )}
                 </button>
               ))}
@@ -135,7 +135,7 @@ export const StatusTransitionModal: React.FC<StatusTransitionModalProps> = ({
 
           {/* Operator Transition Notes */}
           <div>
-            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+            <label className="block text-xs font-semibold text-slate-300 mb-1.5 font-mono">
               Operational Transition Notes (Logged to Audit Trail)
             </label>
             <textarea
@@ -143,12 +143,12 @@ export const StatusTransitionModal: React.FC<StatusTransitionModalProps> = ({
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="e.g. Technician arrived on site, diagnostics confirmed compressor coil burned out."
-              className="w-full rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 p-3 text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors"
+              className="w-full rounded-xl bg-[#0C1215] border border-[#22353A] p-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-sage-300 focus:border-sage-300 transition-all duration-80"
             />
           </div>
 
           {/* Footer Actions */}
-          <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-200 dark:border-slate-800">
+          <div className="flex items-center justify-end gap-3 pt-3 border-t border-[#22353A]">
             <Button type="button" variant="outline" size="sm" onClick={onClose}>
               Cancel
             </Button>

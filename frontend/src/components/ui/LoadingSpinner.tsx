@@ -20,9 +20,9 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   return (
     <div className="flex flex-col items-center justify-center p-4 space-y-3">
       <div
-        className={`animate-spin rounded-full border-teal-500/20 border-t-teal-500 ${sizeMap[size]} ${className}`}
+        className={`animate-spin rounded-full border-sage-300/20 border-t-sage-300 ${sizeMap[size]} ${className}`}
       />
-      {label && <p className="text-xs text-slate-400 animate-pulse">{label}</p>}
+      {label && <p className="text-xs text-slate-400 font-mono tracking-wider animate-pulse">{label}</p>}
     </div>
   );
 };

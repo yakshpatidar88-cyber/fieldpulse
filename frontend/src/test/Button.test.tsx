@@ -7,7 +7,7 @@ describe('Button Component', () => {
     render(<Button>Confirm Dispatch</Button>);
     const button = screen.getByRole('button', { name: /confirm dispatch/i });
     expect(button).toBeInTheDocument();
-    expect(button.className).toContain('bg-teal-600');
+    expect(button.className).toContain('bg-sage-300');
   });
 
   it('renders loading spinner when isLoading is true and disables button', () => {

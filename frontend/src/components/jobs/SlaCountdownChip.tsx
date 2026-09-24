@@ -28,7 +28,7 @@ export const SlaCountdownChip: React.FC<SlaCountdownChipProps> = ({
         const overMinutes = Math.floor(Math.abs(diff) / (1000 * 60));
         const hours = Math.floor(overMinutes / 60);
         const mins = overMinutes % 60;
-        setTimeLeft(hours > 0 ? `+${hours}h ${mins}m breached` : `+${mins}m breached`);
+        setTimeLeft(hours > 0 ? `+${hours}h ${mins}m BREACHED` : `+${mins}m BREACHED`);
         return;
       }
 
@@ -48,14 +48,14 @@ export const SlaCountdownChip: React.FC<SlaCountdownChipProps> = ({
     };
 
     calculateTime();
-    const interval = setInterval(calculateTime, 30000); // refresh every 30s
+    const interval = setInterval(calculateTime, 30000);
     return () => clearInterval(interval);
   }, [deadline, isCompleted]);
 
   if (isCompleted) {
     return (
-      <span className="inline-flex items-center text-[11px] font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-500/20">
-        <CheckCircle2 className="w-3 h-3 mr-1" />
+      <span className="inline-flex items-center text-[11px] font-mono text-sage-300 bg-sage-300/10 px-2 py-0.5 rounded-md border border-sage-300/25">
+        <CheckCircle2 className="w-3 h-3 mr-1 text-sage-300" />
         SLA Met
       </span>
     );
@@ -63,7 +63,7 @@ export const SlaCountdownChip: React.FC<SlaCountdownChipProps> = ({
 
   if (!deadline) {
     return (
-      <span className="text-[11px] font-mono text-slate-400 dark:text-slate-500">
+      <span className="text-[11px] font-mono text-slate-500">
         &mdash;
       </span>
     );
@@ -71,8 +71,8 @@ export const SlaCountdownChip: React.FC<SlaCountdownChipProps> = ({
 
   if (isBreached || riskLevel === 'BREACHED') {
     return (
-      <span className="inline-flex items-center text-[11px] font-mono font-bold text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-500/15 px-2 py-0.5 rounded border border-rose-200 dark:border-rose-500/30 animate-pulse">
-        <AlertOctagon className="w-3 h-3 mr-1 text-rose-500" />
+      <span className="inline-flex items-center text-[11px] font-mono font-bold text-rose-300 bg-rose-500/15 px-2 py-0.5 rounded-md border border-rose-500/40 animate-pulse shadow-[0_0_8px_rgba(244,63,94,0.3)]">
+        <AlertOctagon className="w-3 h-3 mr-1 text-rose-400" />
         {timeLeft || 'BREACHED'}
       </span>
     );
@@ -80,16 +80,16 @@ export const SlaCountdownChip: React.FC<SlaCountdownChipProps> = ({
 
   if (riskLevel === 'WARNING') {
     return (
-      <span className="inline-flex items-center text-[11px] font-mono font-medium text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-500/15 px-2 py-0.5 rounded border border-amber-200 dark:border-amber-500/30">
-        <Timer className="w-3 h-3 mr-1 text-amber-500 animate-spin" />
+      <span className="inline-flex items-center text-[11px] font-mono font-medium text-amber-300 bg-amber-500/15 px-2 py-0.5 rounded-md border border-amber-500/30">
+        <Timer className="w-3 h-3 mr-1 text-amber-400 animate-spin" />
         {timeLeft} left
       </span>
     );
   }
 
   return (
-    <span className="inline-flex items-center text-[11px] font-mono font-medium text-teal-700 dark:text-teal-400 bg-teal-50 dark:bg-teal-500/10 px-2 py-0.5 rounded border border-teal-200 dark:border-teal-500/20">
-      <Timer className="w-3 h-3 mr-1 text-teal-500" />
+    <span className="inline-flex items-center text-[11px] font-mono font-medium text-sage-300 bg-sage-300/10 px-2 py-0.5 rounded-md border border-sage-300/20">
+      <Timer className="w-3 h-3 mr-1 text-sage-400" />
       {timeLeft} left
     </span>
   );
