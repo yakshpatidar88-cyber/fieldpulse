@@ -11,6 +11,8 @@ import { DispatchConsolePage } from './pages/DispatchConsolePage';
 import { JobsPage } from './pages/JobsPage';
 import { InventoryPage } from './pages/InventoryPage';
 import { SlaPage } from './pages/SlaPage';
+import { TechniciansPage } from './pages/TechniciansPage';
+import { AnalyticsPage } from './pages/AnalyticsPage';
 
 export default function App() {
   return (
@@ -51,6 +53,8 @@ export default function App() {
                 </ProtectedRoute>
               }
             />
+            <Route path="technicians" element={<TechniciansPage />} />
+            <Route path="analytics" element={<AnalyticsPage />} />
           </Route>
 
           {/* Fallback */}

@@ -6,6 +6,8 @@ import {
   Briefcase,
   Boxes,
   ShieldAlert,
+  Users,
+  BarChart3,
   Zap,
   Radio,
 } from 'lucide-react';
@@ -45,8 +47,22 @@ const navItems: NavItem[] = [
   {
     to: '/sla',
     label: 'SLA Guardrail',
-    badge: '96.4%',
+    badge: '98.2%',
     icon: ShieldAlert,
+    roles: ['ROLE_ADMIN', 'ROLE_DISPATCHER'],
+  },
+  {
+    to: '/technicians',
+    label: 'Fleet Roster',
+    badge: '4 ACTIVE',
+    icon: Users,
+    roles: ['ROLE_ADMIN', 'ROLE_DISPATCHER'],
+  },
+  {
+    to: '/analytics',
+    label: 'Analytics Deck',
+    badge: '92.4%',
+    icon: BarChart3,
     roles: ['ROLE_ADMIN', 'ROLE_DISPATCHER'],
   },
 ];
@@ -67,25 +83,25 @@ export const Sidebar: React.FC = () => {
     <aside
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className={`bg-pine-900 border-r border-pine-600 flex flex-col justify-between shrink-0 select-none z-40 transition-all duration-80 ${
-        isHovered ? 'w-60 shadow-2xl' : 'w-16'
+      className={`bg-white dark:bg-[#131D21] border-r border-slate-200 dark:border-[#22353A] flex flex-col justify-between shrink-0 select-none z-40 transition-all duration-80 ${
+        isHovered ? 'w-60 shadow-xl' : 'w-16'
       }`}
     >
       <div>
         {/* Brand Header */}
-        <div className="h-14 flex items-center px-4 border-b border-pine-600 space-x-3 overflow-hidden">
-          <div className="w-8 h-8 rounded-xl bg-sage-300/15 border border-sage-300/30 flex items-center justify-center text-sage-300 shrink-0 shadow-tactical-glow">
-            <Zap className="w-4 h-4 fill-sage-300" />
+        <div className="h-14 flex items-center px-4 border-b border-slate-200 dark:border-[#22353A] space-x-3 overflow-hidden">
+          <div className="w-8 h-8 rounded-xl bg-emerald-100 dark:bg-sage-300/15 border border-emerald-200 dark:border-sage-300/30 flex items-center justify-center text-emerald-800 dark:text-sage-300 shrink-0 shadow-xs">
+            <Zap className="w-4 h-4 fill-emerald-800 dark:fill-sage-300" />
           </div>
           {isHovered && (
             <div className="truncate">
-              <h1 className="font-extrabold text-sm tracking-tight text-white flex items-center gap-1.5">
+              <h1 className="font-black text-sm tracking-tight text-slate-900 dark:text-white flex items-center gap-1.5">
                 FieldPulse
-                <span className="text-[9px] uppercase font-mono px-1 py-0.2 rounded bg-sage-300/15 text-sage-300 border border-sage-300/30 font-bold">
+                <span className="text-[9px] uppercase font-mono px-1 py-0.2 rounded bg-emerald-100 dark:bg-sage-300/15 text-emerald-800 dark:text-sage-300 border border-emerald-200 dark:border-sage-300/30 font-bold">
                   PRO
                 </span>
               </h1>
-              <p className="text-[10px] text-slate-400">Tactical Dispatch</p>
+              <p className="text-[10px] text-slate-400 font-mono">Tactical Dispatch</p>
             </div>
           )}
         </div>
@@ -104,8 +120,8 @@ export const Sidebar: React.FC = () => {
                     isHovered ? 'px-3 py-2.5 justify-between' : 'h-10 w-12 justify-center mx-auto'
                   } ${
                     isActive
-                      ? 'bg-sage-300/10 text-sage-300 border border-sage-300/30 shadow-xs'
-                      : 'text-slate-400 hover:text-white hover:bg-pine-800/80 border border-transparent'
+                      ? 'bg-emerald-50 dark:bg-sage-300/10 text-emerald-900 dark:text-sage-300 border border-emerald-200 dark:border-sage-300/30 shadow-xs font-bold'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#1A262B] border border-transparent'
                   }`
                 }
               >
@@ -113,7 +129,7 @@ export const Sidebar: React.FC = () => {
                   <>
                     {/* Active Edge Indicator Pill */}
                     {isActive && (
-                      <span className="absolute -left-2 top-2.5 bottom-2.5 w-1 bg-sage-300 rounded-r-full shadow-tactical-glow" />
+                      <span className="absolute -left-2 top-2.5 bottom-2.5 w-1 bg-emerald-700 dark:bg-sage-300 rounded-r-full" />
                     )}
 
                     <div className="flex items-center space-x-3 truncate">
@@ -122,7 +138,7 @@ export const Sidebar: React.FC = () => {
                     </div>
 
                     {isHovered && item.badge && (
-                      <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-sage-300/15 text-sage-300 border border-sage-300/25 shrink-0">
+                      <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-slate-100 dark:bg-sage-300/15 text-slate-700 dark:text-sage-300 border border-slate-200 dark:border-sage-300/25 shrink-0">
                         {item.badge}
                       </span>
                     )}
@@ -135,23 +151,23 @@ export const Sidebar: React.FC = () => {
       </div>
 
       {/* Footer Telemetry Widget */}
-      <div className="p-2 border-t border-pine-600">
+      <div className="p-2 border-t border-slate-200 dark:border-[#22353A]">
         <div
-          className={`rounded-xl bg-pine-800/80 border border-pine-600 flex items-center transition-all ${
+          className={`rounded-xl bg-slate-50 dark:bg-[#0C1215] border border-slate-200 dark:border-[#22353A] flex items-center transition-all ${
             isHovered ? 'p-2.5 justify-between text-xs' : 'h-10 w-12 justify-center mx-auto'
           }`}
         >
           <div className="flex items-center space-x-2">
-            <Radio className="w-3.5 h-3.5 text-sage-300 animate-pulse shrink-0" />
+            <Radio className="w-3.5 h-3.5 text-emerald-600 dark:text-sage-300 animate-pulse shrink-0" />
             {isHovered && (
               <div className="truncate text-[10px]">
-                <span className="text-white font-semibold block leading-tight">GPS LIVE</span>
-                <span className="text-slate-400 font-mono">14ms latency</span>
+                <span className="text-slate-800 dark:text-white font-semibold block leading-tight">GPS LIVE</span>
+                <span className="text-slate-500 dark:text-slate-400 font-mono">14ms latency</span>
               </div>
             )}
           </div>
           {isHovered && (
-            <span className="w-2 h-2 rounded-full bg-sage-300 shadow-tactical-glow" />
+            <span className="w-2 h-2 rounded-full bg-emerald-500 dark:bg-sage-300" />
           )}
         </div>
       </div>

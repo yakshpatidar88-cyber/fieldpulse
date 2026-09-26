@@ -32,10 +32,10 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
   const [showBreakdown, setShowBreakdown] = React.useState(false);
 
   const getScoreColor = (score: number) => {
-    if (score >= 80) return 'text-sage-300 bg-sage-300/15 border-sage-300/30';
-    if (score >= 60) return 'text-cyan-300 bg-cyan-500/15 border-cyan-500/30';
-    if (score >= 40) return 'text-amber-300 bg-amber-500/15 border-amber-500/30';
-    return 'text-rose-400 bg-rose-500/15 border-rose-500/30';
+    if (score >= 80) return 'text-emerald-800 bg-emerald-50 border-emerald-200 dark:text-sage-300 dark:bg-sage-300/15 dark:border-sage-300/30';
+    if (score >= 60) return 'text-sky-800 bg-sky-50 border-sky-200 dark:text-cyan-300 dark:bg-cyan-500/15 dark:border-cyan-500/30';
+    if (score >= 40) return 'text-amber-800 bg-amber-50 border-amber-200 dark:text-amber-300 dark:bg-amber-500/15 dark:border-amber-500/30';
+    return 'text-rose-800 bg-rose-50 border-rose-200 dark:text-rose-400 dark:bg-rose-500/15 dark:border-rose-500/30';
   };
 
   const isDisqualified = !candidate.eligible;
@@ -45,10 +45,10 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
       onClick={onSelect}
       className={`rounded-xl p-3.5 transition-all duration-80 cursor-pointer border ${
         isSelected
-          ? 'bg-[#162227] border-sage-300 ring-1 ring-sage-300/40 shadow-lg shadow-black/40'
+          ? 'bg-emerald-50/70 dark:bg-[#162227] border-emerald-600 dark:border-sage-300 ring-1 ring-emerald-500/30 dark:ring-sage-300/40 shadow-md'
           : isDisqualified
-          ? 'bg-[#0C1215]/60 border-[#22353A] opacity-50 hover:opacity-75'
-          : 'bg-[#131D21] border-[#22353A] hover:border-[#2f4950] hover:bg-[#152024]'
+          ? 'bg-slate-50 dark:bg-[#0C1215]/60 border-slate-200 dark:border-[#22353A] opacity-50 hover:opacity-75'
+          : 'bg-white dark:bg-[#131D21] border-slate-200 dark:border-[#22353A] hover:border-slate-300 dark:hover:border-[#2f4950] hover:bg-slate-50/60 dark:hover:bg-[#152024] shadow-xs'
       }`}
     >
       {/* Top row: Rank, Name, Employee Code, Score Badge */}
@@ -57,30 +57,30 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
           <div
             className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold font-mono ${
               rank === 1 && !isDisqualified
-                ? 'bg-sage-300/20 text-sage-300 border border-sage-300/40'
-                : 'bg-[#0C1215] text-slate-400 border border-[#22353A]'
+                ? 'bg-emerald-100 text-emerald-900 border border-emerald-300 dark:bg-sage-300/20 dark:text-sage-300 dark:border-sage-300/40'
+                : 'bg-slate-100 dark:bg-[#0C1215] text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-[#22353A]'
             }`}
           >
             #{rank}
           </div>
           <div>
             <div className="flex items-center space-x-2">
-              <h4 className="text-xs font-bold text-white">{candidate.fullName}</h4>
+              <h4 className="text-xs font-bold text-slate-900 dark:text-white">{candidate.fullName}</h4>
               <span className="text-[10px] font-mono text-slate-500">
                 {candidate.employeeCode}
               </span>
             </div>
-            <div className="flex items-center space-x-2.5 text-[11px] text-slate-400 mt-0.5">
+            <div className="flex items-center space-x-2.5 text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
               <span className="flex items-center gap-1 font-mono">
-                <MapPin className="w-3 h-3 text-sage-300" />
+                <MapPin className="w-3 h-3 text-emerald-600 dark:text-sage-300" />
                 {candidate.distanceKm.toFixed(1)} km
               </span>
               <span className="flex items-center gap-1 font-mono">
-                <Layers className="w-3 h-3 text-cyan-400" />
+                <Layers className="w-3 h-3 text-sky-600 dark:text-cyan-400" />
                 {candidate.activeJobsCount}/{candidate.maxConcurrentJobs}
               </span>
-              <span className="flex items-center gap-1 text-amber-400 font-mono">
-                <Star className="w-3 h-3 fill-amber-400" />
+              <span className="flex items-center gap-1 text-amber-500 font-mono font-medium">
+                <Star className="w-3 h-3 fill-amber-500" />
                 {candidate.rating.toFixed(1)}
               </span>
             </div>
@@ -90,7 +90,7 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
         {/* Overall Score */}
         <div className="text-right">
           {isDisqualified ? (
-            <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-rose-500/15 text-rose-300 border border-rose-500/30">
+            <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-rose-100 text-rose-800 border border-rose-200 dark:bg-rose-500/15 dark:text-rose-300 dark:border-rose-500/30">
               Ineligible
             </span>
           ) : (
@@ -108,7 +108,7 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
 
       {/* Disqualification Reason if ineligible */}
       {isDisqualified && candidate.disqualificationReason && (
-        <div className="mt-2 p-2 rounded bg-rose-500/10 border border-rose-500/20 text-rose-300 text-[11px] flex items-center gap-1.5 font-mono">
+        <div className="mt-2 p-2 rounded bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/20 text-rose-800 dark:text-rose-300 text-[11px] flex items-center gap-1.5 font-mono">
           <XCircle className="w-3.5 h-3.5 shrink-0" />
           <span>{candidate.disqualificationReason}</span>
         </div>
@@ -119,7 +119,7 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
         {candidate.matchedSkills.map((skill) => (
           <span
             key={skill}
-            className="inline-flex items-center gap-1 text-[10px] font-mono px-2 py-0.5 rounded bg-sage-300/10 text-sage-300 border border-sage-300/20"
+            className="inline-flex items-center gap-1 text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-50 dark:bg-sage-300/10 text-emerald-800 dark:text-sage-300 border border-emerald-200 dark:border-sage-300/20"
           >
             <CheckCircle2 className="w-2.5 h-2.5" />
             {skill}
@@ -128,7 +128,7 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
         {candidate.missingSkills.map((skill) => (
           <span
             key={skill}
-            className="inline-flex items-center gap-1 text-[10px] font-mono px-2 py-0.5 rounded bg-rose-500/10 text-rose-400 border border-rose-500/20"
+            className="inline-flex items-center gap-1 text-[10px] font-mono px-2 py-0.5 rounded bg-rose-50 dark:bg-rose-500/10 text-rose-800 dark:text-rose-400 border border-rose-200 dark:border-rose-500/20"
           >
             <XCircle className="w-2.5 h-2.5" />
             {skill}
@@ -137,14 +137,14 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
       </div>
 
       {/* Expandable Multi-Factor Score Breakdown */}
-      <div className="mt-2.5 pt-2 border-t border-[#22353A]">
+      <div className="mt-2.5 pt-2 border-t border-slate-200 dark:border-[#22353A]">
         <button
           type="button"
           onClick={(e) => {
             e.stopPropagation();
             setShowBreakdown(!showBreakdown);
           }}
-          className="text-[11px] text-slate-400 hover:text-white flex items-center justify-between w-full py-0.5 font-mono"
+          className="text-[11px] text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white flex items-center justify-between w-full py-0.5 font-mono"
         >
           <span>Multi-Factor Weights</span>
           {showBreakdown ? (
@@ -155,28 +155,28 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
         </button>
 
         {showBreakdown && candidate.scoreBreakdown && (
-          <div className="mt-2 grid grid-cols-2 gap-1.5 text-[11px] p-2 rounded-lg bg-[#0C1215] border border-[#22353A] font-mono">
+          <div className="mt-2 grid grid-cols-2 gap-1.5 text-[11px] p-2 rounded-lg bg-slate-50 dark:bg-[#0C1215] border border-slate-200 dark:border-[#22353A] font-mono">
             <div>
               <span className="text-slate-500">Skills (35%):</span>
-              <span className="text-sage-300 ml-1 font-semibold">
+              <span className="text-emerald-700 dark:text-sage-300 ml-1 font-semibold">
                 {candidate.scoreBreakdown.skillScore.toFixed(1)}
               </span>
             </div>
             <div>
               <span className="text-slate-500">Distance (25%):</span>
-              <span className="text-sage-300 ml-1 font-semibold">
+              <span className="text-emerald-700 dark:text-sage-300 ml-1 font-semibold">
                 {candidate.scoreBreakdown.distanceScore.toFixed(1)}
               </span>
             </div>
             <div>
               <span className="text-slate-500">Workload (20%):</span>
-              <span className="text-sage-300 ml-1 font-semibold">
+              <span className="text-emerald-700 dark:text-sage-300 ml-1 font-semibold">
                 {candidate.scoreBreakdown.workloadScore.toFixed(1)}
               </span>
             </div>
             <div>
               <span className="text-slate-500">SLA (20%):</span>
-              <span className="text-sage-300 ml-1 font-semibold">
+              <span className="text-emerald-700 dark:text-sage-300 ml-1 font-semibold">
                 {candidate.scoreBreakdown.slaScore.toFixed(1)}
               </span>
             </div>
@@ -204,3 +204,5 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
     </div>
   );
 };
+
+export default CandidateCard;

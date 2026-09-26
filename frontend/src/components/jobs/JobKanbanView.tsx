@@ -40,29 +40,29 @@ export const JobKanbanView: React.FC<JobKanbanViewProps> = ({
       id: 'pending',
       title: 'Triage & Pending',
       statuses: ['CREATED', 'TRIAGED'],
-      colorBadge: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30',
-      accentBorder: 'border-t-cyan-500',
+      colorBadge: 'bg-sky-50 text-sky-800 border-sky-200 dark:bg-cyan-500/15 dark:text-cyan-300 dark:border-cyan-500/30',
+      accentBorder: 'border-t-sky-500',
     },
     {
       id: 'assigned',
       title: 'Assigned / Dispatched',
       statuses: ['ASSIGNED', 'ACCEPTED'],
-      colorBadge: 'bg-purple-500/15 text-purple-300 border-purple-500/30',
+      colorBadge: 'bg-purple-50 text-purple-800 border-purple-200 dark:bg-purple-500/15 dark:text-purple-300 dark:border-purple-500/30',
       accentBorder: 'border-t-purple-500',
     },
     {
       id: 'in_progress',
       title: 'Work In Progress',
       statuses: ['IN_PROGRESS'],
-      colorBadge: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
+      colorBadge: 'bg-amber-50 text-amber-800 border-amber-200 dark:bg-amber-500/15 dark:text-amber-300 dark:border-amber-500/30',
       accentBorder: 'border-t-amber-500',
     },
     {
       id: 'completed',
       title: 'Completed & Closed',
       statuses: ['COMPLETED'],
-      colorBadge: 'bg-sage-300/15 text-sage-300 border-sage-300/30',
-      accentBorder: 'border-t-sage-300',
+      colorBadge: 'bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-sage-300/15 dark:text-sage-300 dark:border-sage-300/30',
+      accentBorder: 'border-t-emerald-600 dark:border-t-sage-300',
     },
   ];
 
@@ -74,11 +74,11 @@ export const JobKanbanView: React.FC<JobKanbanViewProps> = ({
         return (
           <div
             key={col.id}
-            className={`bg-[#131D21] border border-[#22353A] rounded-2xl p-4 flex flex-col min-h-[520px] border-t-4 ${col.accentBorder} shadow-lg transition-all duration-80`}
+            className={`bg-white dark:bg-[#131D21] border border-slate-200 dark:border-[#22353A] rounded-2xl p-4 flex flex-col min-h-[520px] border-t-4 ${col.accentBorder} shadow-xs transition-all duration-80`}
           >
             {/* Column Header */}
-            <div className="flex items-center justify-between pb-3 mb-3 border-b border-[#22353A]">
-              <span className="text-xs font-bold text-white tracking-wide uppercase font-mono">
+            <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-200 dark:border-[#22353A]">
+              <span className="text-xs font-bold text-slate-900 dark:text-white tracking-wide uppercase font-mono">
                 {col.title}
               </span>
               <span
@@ -91,7 +91,7 @@ export const JobKanbanView: React.FC<JobKanbanViewProps> = ({
             {/* Column Job Cards List */}
             <div className="space-y-3 flex-1 overflow-y-auto pr-1">
               {columnJobs.length === 0 ? (
-                <div className="h-40 flex items-center justify-center text-xs text-slate-500 border border-dashed border-[#22353A] rounded-xl font-mono">
+                <div className="h-40 flex items-center justify-center text-xs text-slate-400 dark:text-slate-500 border border-dashed border-slate-200 dark:border-[#22353A] rounded-xl font-mono">
                   No tickets in this state
                 </div>
               ) : (
@@ -99,11 +99,11 @@ export const JobKanbanView: React.FC<JobKanbanViewProps> = ({
                   <div
                     key={job.id}
                     onClick={() => onSelectJob(job.id)}
-                    className="bg-[#0C1215] border border-[#22353A] hover:border-sage-300/40 rounded-xl p-4 shadow-sm hover:shadow-md hover:bg-[#152024] transition-all duration-80 cursor-pointer group space-y-3"
+                    className="bg-slate-50 dark:bg-[#0C1215] border border-slate-200 dark:border-[#22353A] hover:border-slate-300 dark:hover:border-sage-300/40 rounded-xl p-4 shadow-2xs hover:shadow-xs hover:bg-slate-100/70 dark:hover:bg-[#152024] transition-all duration-80 cursor-pointer group space-y-3"
                   >
                     {/* Top Row: Job# and Priority */}
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-mono font-bold text-sage-300 group-hover:text-white transition-colors">
+                      <span className="text-xs font-mono font-bold text-emerald-800 dark:text-sage-300 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">
                         {job.jobNumber}
                       </span>
                       <JobPriorityBadge priority={job.priority} size="sm" />
@@ -111,11 +111,11 @@ export const JobKanbanView: React.FC<JobKanbanViewProps> = ({
 
                     {/* Title & Customer */}
                     <div>
-                      <h4 className="text-xs font-bold text-white line-clamp-1 group-hover:text-sage-300 transition-colors">
+                      <h4 className="text-xs font-bold text-slate-900 dark:text-white line-clamp-1 group-hover:text-emerald-700 dark:group-hover:text-sage-300 transition-colors">
                         {job.title || job.customerName || 'Service Ticket'}
                       </h4>
-                      <p className="text-[11px] text-slate-400 flex items-center gap-1 mt-1 line-clamp-1">
-                        <MapPin className="w-3 h-3 shrink-0 text-slate-500" />
+                      <p className="text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1 mt-1 line-clamp-1">
+                        <MapPin className="w-3 h-3 shrink-0 text-slate-400" />
                         <span>{job.address}</span>
                       </p>
                     </div>
@@ -130,17 +130,17 @@ export const JobKanbanView: React.FC<JobKanbanViewProps> = ({
                     </div>
 
                     {/* Technician info & Quick Advance action */}
-                    <div className="pt-2 border-t border-[#22353A] flex items-center justify-between text-xs">
+                    <div className="pt-2 border-t border-slate-200 dark:border-[#22353A] flex items-center justify-between text-xs">
                       {job.assignedTechnicianName ? (
-                        <div className="flex items-center gap-1.5 text-[11px] font-medium text-slate-300">
-                          <UserCheck className="w-3 h-3 text-sage-300" />
+                        <div className="flex items-center gap-1.5 text-[11px] font-medium text-slate-700 dark:text-slate-300">
+                          <UserCheck className="w-3 h-3 text-emerald-600 dark:text-sage-300" />
                           <span className="truncate max-w-[100px]">
                             {job.assignedTechnicianName}
                           </span>
                         </div>
                       ) : (
-                        <div className="flex items-center gap-1 text-[11px] text-slate-500 italic">
-                          <UserX className="w-3 h-3 text-slate-500" />
+                        <div className="flex items-center gap-1 text-[11px] text-slate-400 italic">
+                          <UserX className="w-3 h-3 text-slate-400" />
                           <span>Unassigned</span>
                         </div>
                       )}
@@ -152,10 +152,9 @@ export const JobKanbanView: React.FC<JobKanbanViewProps> = ({
                             size="sm"
                             variant="secondary"
                             onClick={() => navigate(`/dispatch?jobId=${job.id}`)}
-                            title="Open Dispatch Matrix"
-                            className="text-[10px] py-1 px-2"
+                            className="text-[10px] px-2 py-0.5"
                           >
-                            <Send className="w-3 h-3 mr-1 text-sage-300" />
+                            <Send className="w-3 h-3 mr-1 text-emerald-600 dark:text-sage-300" />
                             Dispatch
                           </Button>
                         ) : job.status !== 'COMPLETED' && job.status !== 'CANCELLED' ? (
@@ -163,14 +162,14 @@ export const JobKanbanView: React.FC<JobKanbanViewProps> = ({
                             size="sm"
                             variant="outline"
                             onClick={() => onOpenTransitionModalById(job.id)}
-                            title="Advance State"
-                            className="text-[10px] py-1 px-2 text-slate-300"
+                            className="text-[10px] px-2 py-0.5"
                           >
-                            Next <ArrowRight className="w-3 h-3 ml-1" />
+                            <span>Next</span>
+                            <ArrowRight className="w-3 h-3 ml-1" />
                           </Button>
                         ) : (
-                          <span className="text-[10px] font-mono text-sage-300 flex items-center gap-1">
-                            <CheckCircle2 className="w-3 h-3" /> Closed
+                          <span className="text-[10px] font-mono text-emerald-700 dark:text-sage-300 flex items-center gap-1">
+                            <CheckCircle2 className="w-3 h-3" /> Done
                           </span>
                         )}
                       </div>
@@ -185,3 +184,5 @@ export const JobKanbanView: React.FC<JobKanbanViewProps> = ({
     </div>
   );
 };
+
+export default JobKanbanView;

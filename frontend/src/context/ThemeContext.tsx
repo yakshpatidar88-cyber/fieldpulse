@@ -20,12 +20,8 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       if (stored === 'light' || stored === 'dark') {
         return stored;
       }
-      // Check system preference if no stored theme
-      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
-        return 'light';
-      }
     }
-    return 'dark'; // Default to mission-critical dark mode
+    return 'light'; // Light mode is now the mainstream primary mode
   });
 
   useEffect(() => {

@@ -9,19 +9,20 @@ import {
 } from 'react-leaflet';
 import L from 'leaflet';
 import { ScoredCandidate } from '../../types/dispatch';
+import { useTheme } from '../../context/ThemeContext';
 
-// High-contrast Tactical Map Markers for CartoDB Dark Matter
+// High-contrast Tactical Map Markers for CartoDB Dark Matter / Positron
 const jobIcon = L.divIcon({
   className: 'custom-job-marker',
   html: `
     <div style="
-      background-color: #F43F5E;
+      background-color: #E11D48;
       color: #ffffff;
       width: 34px;
       height: 34px;
       border-radius: 50%;
       border: 2px solid #ffffff;
-      box-shadow: 0 0 16px rgba(244, 63, 94, 0.7);
+      box-shadow: 0 2px 10px rgba(225, 29, 72, 0.5);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -36,21 +37,33 @@ const jobIcon = L.divIcon({
   popupAnchor: [0, -17],
 });
 
-const technicianIcon = (isSelected: boolean, rank?: number) =>
+const technicianIcon = (isSelected: boolean, isDark: boolean, rank?: number) =>
   L.divIcon({
     className: 'custom-tech-marker',
     html: `
       <div style="
-        background-color: ${isSelected ? '#AFD19B' : '#131D21'};
-        color: ${isSelected ? '#0C1215' : '#AFD19B'};
+        background-color: ${
+          isSelected
+            ? isDark ? '#AFD19B' : '#15803D'
+            : isDark ? '#131D21' : '#FFFFFF'
+        };
+        color: ${
+          isSelected
+            ? isDark ? '#0C1215' : '#FFFFFF'
+            : isDark ? '#AFD19B' : '#15803D'
+        };
         width: ${isSelected ? '38px' : '30px'};
         height: ${isSelected ? '38px' : '30px'};
         border-radius: 50%;
-        border: 2px solid ${isSelected ? '#ffffff' : '#22353A'};
+        border: 2px solid ${
+          isSelected
+            ? '#FFFFFF'
+            : isDark ? '#22353A' : '#CBD5E1'
+        };
         box-shadow: ${
           isSelected
-            ? '0 0 16px rgba(175, 209, 155, 0.8)'
-            : '0 4px 10px rgba(0,0,0,0.5)'
+            ? isDark ? '0 0 16px rgba(175, 209, 155, 0.8)' : '0 4px 12px rgba(21, 128, 61, 0.4)'
+            : '0 2px 6px rgba(0,0,0,0.15)'
         };
         display: flex;
         align-items: center;
@@ -117,18 +130,26 @@ export const DispatchMap: React.FC<DispatchMapProps> = ({
   onSelectCandidate,
   className = '',
 }) => {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
+
+  const tileUrl = isDark
+    ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+    : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
+
   return (
-    <div className={`relative w-full h-full rounded-2xl overflow-hidden border border-[#22353A] shadow-2xl ${className}`}>
+    <div className={`relative w-full h-full rounded-2xl overflow-hidden border border-slate-200 dark:border-[#22353A] shadow-xl ${className}`}>
       <MapContainer
+        key={theme}
         center={[jobLatitude, jobLongitude]}
         zoom={12}
         scrollWheelZoom={true}
-        className="w-full h-full min-h-[580px] bg-[#0C1215]"
+        className={`w-full h-full min-h-[580px] ${isDark ? 'bg-[#0C1215]' : 'bg-[#E2E8F0]'}`}
       >
-        {/* CartoDB Dark Matter Tactical Basemap */}
+        {/* Dynamic Basemap: CartoDB Positron for Light, Dark Matter for Dark */}
         <TileLayer
           attribution='&copy; <a href="https://carto.com/">CARTO</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-          url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+          url={tileUrl}
         />
 
         <AutoRecenter
@@ -157,7 +178,7 @@ export const DispatchMap: React.FC<DispatchMapProps> = ({
             <Marker
               key={candidate.technicianId}
               position={[candidate.currentLatitude, candidate.currentLongitude]}
-              icon={technicianIcon(isSelected, index + 1)}
+              icon={technicianIcon(isSelected, isDark, index + 1)}
               eventHandlers={{
                 click: () => onSelectCandidate(candidate),
               }}
@@ -165,7 +186,7 @@ export const DispatchMap: React.FC<DispatchMapProps> = ({
               <Popup>
                 <div className="p-1 font-sans text-slate-900">
                   <div className="flex items-center gap-1.5 mb-1">
-                    <span className="bg-[#131D21] text-emerald-400 text-[10px] font-mono font-bold px-1.5 py-0.5 rounded">
+                    <span className="bg-emerald-100 text-emerald-800 text-[10px] font-mono font-bold px-1.5 py-0.5 rounded">
                       Rank #{index + 1}
                     </span>
                     <span className="font-bold text-xs">{candidate.fullName}</span>
@@ -185,7 +206,7 @@ export const DispatchMap: React.FC<DispatchMapProps> = ({
           );
         })}
 
-        {/* Route Line Connecting Job Site to Selected Technician (Electric Sage Glow Line) */}
+        {/* Route Line Connecting Job Site to Selected Technician */}
         {selectedCandidate && (
           <Polyline
             positions={[
@@ -193,30 +214,32 @@ export const DispatchMap: React.FC<DispatchMapProps> = ({
               [selectedCandidate.currentLatitude, selectedCandidate.currentLongitude],
             ]}
             pathOptions={{
-              color: '#AFD19B',
+              color: isDark ? '#AFD19B' : '#15803D',
               weight: 3.5,
               dashArray: '6, 8',
-              opacity: 0.9,
+              opacity: 0.95,
             }}
           />
         )}
       </MapContainer>
 
       {/* Tactical Map HUD Legend */}
-      <div className="absolute top-3 left-3 bg-[#131D21]/90 backdrop-blur-md border border-[#22353A] rounded-xl p-2.5 shadow-xl text-xs z-[1000] space-y-1.5">
+      <div className="absolute top-3 left-3 bg-white/90 dark:bg-[#131D21]/90 backdrop-blur-md border border-slate-200 dark:border-[#22353A] rounded-xl p-2.5 shadow-xl text-xs z-[1000] space-y-1.5">
         <div className="flex items-center gap-2">
-          <span className="w-2.5 h-2.5 rounded-full bg-rose-500 shadow-[0_0_6px_rgba(244,63,94,0.8)]" />
-          <span className="text-slate-300 text-[11px] font-mono">Job Site</span>
+          <span className="w-2.5 h-2.5 rounded-full bg-rose-500 shadow-xs" />
+          <span className="text-slate-700 dark:text-slate-300 text-[11px] font-mono font-medium">Job Site</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="w-2.5 h-2.5 rounded-full bg-sage-300 shadow-[0_0_6px_rgba(175,209,155,0.8)]" />
-          <span className="text-slate-300 text-[11px] font-mono">Selected Tech</span>
+          <span className="w-2.5 h-2.5 rounded-full bg-emerald-600 dark:bg-sage-300 shadow-xs" />
+          <span className="text-slate-700 dark:text-slate-300 text-[11px] font-mono font-medium">Selected Tech</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="w-2.5 h-2.5 rounded-full bg-[#22353A] border border-slate-500" />
-          <span className="text-slate-300 text-[11px] font-mono">Candidate Fleet</span>
+          <span className="w-2.5 h-2.5 rounded-full bg-slate-300 dark:bg-[#22353A] border border-slate-400 dark:border-slate-500" />
+          <span className="text-slate-700 dark:text-slate-300 text-[11px] font-mono font-medium">Candidate Fleet</span>
         </div>
       </div>
     </div>
   );
 };
+
+export default DispatchMap;

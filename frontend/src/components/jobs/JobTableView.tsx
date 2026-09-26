@@ -51,7 +51,7 @@ export const JobTableView: React.FC<JobTableViewProps> = ({
   return (
     <div className="space-y-4">
       {/* Search and Filters Toolbar */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-[#131D21] p-3.5 rounded-xl border border-[#22353A] shadow-md">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-white dark:bg-[#131D21] p-3.5 rounded-xl border border-slate-200 dark:border-[#22353A] shadow-xs">
         {/* Search Input */}
         <div className="relative flex-1">
           <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
@@ -60,7 +60,7 @@ export const JobTableView: React.FC<JobTableViewProps> = ({
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search by job #, customer, address, or issue..."
-            className="w-full pl-9 pr-3 py-1.5 rounded-lg bg-[#0C1215] border border-[#22353A] text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-sage-300 focus:border-sage-300 transition-all duration-80"
+            className="w-full pl-9 pr-3 py-1.5 rounded-lg bg-slate-50 dark:bg-[#0C1215] border border-slate-200 dark:border-[#22353A] text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:focus:ring-sage-300 focus:border-emerald-500 dark:focus:border-sage-300 transition-all duration-80"
           />
         </div>
 
@@ -70,7 +70,7 @@ export const JobTableView: React.FC<JobTableViewProps> = ({
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="rounded-lg bg-[#0C1215] border border-[#22353A] px-3 py-1.5 text-xs text-slate-300 focus:outline-none focus:ring-1 focus:ring-sage-300 transition-all duration-80"
+            className="rounded-lg bg-slate-50 dark:bg-[#0C1215] border border-slate-200 dark:border-[#22353A] px-3 py-1.5 text-xs text-slate-700 dark:text-slate-300 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:focus:ring-sage-300 transition-all duration-80"
           >
             <option value="ALL">All Statuses</option>
             <option value="CREATED">Created</option>
@@ -86,7 +86,7 @@ export const JobTableView: React.FC<JobTableViewProps> = ({
           <select
             value={priorityFilter}
             onChange={(e) => setPriorityFilter(e.target.value)}
-            className="rounded-lg bg-[#0C1215] border border-[#22353A] px-3 py-1.5 text-xs text-slate-300 focus:outline-none focus:ring-1 focus:ring-sage-300 transition-all duration-80"
+            className="rounded-lg bg-slate-50 dark:bg-[#0C1215] border border-slate-200 dark:border-[#22353A] px-3 py-1.5 text-xs text-slate-700 dark:text-slate-300 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:focus:ring-sage-300 transition-all duration-80"
           >
             <option value="ALL">All Priorities</option>
             <option value="CRITICAL">Critical</option>
@@ -98,7 +98,7 @@ export const JobTableView: React.FC<JobTableViewProps> = ({
       </div>
 
       {/* Floating Tactical Strips Header (Visible on Desktop) */}
-      <div className="hidden lg:grid grid-cols-12 gap-4 px-4 py-2 text-[11px] font-mono uppercase tracking-wider text-slate-400 font-semibold">
+      <div className="hidden lg:grid grid-cols-12 gap-4 px-4 py-2 text-[11px] font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 font-semibold">
         <div className="col-span-2">Job Number</div>
         <div className="col-span-3">Service Scope &amp; Address</div>
         <div className="col-span-1">Priority</div>
@@ -107,10 +107,10 @@ export const JobTableView: React.FC<JobTableViewProps> = ({
         <div className="col-span-2 text-right">Actions</div>
       </div>
 
-      {/* Floating Tactical Card Strips (Option C) */}
+      {/* Floating Tactical Card Strips */}
       <div className="space-y-2">
         {filteredJobs.length === 0 ? (
-          <div className="bg-[#131D21] border border-[#22353A] rounded-xl p-12 text-center text-slate-400 text-xs font-mono">
+          <div className="bg-white dark:bg-[#131D21] border border-slate-200 dark:border-[#22353A] rounded-xl p-12 text-center text-slate-500 dark:text-slate-400 text-xs font-mono">
             No field service jobs match the specified search or filter criteria.
           </div>
         ) : (
@@ -118,26 +118,26 @@ export const JobTableView: React.FC<JobTableViewProps> = ({
             <div
               key={job.id}
               onClick={() => onSelectJob(job.id)}
-              className="bg-[#131D21] border border-[#22353A] hover:border-sage-300/40 hover:bg-[#162227] rounded-xl p-4 transition-all duration-80 cursor-pointer shadow-sm hover:shadow-md group"
+              className="bg-white dark:bg-[#131D21] border border-slate-200 dark:border-[#22353A] hover:border-slate-300 dark:hover:border-sage-300/40 hover:bg-slate-50/50 dark:hover:bg-[#162227] rounded-xl p-4 transition-all duration-80 cursor-pointer shadow-xs hover:shadow-md group"
             >
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 lg:gap-4 items-center">
                 {/* Column 1: Job # & Tech */}
                 <div className="lg:col-span-2 space-y-1">
                   <div className="flex items-center gap-2">
-                    <span className="font-mono text-xs font-bold text-sage-300 group-hover:text-white transition-colors">
+                    <span className="font-mono text-xs font-bold text-emerald-800 dark:text-sage-300 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">
                       {job.jobNumber}
                     </span>
                   </div>
-                  <div className="text-[11px] text-slate-400 flex items-center gap-1.5 truncate">
+                  <div className="text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1.5 truncate">
                     {job.assignedTechnicianName ? (
                       <>
-                        <UserCheck className="w-3.5 h-3.5 text-sage-300 shrink-0" />
-                        <span className="text-slate-300 truncate">{job.assignedTechnicianName}</span>
+                        <UserCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-sage-300 shrink-0" />
+                        <span className="text-slate-700 dark:text-slate-300 truncate">{job.assignedTechnicianName}</span>
                       </>
                     ) : (
                       <>
-                        <UserX className="w-3.5 h-3.5 text-slate-500 shrink-0" />
-                        <span className="italic text-slate-500">Unassigned</span>
+                        <UserX className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                        <span className="italic text-slate-400">Unassigned</span>
                       </>
                     )}
                   </div>
@@ -145,10 +145,10 @@ export const JobTableView: React.FC<JobTableViewProps> = ({
 
                 {/* Column 2: Scope & Address */}
                 <div className="lg:col-span-3 space-y-0.5">
-                  <h4 className="text-xs font-semibold text-white group-hover:text-sage-300 transition-colors truncate">
+                  <h4 className="text-xs font-semibold text-slate-900 dark:text-white group-hover:text-emerald-700 dark:group-hover:text-sage-300 transition-colors truncate">
                     {job.title || job.customerName || 'Service Incident'}
                   </h4>
-                  <p className="text-[11px] text-slate-400 truncate">
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 truncate">
                     {job.address}
                   </p>
                 </div>
@@ -179,7 +179,7 @@ export const JobTableView: React.FC<JobTableViewProps> = ({
                     variant="ghost"
                     title="Inspect Details"
                     onClick={() => onSelectJob(job.id)}
-                    className="text-slate-400 hover:text-white"
+                    className="text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
                   >
                     <Eye className="w-3.5 h-3.5" />
                   </Button>
@@ -192,7 +192,7 @@ export const JobTableView: React.FC<JobTableViewProps> = ({
                       onClick={() => navigate(`/dispatch?jobId=${job.id}`)}
                       className="px-2"
                     >
-                      <Send className="w-3 h-3 text-sage-300 mr-1" />
+                      <Send className="w-3 h-3 text-emerald-600 dark:text-sage-300 mr-1" />
                       <span className="text-[10px]">Dispatch</span>
                     </Button>
                   )}
@@ -203,7 +203,7 @@ export const JobTableView: React.FC<JobTableViewProps> = ({
                       variant="outline"
                       title="Advance Lifecycle State"
                       onClick={() => onOpenTransitionModalById(job.id)}
-                      className="px-2 text-slate-300"
+                      className="px-2"
                     >
                       <span className="text-[10px] mr-1">Next</span>
                       <ArrowRight className="w-3 h-3" />
@@ -217,15 +217,17 @@ export const JobTableView: React.FC<JobTableViewProps> = ({
       </div>
 
       {/* Floating Strip Footer */}
-      <div className="px-4 py-3 bg-[#131D21] border border-[#22353A] rounded-xl flex items-center justify-between text-xs text-slate-400">
+      <div className="px-4 py-3 bg-white dark:bg-[#131D21] border border-slate-200 dark:border-[#22353A] rounded-xl flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 shadow-2xs">
         <span>
-          Showing <strong className="text-white">{filteredJobs.length}</strong> of{' '}
+          Showing <strong className="text-slate-900 dark:text-white">{filteredJobs.length}</strong> of{' '}
           {jobs.length} jobs
         </span>
-        <span className="font-mono text-[11px] text-sage-300">
+        <span className="font-mono text-[11px] text-emerald-700 dark:text-sage-300 font-semibold">
           SLA Proximity Engine &bull; Tactical Fleet
         </span>
       </div>
     </div>
   );
 };
+
+export default JobTableView;
