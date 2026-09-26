@@ -101,6 +101,18 @@
             <span class="text-base mr-3">📈</span>
             <span class="truncate opacity-0 group-hover:opacity-100 transition-opacity duration-80">Analytics Deck</span>
           </button>
+          <button onclick="switchTab('maintenance')" id="nav-maintenance" class="nav-item w-full flex items-center h-10 rounded-xl text-xs font-semibold px-3 transition-all duration-80 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#1A262B]">
+            <span class="text-base mr-3">📅</span>
+            <span class="truncate opacity-0 group-hover:opacity-100 transition-opacity duration-80">Preventive PM</span>
+          </button>
+          <button onclick="switchTab('customer-portal')" id="nav-customer-portal" class="nav-item w-full flex items-center h-10 rounded-xl text-xs font-semibold px-3 transition-all duration-80 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#1A262B]">
+            <span class="text-base mr-3">📱</span>
+            <span class="truncate opacity-0 group-hover:opacity-100 transition-opacity duration-80">Customer Portal</span>
+          </button>
+          <button onclick="switchTab('audit')" id="nav-audit" class="nav-item w-full flex items-center h-10 rounded-xl text-xs font-semibold px-3 transition-all duration-80 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#1A262B]">
+            <span class="text-base mr-3">📜</span>
+            <span class="truncate opacity-0 group-hover:opacity-100 transition-opacity duration-80">Audit Trail</span>
+          </button>
         </div>
       </div>
 
@@ -578,6 +590,87 @@
                   <div class="w-full h-2 rounded-full bg-slate-100 dark:bg-[#0C1215]"><div class="h-full bg-rose-500 rounded-full" style="width: 91.2%"></div></div>
                 </div>
               </div>
+            </div>
+          </div>
+        <!-- TAB 8: PREVENTIVE PM -->
+        <div id="tab-maintenance" class="tab-content hidden space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <div class="flex items-center gap-2">
+                <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">Preventive Maintenance Schedules</h2>
+                <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-sage-300/15 text-emerald-800 dark:text-sage-300 border border-emerald-200 dark:border-sage-300/30">PREDICTIVE</span>
+              </div>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Automated recurring inspection cycles, health scoring, and autonomous PM service ticket dispatch.</p>
+            </div>
+          </div>
+          <div class="space-y-3">
+            <div class="p-5 rounded-2xl bg-white dark:bg-[#131D21] border border-slate-200 dark:border-[#22353A] shadow-xs flex items-center justify-between">
+              <div>
+                <span class="font-bold text-sm text-slate-900 dark:text-white">Centrifugal Chiller Unit #01</span>
+                <span class="text-xs font-mono ml-2 text-emerald-600 font-bold">● OPTIMAL (94% Health)</span>
+                <p class="text-xs text-slate-500 mt-1">Mercy Hospital Chicago &bull; Cadence: Quarterly (90 Days) &bull; Tech: Marcus Vance</p>
+              </div>
+              <button onclick="alert('Preventive Work Order generated for Chiller Unit #01!')" class="px-3 py-1.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold">Generate PM Ticket</button>
+            </div>
+            <div class="p-5 rounded-2xl bg-white dark:bg-[#131D21] border border-slate-200 dark:border-[#22353A] shadow-xs flex items-center justify-between">
+              <div>
+                <span class="font-bold text-sm text-slate-900 dark:text-white">Rooftop Packaged HVAC #04</span>
+                <span class="text-xs font-mono ml-2 text-amber-600 font-bold">● DUE SOON (78% Health)</span>
+                <p class="text-xs text-slate-500 mt-1">Midwest Tower Corporate &bull; Cadence: Bi-Monthly &bull; Tech: Elena Rostova</p>
+              </div>
+              <button onclick="alert('Priority PM Ticket generated for Rooftop HVAC #04!')" class="px-3 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold">Generate PM Ticket</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 9: CUSTOMER PORTAL -->
+        <div id="tab-customer-portal" class="tab-content hidden space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <div class="flex items-center gap-2">
+                <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">Customer Live Tracking Experience</h2>
+                <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 border border-blue-200">LIVE CLIENT CONSOLE</span>
+              </div>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Real-time GPS mobile tracking portal, technician identity verification, and customer digital sign-off receipts.</p>
+            </div>
+            <button onclick="toggleCustomerModal(true)" class="px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold">
+              📱 Launch Interactive Mobile Simulator
+            </button>
+          </div>
+          <div class="p-6 rounded-2xl bg-white dark:bg-[#131D21] border border-slate-200 dark:border-[#22353A] shadow-xs">
+            <h3 class="text-sm font-bold text-slate-900 dark:text-white mb-2">Simulated Customer Mobile Journey</h3>
+            <p class="text-xs text-slate-500 leading-relaxed">Customers receive a secure SMS link to trace technician GPS arrival in real-time, view verified EPA/HVAC licenses, and cryptographically sign off upon repair completion.</p>
+          </div>
+        </div>
+
+        <!-- TAB 10: AUDIT TRAIL -->
+        <div id="tab-audit" class="tab-content hidden space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <div class="flex items-center gap-2">
+                <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">Regulatory Audit Trail &amp; Event Log</h2>
+                <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-sage-300/15 text-emerald-800 dark:text-sage-300 border border-emerald-200 dark:border-sage-300/30">TAMPER-EVIDENT</span>
+              </div>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Chronological immutable records of every status transition, dispatcher assignment, and safety escalation.</p>
+            </div>
+            <button onclick="downloadAnalyticsCSV()" class="px-3 py-1.5 rounded-xl border border-slate-300 dark:border-[#22353A] text-xs font-semibold">Export Audit CSV</button>
+          </div>
+          <div class="space-y-2.5">
+            <div class="p-4 rounded-xl bg-white dark:bg-[#131D21] border border-slate-200 dark:border-[#22353A] shadow-xs flex justify-between items-center text-xs">
+              <div>
+                <span class="font-mono text-[10px] font-bold px-2 py-0.5 rounded bg-slate-100 dark:bg-[#0C1215] text-emerald-800 dark:text-sage-300">STATUS_TRANSITION</span>
+                <strong class="ml-2 text-slate-900 dark:text-white font-mono">JOB-2026-0001</strong>
+                <p class="text-slate-500 text-[11px] mt-0.5">Transitioned lifecycle state from ASSIGNED to IN_PROGRESS upon on-site GPS check-in &bull; Actor: Marcus Vance [TECH-001]</p>
+              </div>
+              <span class="text-emerald-600 font-bold font-mono text-[10px]">✓ VERIFIED</span>
+            </div>
+            <div class="p-4 rounded-xl bg-white dark:bg-[#131D21] border border-slate-200 dark:border-[#22353A] shadow-xs flex justify-between items-center text-xs">
+              <div>
+                <span class="font-mono text-[10px] font-bold px-2 py-0.5 rounded bg-slate-100 dark:bg-[#0C1215] text-emerald-800 dark:text-sage-300">DISPATCH_ASSIGNED</span>
+                <strong class="ml-2 text-slate-900 dark:text-white font-mono">JOB-2026-0001</strong>
+                <p class="text-slate-500 text-[11px] mt-0.5">Assigned Marcus Vance (Score: 96.5/100) via automated multi-factor Haversine match matrix &bull; Actor: Sarah Jenkins</p>
+              </div>
+              <span class="text-emerald-600 font-bold font-mono text-[10px]">✓ VERIFIED</span>
             </div>
           </div>
         </div>

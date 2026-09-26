@@ -8,6 +8,9 @@ import {
   ShieldAlert,
   Users,
   BarChart3,
+  CalendarCheck,
+  Smartphone,
+  History,
   Zap,
   Radio,
 } from 'lucide-react';
@@ -18,7 +21,6 @@ interface NavItem {
   label: string;
   badge?: string;
   icon: React.ComponentType<{ className?: string }>;
-  roles?: string[];
 }
 
 const navItems: NavItem[] = [
@@ -32,7 +34,6 @@ const navItems: NavItem[] = [
     label: 'Dispatch Console',
     badge: 'QUEUE',
     icon: Send,
-    roles: ['ROLE_ADMIN', 'ROLE_DISPATCHER'],
   },
   {
     to: '/jobs',
@@ -49,35 +50,41 @@ const navItems: NavItem[] = [
     label: 'SLA Guardrail',
     badge: '98.2%',
     icon: ShieldAlert,
-    roles: ['ROLE_ADMIN', 'ROLE_DISPATCHER'],
   },
   {
     to: '/technicians',
-    label: 'Fleet Roster',
+    label: 'Fleet Technicians',
     badge: '4 ACTIVE',
     icon: Users,
-    roles: ['ROLE_ADMIN', 'ROLE_DISPATCHER'],
   },
   {
     to: '/analytics',
     label: 'Analytics Deck',
     badge: '92.4%',
     icon: BarChart3,
-    roles: ['ROLE_ADMIN', 'ROLE_DISPATCHER'],
+  },
+  {
+    to: '/maintenance',
+    label: 'Preventive PM',
+    badge: 'AUTO',
+    icon: CalendarCheck,
+  },
+  {
+    to: '/customer-portal',
+    label: 'Customer Portal',
+    badge: 'LIVE',
+    icon: Smartphone,
+  },
+  {
+    to: '/audit',
+    label: 'Audit Trail',
+    badge: 'LOGS',
+    icon: History,
   },
 ];
 
 export const Sidebar: React.FC = () => {
-  const { user } = useAuth();
   const [isHovered, setIsHovered] = useState(false);
-  const userRoles = user?.roles || (user?.role ? [user.role] : []);
-  const isAdmin = userRoles.includes('ROLE_ADMIN');
-
-  const filteredItems = navItems.filter((item) => {
-    if (!item.roles || item.roles.length === 0) return true;
-    if (isAdmin) return true;
-    return item.roles.some((r) => userRoles.includes(r as any));
-  });
 
   return (
     <aside
@@ -87,9 +94,9 @@ export const Sidebar: React.FC = () => {
         isHovered ? 'w-60 shadow-xl' : 'w-16'
       }`}
     >
-      <div>
+      <div className="flex-1 overflow-y-auto overflow-x-hidden">
         {/* Brand Header */}
-        <div className="h-14 flex items-center px-4 border-b border-slate-200 dark:border-[#22353A] space-x-3 overflow-hidden">
+        <div className="h-14 flex items-center px-4 border-b border-slate-200 dark:border-[#22353A] space-x-3 overflow-hidden sticky top-0 bg-white dark:bg-[#131D21] z-10">
           <div className="w-8 h-8 rounded-xl bg-emerald-100 dark:bg-sage-300/15 border border-emerald-200 dark:border-sage-300/30 flex items-center justify-center text-emerald-800 dark:text-sage-300 shrink-0 shadow-xs">
             <Zap className="w-4 h-4 fill-emerald-800 dark:fill-sage-300" />
           </div>
@@ -108,7 +115,7 @@ export const Sidebar: React.FC = () => {
 
         {/* Navigation Items */}
         <div className="p-2 space-y-1">
-          {filteredItems.map((item) => {
+          {navItems.map((item) => {
             const Icon = item.icon;
             return (
               <NavLink
@@ -151,7 +158,7 @@ export const Sidebar: React.FC = () => {
       </div>
 
       {/* Footer Telemetry Widget */}
-      <div className="p-2 border-t border-slate-200 dark:border-[#22353A]">
+      <div className="p-2 border-t border-slate-200 dark:border-[#22353A] shrink-0 bg-white dark:bg-[#131D21]">
         <div
           className={`rounded-xl bg-slate-50 dark:bg-[#0C1215] border border-slate-200 dark:border-[#22353A] flex items-center transition-all ${
             isHovered ? 'p-2.5 justify-between text-xs' : 'h-10 w-12 justify-center mx-auto'

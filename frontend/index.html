@@ -1,13 +1,25 @@
 <!doctype html>
-<html lang="en" class="dark">
+<html lang="en" class="light">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FieldPulse - Intelligent Field Service Dispatch &amp; Operations</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script>
+      (function() {
+        var storedTheme = localStorage.getItem('fieldpulse_theme_v3');
+        if (storedTheme === 'dark') {
+          document.documentElement.classList.add('dark');
+          document.documentElement.classList.remove('light');
+        } else {
+          document.documentElement.classList.remove('dark');
+          document.documentElement.classList.add('light');
+        }
+      })();
+    </script>
   </head>
-  <body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen transition-colors duration-150">
+  <body class="bg-[#F8FAFB] dark:bg-[#0C1215] text-slate-900 dark:text-slate-100 min-h-screen transition-colors duration-80">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

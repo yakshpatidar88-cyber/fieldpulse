@@ -13,6 +13,9 @@ import { InventoryPage } from './pages/InventoryPage';
 import { SlaPage } from './pages/SlaPage';
 import { TechniciansPage } from './pages/TechniciansPage';
 import { AnalyticsPage } from './pages/AnalyticsPage';
+import { MaintenancePage } from './pages/MaintenancePage';
+import { CustomerPortalPage } from './pages/CustomerPortalPage';
+import { AuditLogPage } from './pages/AuditLogPage';
 
 export default function App() {
   return (
@@ -24,42 +27,31 @@ export default function App() {
               {/* Public Auth Route */}
               <Route path="/login" element={<LoginPage />} />
 
-          {/* Protected Application Shell */}
-          <Route
-            path="/"
-            element={
-              <ProtectedRoute>
-                <AppLayout />
-              </ProtectedRoute>
-            }
-          >
-            <Route index element={<Navigate to="/dashboard" replace />} />
-            <Route path="dashboard" element={<DashboardPage />} />
-            <Route
-              path="dispatch"
-              element={
-                <ProtectedRoute allowedRoles={['ROLE_ADMIN', 'ROLE_DISPATCHER']}>
-                  <DispatchConsolePage />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="jobs" element={<JobsPage />} />
-            <Route path="inventory" element={<InventoryPage />} />
-            <Route
-              path="sla"
-              element={
-                <ProtectedRoute allowedRoles={['ROLE_ADMIN', 'ROLE_DISPATCHER']}>
-                  <SlaPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="technicians" element={<TechniciansPage />} />
-            <Route path="analytics" element={<AnalyticsPage />} />
-          </Route>
+              {/* Protected Application Shell */}
+              <Route
+                path="/"
+                element={
+                  <ProtectedRoute>
+                    <AppLayout />
+                  </ProtectedRoute>
+                }
+              >
+                <Route index element={<Navigate to="/dashboard" replace />} />
+                <Route path="dashboard" element={<DashboardPage />} />
+                <Route path="dispatch" element={<DispatchConsolePage />} />
+                <Route path="jobs" element={<JobsPage />} />
+                <Route path="inventory" element={<InventoryPage />} />
+                <Route path="sla" element={<SlaPage />} />
+                <Route path="technicians" element={<TechniciansPage />} />
+                <Route path="analytics" element={<AnalyticsPage />} />
+                <Route path="maintenance" element={<MaintenancePage />} />
+                <Route path="customer-portal" element={<CustomerPortalPage />} />
+                <Route path="audit" element={<AuditLogPage />} />
+              </Route>
 
-          {/* Fallback */}
-          <Route path="*" element={<Navigate to="/dashboard" replace />} />
-        </Routes>
+              {/* Fallback */}
+              <Route path="*" element={<Navigate to="/dashboard" replace />} />
+            </Routes>
           </WebSocketProvider>
         </AuthProvider>
       </BrowserRouter>

@@ -9,7 +9,7 @@ interface ThemeContextType {
   setTheme: (theme: Theme) => void;
 }
 
-const THEME_STORAGE_KEY = 'fieldpulse_theme';
+const THEME_STORAGE_KEY = 'fieldpulse_theme_v3';
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
@@ -21,7 +21,7 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         return stored;
       }
     }
-    return 'light'; // Light mode is now the mainstream primary mode
+    return 'light'; // Default to Light Mode as the primary mainstream theme
   });
 
   useEffect(() => {
